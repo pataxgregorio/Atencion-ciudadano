@@ -90,7 +90,9 @@ class UserController extends Controller
             echo "Captured Throwable: " . $e->getMessage(), "\n";
         }        
     }
-
+    public function getUsers2(Request $request){
+        return json.encode("FUNCIONA");
+    }
     public function profile(){
         $count_notification = (new User)->count_noficaciones_user();
         $user = Auth::user();

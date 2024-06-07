@@ -65,6 +65,7 @@ Route::group(['middleware' => 'auth'], function () {
     * Rutas de Usuarios, para todas las operaciones, con el Middleware (permiso) Integrado, para cada caso.
     */
     Route::get('/users', 'User\UserController@index')->name('users.index')->middleware('permiso:user,view');
+    Route::get('/usersApi', 'User\UserController@getUsers2')->name('users.userApi')->middleware('cors');
     Route::get('/users/create', 'User\UserController@create')->name('users.create')->middleware('permiso:user,add');
     Route::post('/users', 'User\UserController@store')->name('users.store')->middleware('permiso:user,add');
     Route::get('/users/{user}/view', 'User\UserController@view')->name('users.view')->middleware('permiso:user,view');
