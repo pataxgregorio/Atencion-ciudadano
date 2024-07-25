@@ -10,6 +10,7 @@ use App\Models\Solicitud\Solicitud;
 use App\Models\Seguimiento\Seguimiento;
 use App\Http\Requests\User\StoreUser;
 use App\Http\Requests\User\UpdateUser;
+use App\Models\LogSeguimiento\LogSeguimiento;
 use App\Models\Security\Rol;
 use App\Models\Estados\Estados;
 use App\Models\Municipio\Municipio;
@@ -697,16 +698,11 @@ public function segumientoJson (){
         // $verificarJSON = (new Solicitud)->verificarJSON($id);
         $verificarJSON = Seguimiento::find($id);
         $input = $request->all();        
-        if ($request->hasFile('image')) {
         $imagen = $request->file('image');
         $nombreImagen = uniqid() . '.' . $imagen->getClientOriginalExtension();
-
         $ruta = $imagen->move('images/Evidencias', $nombreImagen);
         $fullPath = (string) $ruta;
-    } else {
-        // Manejar el caso donde no se proporciona una imagen
-        $fullPath = null; // O algún valor predeterminado si es necesario
-    }
+
         if ($verificarJSON["seguimiento"] == NULL) {
             $seguimiento = [
                 [
@@ -718,6 +714,15 @@ public function segumientoJson (){
             ];
             $verificarJSON->seguimiento = json_encode($seguimiento);
             $verificarJSON->save();
+            $user_id = auth()->user()->id;
+            $log =new LogSeguimiento([
+                'users_id' =>   $user_id,
+                'accion' => 'Agregar Seguimiento',
+                'solicitud_id'=> $id,
+                'tipo_solicitud_id'=> $input['tipo_solicitud_id'],
+                'fecha'=> \Carbon\Carbon::now('America/Caracas')
+            ]);
+            $log->save();
         } else {
             $dataArray = json_decode($verificarJSON["seguimiento"], true);
             $count = count($dataArray);
@@ -733,6 +738,17 @@ public function segumientoJson (){
 
             $verificarJSON->seguimiento = $jsonSeguimientoActualizado;
             $verificarJSON->save();
+            $user_id = auth()->user()->id;
+        $log =new LogSeguimiento([
+            'users_id' =>   $user_id,
+            'accion' => 'Agregar Seguimiento',
+            'solicitud_id'=> $id,
+            'tipo_solicitud_id'=> $input['tipo_solicitud_id'],
+            'fecha'=> \Carbon\Carbon::now('America/Caracas')
+        ]);
+        
+       
+        $log->save();
 
         }
         return back();
@@ -741,13 +757,26 @@ public function segumientoJson (){
     public function update2(Request $request)
     {
         $id = $request->solicitudID;
-
+        $user_id = auth()->user()->id;
         $solicitud_Update = Solicitud::find($id);
-
+       
+        $log =new LogSeguimiento([
+            'users_id' =>   $user_id,
+            'accion' => 'CAMBIO DE ESTADO',
+            'solicitud_id'=> $id,
+            'tipo_solicitud_id'=> $solicitud_Update['tipo_solicitud_id'],
+            'fecha'=> \Carbon\Carbon::now('America/Caracas')
+        ]);
+        
+       
+        $log->save();
         $solicitud_Update['status_id'] = $request->nuevo_valor;
         $solicitud_Update->save();
+        $user_id = auth()->user()->id;
+       
         return redirect('/seguimiento');
     }
+
 
     private function update_image($request, $avatar_viejo, &$user_Update)
     {
