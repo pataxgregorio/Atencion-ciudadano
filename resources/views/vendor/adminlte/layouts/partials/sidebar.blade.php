@@ -52,7 +52,13 @@
                     <li><a href="{{ url('/finalizadas2') }}"><i class='fa fa-link'></i> <span>Solicitudes</span></a></li>
                 </ul>
             </li>
-
+            <li class="treeview">
+                <a href="#"><i class='fa fa-link'></i> <span>Inventario</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                    <li><a href="{{ url('/almacen') }}"><i class='fa fa-link'></i> <span>Almacen</span></a></li>
+                    <li><a href="{{ url('/producto') }}"><i class='fa fa-link'></i> <span>Producto</span></a></li>
+                </ul>
+            </li>
             @if(Auth::user()->rols_id === 1 )
             <li><a href="{{ url('/notificaciones') }}"><i class='fa fa-link'></i> <span>{{ trans('message.menu_notificaciones') }}</span></a></li>
             <li class="treeview">
