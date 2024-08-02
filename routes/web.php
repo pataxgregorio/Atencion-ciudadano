@@ -251,13 +251,14 @@ Route::get('/seguimiento/finalizadas2', 'Seguimiento\SeguimientoController@getSe
 
 Route::get('/seguimiento/list2', 'Seguimiento\SeguimientoController@getSeguimiento2')->name('seguimiento.list2');
 // *********************************************************************************************************
+
 /* Inventario  */
 Route::get('/almacen', 'Almacen\AlmacenController@index')->name('almacen');
 Route::get('/almacen/create', 'Almacen\AlmacenController@create')->name('almacen.create');
 Route::get('/almacen/list', 'Almacen\AlmacenController@getAlmacen')->name('almacen.list');
 Route::get('/almacen/{almacen}/edit', 'Almacen\AlmacenController@edit')->name('almacen.edit');
 Route::get('/almacen/{almacen}/show', 'Almacen\AlmacenController@show')->name('almacen.view');
-Route::post('/store', 'Almacen\AlmacenController@store')->name('almacen.store')->middleware('permiso:almacen,add');
+Route::post('/almacen/store', 'Almacen\AlmacenController@store')->name('almacen.store')->middleware('permiso:almacen,add');
 Route::post('/almacen/{almacen}', 'Almacen\AlmacenController@update')->name('almacen.update')->middleware('permiso:almacen,update');
 
 /*****Producto**********************/
@@ -267,5 +268,15 @@ Route::get('/producto/create', 'Producto\ProductoController@create')->name('prod
 Route::get('/producto/list', 'Producto\ProductoController@getProducto')->name('producto.list');
 Route::get('/producto/{producto}/edit', 'Producto\ProductoController@edit')->name('producto.edit');
 Route::get('/producto/{producto}/show', 'Producto\ProductoController@show')->name('producto.view');
-Route::post('/store', 'Producto\ProductoController@store')->name('producto.store');
+Route::post('/producto/store', 'Producto\ProductoController@store')->name('producto.store');
 Route::post('/producto/{producto}', 'Producto\ProductoController@update')->name('producto.update');
+
+/************ Servcio **************/
+
+Route::get('/servicio', 'Servicio\ServicioController@index')->name('servicio');
+Route::get('/servicio/create', 'Servicio\ServicioController@create')->name('servicio.create');
+Route::get('/servicio/list', 'Servicio\ServicioController@getServicio')->name('servicio.list');
+Route::get('/servicio/{servicio}/edit', 'Servicio\ServicioController@edit')->name('servicio.edit');
+Route::get('/servicio/{servicio}/show', 'Servicio\ServicioController@show')->name('servicio.view');
+Route::post('/servicio/store', 'Servicio\ServicioController@store')->name('servicio.store');
+Route::post('/servicio/{servicio}', 'Servicio\ServicioController@update')->name('servicio.update');

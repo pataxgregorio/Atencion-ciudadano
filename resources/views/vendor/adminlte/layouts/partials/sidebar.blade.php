@@ -57,6 +57,7 @@
                 <ul class="treeview-menu">
                     <li><a href="{{ url('/almacen') }}"><i class='fa fa-link'></i> <span>Almacen</span></a></li>
                     <li><a href="{{ url('/producto') }}"><i class='fa fa-link'></i> <span>Producto</span></a></li>
+                    <li><a href="{{ url('/servicio') }}"><i class='fa fa-link'></i> <span>Servicios</span></a></li>
                 </ul>
             </li>
             @if(Auth::user()->rols_id === 1 )
