@@ -257,7 +257,7 @@ Route::get('/almacen/create', 'Almacen\AlmacenController@create')->name('almacen
 Route::get('/almacen/list', 'Almacen\AlmacenController@getAlmacen')->name('almacen.list');
 Route::get('/almacen/{almacen}/edit', 'Almacen\AlmacenController@edit')->name('almacen.edit');
 Route::get('/almacen/{almacen}/show', 'Almacen\AlmacenController@show')->name('almacen.view');
-Route::post('/store', 'Almacen\AlmacenController@store')->name('almacen.store')->middleware('permiso:almacen,add');
+Route::post('/almacen/store', 'Almacen\AlmacenController@store')->name('almacen.store')->middleware('permiso:almacen,add');
 Route::post('/almacen/{almacen}', 'Almacen\AlmacenController@update')->name('almacen.update')->middleware('permiso:almacen,update');
 
 /*****Producto**********************/

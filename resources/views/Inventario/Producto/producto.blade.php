@@ -45,7 +45,6 @@ Componentes para los Módulos del Sistema, (New,Print,Download and Upload)
                             <tr>
                                 <th>Nro Producto</th>
                                 <th>Nombre de Producto</th>
-                                <th>Ubicacion</th>
                                 <th>descripcion</th>
                             </tr>
                         </thead>
@@ -82,8 +81,7 @@ Componentes para los Módulos del Sistema, (New,Print,Download and Upload)
                 }
             },
             {data: 'nombre', name: 'nombre'},
-            {data: 'ubicacion', name: 'ubicacion'}, 
-                   
+            {data: 'descripcion', name: 'descripcion'},       
           
           
             {

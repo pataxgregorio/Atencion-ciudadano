@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\Models\User\User;
 use App\Models\Security\Rol;
 use App\Models\Producto\Producto;
+use App\Models\Categoria\Categoria;
 use App\Http\Controllers\User\Colores;
 class ProductoController extends Controller
 {
@@ -32,10 +33,9 @@ class ProductoController extends Controller
         $count_notification = (new User)->count_noficaciones_user();
         $roles = (new Rol)->datos_roles();
         $array_color = (new Colores)->getColores();
-       
+        $categoria = (new Categoria)->getCategoria();
 
-
-        return view('Inventario.Producto.producto_create', compact('count_notification', 'titulo_modulo', 'roles', 'array_color'));
+        return view('Inventario.Producto.producto_create', compact('count_notification', 'titulo_modulo','categoria', 'roles', 'array_color'));
     }
     public function getProducto(Request $request){
         //
@@ -64,10 +64,15 @@ class ProductoController extends Controller
     }
    
 public function store(Request $request){
+    $input  = $request->all();
+   
     $count_notification = (new User)->count_noficaciones_user();
     $producto = new Producto([                            
                     'nombre' =>$request->nombre,
-                    'ubicacion' => $request->ubicacion,
+                    'descripcion'=> $request->descripcion,
+                    'cantidad'=> $request->cantidad,
+                    'precio'=> $request->precio,
+                    'categoria_id' =>$request->categoria_id,
                     'created_at' => \Carbon\Carbon::now(),
                     'updated_at' => \Carbon\Carbon::now(),
                 ]);
@@ -81,12 +86,18 @@ public function edit($id){
     $count_notification = (new User)->count_noficaciones_user();
     $titulo_modulo = trans('message.modulo_action.edit_modulo');
     $array_color = (new Colores)->getColores();
-    return view('Inventario.Producto.producto_edit',compact('count_notification','titulo_modulo','producto','array_color'));
+    $categoria = (new Categoria)->getCategoria();
+    return view('Inventario.Producto.producto_edit',compact('count_notification','titulo_modulo','categoria','producto','array_color'));
 }
 public function update(Request $request, $id){
+  // var_dump($request->all());
+   //exit();
     $producto_Update = Producto::find($id);
     $producto_Update->nombre = $request->nombre;
-    $producto_Update->ubicacion = $request->ubicacion;
+    $producto_Update->descripcion = $request->descripcion;
+    $producto_Update->cantidad = $request->cantidad;
+    $producto_Update->precio = $request->precio;
+    $producto_Update->categoria_id = $request->categoria_id;
     $producto_Update->updated_at = \Carbon\Carbon::now();
     $producto_Update->save();
     session(['update' => true]);
@@ -98,7 +109,8 @@ public function show($id){
     $count_notification = (new User)->count_noficaciones_user();
     $titulo_modulo = trans('message.modulo_action.show_modulo');
     $array_color = (new Colores)->getColores();
-    return view('Inventario.Producto.producto_show',compact('count_notification','titulo_modulo','producto','array_color'));
+    $categoria = (new Categoria)->getCategoria();
+    return view('Inventario.Producto.producto_show',compact('count_notification','titulo_modulo','producto','categoria','array_color'));
 }
 }
 
