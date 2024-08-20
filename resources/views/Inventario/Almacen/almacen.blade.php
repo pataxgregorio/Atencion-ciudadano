@@ -46,6 +46,8 @@ Componentes para los Módulos del Sistema, (New,Print,Download and Upload)
                                 <th>Nro de Almacen</th>
                                 <th>Nombre de Almacen</th>
                                 <th>Ubicacion</th>
+                                <th>Editar</th>
+                                <th>Ver</th>
                             </tr>
                         </thead>
                     <tbody>

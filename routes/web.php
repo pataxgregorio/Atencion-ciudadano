@@ -1,4 +1,4 @@
-    <?php
+<?php
 /**
 * Realizado por @author Tarsicio Carrizales Agosto 2021
 * Correo: telecom.com.ve@gmail.com
@@ -194,6 +194,7 @@ Route::get('/solicitud/getCoodinacion', 'Solicitud\SolicitudController@getCoodin
 Route::get('/solicitud/list', 'Solicitud\SolicitudController@getSolicitud')->name('solicitud.list')->middleware('permiso:solicitud,view, edit');
 Route::get('/solicitud/print', 'Solicitud\SolicitudController@solicitudPrint')->name('solicitud.solicitudPrint')->middleware('permiso:solicitud,print');
 Route::get('/solicitud/solicitudTipo', 'Solicitud\SolicitudController@solicitudTipo')->name('solicitud.solicitudTipo');
+Route::get('/imprimir', 'Solicitud\SolicitudController@imprimir')->name('imprimir');
 
 /* REPORTES FINALIZADAS */
 Route::get('/solicitud/totalFinalizadas', 'Solicitud\SolicitudController@imprimir4')->name('solicitud.solicitudTotalFinalizadas');
@@ -207,13 +208,18 @@ Route::get('/solicitud/solicitudTipo3', 'Solicitud\SolicitudController@solicitud
 Route::get('/solicitud/solicitudTipo4', 'Solicitud\SolicitudController@solicitudTipo4')->name('solicitud.solicitudTipo4');
 Route::get('/solicitud/solicitudTipo4PorFecha', 'Solicitud\SolicitudController@solicitudTipo4PorFecha')->name('solicitud.solicitudTipo4PorFecha');
 Route::get('/solicitud/solicitudTipo5', 'Solicitud\SolicitudController@solicitudTipo5')->name('solicitud.solicitudTipo5');
+Route::get('/solicitud/solicitudTipo5PorFecha', 'Solicitud\SolicitudController@solicitudTipo5PorFecha')->name('solicitud.solicitudTipo5PorFecha');
 Route::get('/solicitud/solicitudTotalTipo', 'Solicitud\SolicitudController@solicitudTotalTipo')->name('solicitud.solicitudTotalTipo');
 Route::get('/solicitud/list2', 'Solicitud\SolicitudController@getSolicitud2')->name('solicitud.list2');
 Route::get('/solicitud/list3', 'Solicitud\SolicitudController@getSolicitud3')->name('solicitud.list3');
 Route::get('/solicitud/totalFinalizadas3', 'Solicitud\SolicitudController@getFinalizadas')->name('solicitud.solicitudTotalFinalizadas3');
 Route::get('/solicitud/totalFinalizadasConFecha', 'Solicitud\SolicitudController@getFinalizadasConFecha')->name('solicitud.solicitudTotalFinalizadasConFecha');
 
-Route::get('/imprimir', 'Solicitud\SolicitudController@imprimir')->name('imprimir');
+/* LISTADO SOLICITUD */
+Route::get('/getComunas', 'Comuna\ComunaController@getComunas')->name('getComunas');
+Route::get('/solicitud/getSolicitudesWAN', 'Solicitud\SolicitudController@getSolicitudesWAN')->name('solicitud.getSolicitudesWAN');
+Route::get('/imprimirWAN', 'Solicitud\SolicitudController@imprimirWAN')->name('solicitud.imprimirWAN');
+
 
 /* REPORTE TOTALES FINALIZADAS POR FECHA  */
 Route::get('/imprimir2', 'Solicitud\SolicitudController@imprimir2')->name('imprimir2');
@@ -258,8 +264,8 @@ Route::get('/almacen/create', 'Almacen\AlmacenController@create')->name('almacen
 Route::get('/almacen/list', 'Almacen\AlmacenController@getAlmacen')->name('almacen.list');
 Route::get('/almacen/{almacen}/edit', 'Almacen\AlmacenController@edit')->name('almacen.edit');
 Route::get('/almacen/{almacen}/show', 'Almacen\AlmacenController@show')->name('almacen.view');
-Route::post('/almacen/store', 'Almacen\AlmacenController@store')->name('almacen.store')->middleware('permiso:almacen,add');
-Route::post('/almacen/{almacen}', 'Almacen\AlmacenController@update')->name('almacen.update')->middleware('permiso:almacen,update');
+Route::post('/almacen/store', 'Almacen\AlmacenController@store')->name('almacen.store');
+Route::post('/almacen/{almacen}', 'Almacen\AlmacenController@update')->name('almacen.update');
 
 /*****Producto**********************/
 

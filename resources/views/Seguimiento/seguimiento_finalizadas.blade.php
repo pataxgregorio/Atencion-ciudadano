@@ -49,6 +49,7 @@
                 <thead>
                     <tr>
                     <th>Nro Solicitud</th>
+                    <th>Fecha</th>
                     <th>Funcionario Receptor</th>
                     <th>Nombre de Solicitante</th>
                     <th>Cedula de Solicitante</th>
@@ -76,6 +77,7 @@
 <script src="{{ url ('/js_datatable/responsive.bootstrap.min.js') }}" type="text/javascript"></script>
 <script src="{{ url ('/js_datatable/dataTables.buttons.min.js') }}" type="text/javascript"></script>
 <script src="{{ url ('/js_delete/sweetalert.min.js') }}" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 <script type="text/javascript">
     $(function () {
         $('#btn_listado').click(function() {
@@ -115,6 +117,14 @@
                     }
                 },
                 {data: 'usuario', name: 'usuario'}, 
+                {
+                    data: 'fecha', name: 'fecha',
+                    "render": function ( data, type, row ) {
+                        var fechaMoment = moment(data);
+                        var fechaFormateada = fechaMoment.format('DD-MM-YYYY, HH:mm');
+                        return fechaFormateada;
+                    }
+                },
                 {data: 'solicitante', name: 'solicitante'},
                 {data: 'cedula', name: 'cedula'}, 
                 {data: 'nombretipo', name: 'nombretipo'}, 

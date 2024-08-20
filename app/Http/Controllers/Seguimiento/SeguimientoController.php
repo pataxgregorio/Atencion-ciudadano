@@ -272,6 +272,7 @@ public function segumientoJson (){
 
 
         $input = $request->all();
+        
         $input['users_id'] = Auth::user()->id;
 
         $recaudos = NULL;

@@ -86,8 +86,7 @@
                     <div style="text-align:left;">
                         {!! Form::label('cedula', trans('message.solicitud_action.cedula'), ['class' => 'control-label']) !!}<span
                             class="required" style="color:red;">*</span>
-                        {!! Form::text('cedula', old('cedula'), ['placeholder' => trans('message.solicitud_action.cedula'), 'class' => 'form-control', 'id' => 'cedula_user', 'required' => true]) !!}
-                    </div>
+{!! Form::text('cedula', old('cedula'), ['placeholder' => trans('message.solicitud_action.cedula'), 'class' => 'form-control', 'id' => 'cedula_user', 'required' => true, 'pattern' => '\d*']) !!}                    </div>
                     <div style="text-align:left;">
                         {!! Form::label('telefono', trans('message.solicitud_action.telefono'), ['class' => 'control-label']) !!}<span
                             class="required" style="color:red;">*</span>
@@ -203,7 +202,7 @@
                     </div>
                     @endif
 
-                    @if($rols_id = 10)
+                    @if($rols_id = 10 || $rols_id = 1)
                     <div style="text-align:left;">
                         <label>EDAD</label><span
                         class="required" style="color:red;">*</span>
@@ -303,7 +302,7 @@
                         {!! Form::text('direccion', old('direccion'), ['placeholder' => trans('message.solicitud_action.direccion'), 'class' => 'form-control', 'id' => 'direccion_user', 'required' => true]) !!}
                     </div>                    
                     
-                    @if($rols_id == 10)
+                    @if($rols_id == 10 || $rols_id == 1)
                     <div style="text-align:left;">
                     {!! Form::label('tipo_subsolicitud_id', trans('message.solicitud_action.tipo_solicitud'), ['class' => 'control-label']) !!}<span
                             class="required" style="color:red;">*</span>
@@ -426,32 +425,40 @@
                         <div style="text-align:left;">
                             {!! Form::label('nombrebeneficiario', trans('message.solicitud_action.nombrebeneficiario'), ['class' => 'control-label']) !!}<span
                                 class="required" style="color:red;">*</span>
-                            {!! Form::text('nombrebeneficiario', old('nombrebeneficiario'), ['placeholder' => trans('message.solicitud_action.nombrebeneficiario'), 'class' => 'form-control', 'id' => 'nombrebeneficiario_user', 'required' => true]) !!}
+                            {!! Form::text('nombrebeneficiario', old('nombrebeneficiario'), ['placeholder' => trans('message.solicitud_action.nombrebeneficiario'), 'class' => 'form-control', 'id' => 'nombrebeneficiario_user']) !!}
+                            
                         </div>
                         <div style="text-align:left;">
                             {!! Form::label('cedulabeneficiario', trans('message.solicitud_action.cedulabeneficiario'), ['class' => 'control-label']) !!}<span
                                 class="required" style="color:red;">*</span>
-                            {!! Form::text('cedulabeneficiario', old('cedulabeneficiario'), ['placeholder' => trans('message.solicitud_action.cedulabeneficiario'), 'class' => 'form-control', 'id' => 'cedulabeneficiario_user', 'required' => true]) !!}
+                            {!! Form::text('cedulabeneficiario', old('cedulabeneficiario'), ['placeholder' => trans('message.solicitud_action.cedulabeneficiario'), 'class' => 'form-control', 'id' => 'cedulabeneficiario_user']) !!}
                         </div>
                         <div style="text-align:left;">
                             {!! Form::label('edadbeneficiario', 'EDAD BENEFICIARIO', ['class' => 'control-label']) !!}<span
                                 class="required" style="color:red;">*</span>
-                            {!! Form::text('edadbeneficiario', old('edadbeneficiario'), ['placeholder' => 'EDAD BENEFICIARIO', 'class' => 'form-control', 'id' => 'edadbeneficiario_user', 'required' => true]) !!}
+                            {!! Form::text('edadbeneficiario', old('edadbeneficiario'), ['placeholder' => 'EDAD BENEFICIARIO', 'class' => 'form-control', 'id' => 'edadbeneficiario_user']) !!}
                         </div>
                         <div style="text-align:left;">
                             {!! Form::label('direccionbeneficiario', trans('message.solicitud_action.direccionbeneficiario'), ['class' => 'control-label']) !!}<span
                                 class="required" style="color:red;">*</span>
-                            {!! Form::text('direccionbeneficiario', old('direccionbeneficiario'), ['placeholder' => trans('message.solicitud_action.direccionbeneficiario'), 'class' => 'form-control', 'id' => 'direccionbeneficiario_user', 'required' => true]) !!}
+                            {!! Form::text('direccionbeneficiario', old('direccionbeneficiario'), ['placeholder' => trans('message.solicitud_action.direccionbeneficiario'), 'class' => 'form-control', 'id' => 'direccionbeneficiario_user']) !!}
                         </div>
                         <div style="text-align:left;">
                             {!! Form::label('solicita', 'Solicita', ['class' => 'control-label']) !!}<span
                                 class="required" style="color:red;">*</span>
-                            {!! Form::text('solicita', isset($valores[0]["solicita"]) ? $valores[0]["solicita"] : '', ['placeholder' => 'Solicita', 'class' => 'form-control', 'id' => 'solicita_user', 'required' => true]) !!}
+                            {!! Form::text('solicita', isset($valores[0]["solicita"]) ? $valores[0]["solicita"] : '', ['placeholder' => 'Solicita', 'class' => 'form-control', 'id' => 'solicita_user']) !!}
                         </div>
                         <div style="text-align:left;">
                             {!! Form::label('venApp', 'Codigo venApp', ['class' => 'control-label']) !!}
                             {!! Form::text('venApp', isset($valores[0]["venApp"]) ? $valores[0]["venApp"] : '', ['placeholder' => 'Codigo', 'class' => 'form-control', 'id' => 'venApp_user']) !!}
                         </div>
+                        @if(Auth::user()->rols_id == 10)
+                            @required('nombrebeneficiario')
+                            @required('cedulabeneficiario')
+                            @required('edadbeneficiario')
+                            @required('direccionbeneficiario')
+                            @required('solicita')
+                        @endif
                         <h3>Recaudos de la Solicitud</h3>
                         <br>
                         <div style="text-align:left;">
@@ -501,7 +508,7 @@
                     </div>
                     <div style="text-align:left;">
 
-                        @if($rols_id != 10)
+                        @if($rols_id !== 10) 
                             <div id=sinasignar>
 
 
@@ -530,7 +537,7 @@
                                 <div style="text-align:left;">
                                     {!! Form::label('enter_id', trans('message.solicitud_action.enter'), ['class' => 'control-label']) !!}<span
                                         class="required" style="color:red;">*</span>
-                                    {!! Form::select('enter_id', $enter, old('enter_id'), ['placeholder' => trans('message.solicitud_action.enter'), 'class' => 'form-control', 'id' => 'enter_id', 'required' => true]) !!}
+                                    {!! Form::select('enter_id', $enter, old('enter_id'), ['placeholder' => trans('message.solicitud_action.enter'), 'class' => 'form-control', 'id' => 'enter_id',]) !!}
                                 </div>
 
                             </div>
@@ -538,7 +545,6 @@
                     </div>
 
                 </div>
-
                 <br>
                 {!! Form::submit(trans('message.solicitud_action.new_solicitud'), ['class' => 'form-control btn btn-primary', 'title' => trans('message.solicitud_action.new_solicitud'), 'data-toggle' => 'tooltip', 'style' => 'background-color:' . $array_color['group_button_color'] . ';']) !!}
             </div>
@@ -555,7 +561,9 @@
 
     $(document).ready(function () {
         var rolID = rolsJS;
-        
+        $('#cedula').on('input', function() {
+            this.value = this.value.replace(/[^0-9]/g, ''); // Elimina cualquier carácter que no sea un número
+        });
         // $("#comuna_id").empty()
         $("#comuna_id").html('<option value="">COMUNA<option/>')
 
@@ -574,8 +582,8 @@
             $("#beneficiario").hide();
             $("#direccion").hide();
         }
-        $("#sinasignar").hide();
-        $("#enter").hide();
+        $("#sinasignar").show();
+        $("#enter").show();
         $('#municipio_id').change(function () {
             $("#parroquia_id").prop('disabled', false)
         });
@@ -584,7 +592,7 @@
             $("#municipio_id").prop('disabled', false);
 
         });
-
+    
         $('#tiposolicitud_id').change(function () {
             var tiposolicitud_id = $('#tiposolicitud_id').val();
 

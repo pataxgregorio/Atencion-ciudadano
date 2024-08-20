@@ -26,6 +26,11 @@ class Comuna extends Model
         }
         
     }
-  
+    public function getComunas(){
+        $comunas = DB::table('comuna')
+        ->select('comuna.id','comuna.codigo')
+        ->get();
+        return $comunas;
+    }  
 }
 

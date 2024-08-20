@@ -197,9 +197,8 @@ class SolicitudController extends Controller
             $input['recaudos'] = $recaudos;
             if($input['tipo_solicitud_id'] != 6){
                 $input['subtiposolicitud_id'] = NULL;
+                $input['solicitud_salud_id'] = NULL;
             }
-            $input['subtiposolicitud_id'] = NULL;
-            $input['codigocontrol'] = "001";
             if ($input['tipo_solicitud_id'] == 1) {
                 $denuncia = [
                     [
@@ -231,7 +230,6 @@ class SolicitudController extends Controller
                 $input['denuncia'] = json_encode($denuncia);
                 $input['denunciado'] = json_encode($denunciado);
                 $input['recaudos'] = json_encode($recaudos);
-
             }
             if ($input['tipo_solicitud_id'] == 2) {
                 $queja = [
@@ -383,46 +381,45 @@ class SolicitudController extends Controller
             }else{
                 $nuevoNumero = NULL;
             }
-            
             $solicitud = new Solicitud([
+                'users_id' => isset($input['users_id']) ? $input['users_id'] : NULL,
+                'trabajador' => isset($input['trabajador']) ? $input['trabajador'] : NULL,
                 'solicitud_salud_id' => $nuevoNumero, 
-                'users_id' => $input['users_id'],
-                'trabajador' => $input['trabajador'],
-                'direccion_id' => $input['direcciones_id'],
-                'coordinacion_id' => $input['coordinacion_id'],
-                'tipo_solicitud_id' => $input['tipo_solicitud_id'],
-                'tipo_subsolicitud_id' => $input['tipo_subsolicitud_id'],
-                'enter_descentralizados_id' => $input['enter_id'],
-                'estado_id' => $input['estado_id'],
-                'municipio_id' => $input['municipio_id'],
-                'parroquia_id' => $input['parroquia_id'],
-                'comuna_id' => $input['comuna_id'],
-                'comunidad_id' => $input['comunidad_id'],
-                'jefecomunidad_id' => $input['jefecomunidad_id'],
-                'codigo_control' => $input['codigocontrol'],
+                'direccion_id' => isset($input['direccion_id']) ? $input['direccion_id'] : NULL,
+                'coordinacion_id' => isset($input['coordinacion_id']) ? $input['coordinacion_id'] : NULL,
+                'tipo_solicitud_id' => isset($input['tipo_solicitud_id']) ? $input['tipo_solicitud_id'] : NULL,
+                'tipo_subsolicitud_id' => isset($input['tipo_subsolicitud_id']) ? $input['tipo_subsolicitud_id'] : NULL,
+                'enter_descentralizados_id' => isset($input['enter_id']) ? $input['enter_id'] : NULL,
+                'estado_id' => isset($input['estado_id']) ? $input['estado_id'] : NULL,
+                'municipio_id' => isset($input['municipio_id']) ? $input['municipio_id'] : NULL,
+                'parroquia_id' => isset($input['parroquia_id']) ? $input['parroquia_id'] : NULL,
+                'comuna_id' => isset($input['comuna_id']) ? $input['comuna_id'] : NULL,
+                'comunidad_id' => isset($input['comunidad_id']) ? $input['comunidad_id'] : NULL,
+                'jefecomunidad_id' => isset($input['jefecomunidad_id']) ? $input['jefecomunidad_id'] : NULL,
+                'codigo_control' => isset($input['codigocontrol']) ? $input['codigocontrol'] : NULL,
                 'status_id' => 1,
-                'nombre' => $input['nombre'],
-                'cedula' => $input['cedula'],
-                'sexo' => $input['sexo'],
-                'email' => $input['email'],
-                'direccion' => $input['direccion'],
+                'nombre' => isset($input['nombre']) ? $input['nombre'] : NULL,
+                'cedula' => isset($input['cedula']) ? $input['cedula'] : NULL,
+                'sexo' => isset($input['sexo']) ? $input['sexo'] : NULL,
+                'email' => isset($input['email']) ? $input['email'] : NULL,
+                'direccion' => isset($input['direccion']) ? $input['direccion'] : NULL,
                 'fecha' => \Carbon\Carbon::now('America/Caracas'),
-                'telefono' => $input['telefono'],
-                'telefono2' => $input['telefono2'],
+                'telefono' => isset($input['telefono']) ? $input['telefono'] : NULL,
+                'telefono2' => isset($input['telefono2']) ? $input['telefono2'] : NULL,
                 'organismo' => NULL,
-                'asignacion' => $input['asignacion'],
-                'edocivil' => $input['edocivil'],
-                'fechaNacimiento' => $input['fechanacimiento'],
-                'nivelestudio' => $input['niveleducativo'],
-                'profesion' => $input['profesion'],
-                'recaudos' => $input['recaudos'],
-                'beneficiario' => $input['beneficiario'],
-                'quejas' => $input['quejas'],
-                'reclamo' => $input['reclamos'],
-                'sugerecia' => $input['sugerencia'],
-                'asesoria' => $input['asesoria'],
-                'denuncia' => $input['denuncia'],
-                'denunciado' => $input['denunciado'],
+                'asignacion' => isset($input['asignacion']) ? $input['asignacion'] : NULL,
+                'edocivil' => isset($input['edocivil']) ? $input['edocivil'] : NULL,
+                'fechaNacimiento' => isset($input['fechanacimiento']) ? $input['fechanacimiento'] : NULL,
+                'nivelestudio' => isset($input['niveleducativo']) ? $input['niveleducativo'] : NULL,
+                'profesion' => isset($input['profesion']) ? $input['profesion'] : NULL,
+                'recaudos' => isset($input['recaudos']) ? $input['recaudos'] : NULL,
+                'beneficiario' => isset($input['beneficiario']) ? $input['beneficiario'] : NULL,
+                'quejas' => isset($input['quejas']) ? $input['quejas'] : NULL,
+                'reclamo' => isset($input['reclamos']) ? $input['reclamos'] : NULL,
+                'sugerecia' => isset($input['sugerencia']) ? $input['sugerencia'] : NULL,
+                'asesoria' => isset($input['asesoria']) ? $input['asesoria'] : NULL,
+                'denuncia' => isset($input['denuncia']) ? $input['denuncia'] : NULL,
+                'denunciado' => isset($input['denunciado']) ? $input['denunciado'] : NULL,
 
                 'created_at' => \Carbon\Carbon::now('America/Caracas'),
                 'updated_at' => \Carbon\Carbon::now('America/Caracas'),
@@ -982,7 +979,18 @@ class SolicitudController extends Controller
     public function solicitudTipo5(Request $request)
     {
       
-            $countSolicitud = (new Solicitud)->count_solictud5();
+            $countSolicitud = (new Solicitud)->count_solicitud5();
+            $array = [$countSolicitud];
+            return $array;
+       
+    }
+
+    public function solicitudTipo5PorFecha(Request $request)
+    {
+            $input = $request->all();
+            $fechaDesde = $input['fecha_desde'];
+            $fechaHasta = $input['fecha_hasta'];
+            $countSolicitud = (new Solicitud)->count_solicitud5PorFecha($fechaDesde, $fechaHasta);
             $array = [$countSolicitud];
             return $array;
        
@@ -1082,6 +1090,93 @@ class SolicitudController extends Controller
         $solfinalizadas = (new Solicitud)->reportetotalcasosatendidosSALUDConFecha($fechaDesde, $fechaHasta);
         return $solfinalizadas;
         }
+
+    public function getSolicitudesWAN(Request $request){
+        $input = $request->all();
+        $fechaDesde = isset($input['fechaDesde']) ? $input['fechaDesde'] : NULL;
+        $fechaHasta = isset($input['fechaHasta']) ? $input['fechaHasta'] : NULL;
+        $status = isset($input['status']) ? $input['status'] : NULL;
+        $comuna = isset($input['comuna_id']) ? $input['comuna_id'] : NULL;
+        $solicitudes = (new Solicitud)->solicitudesWAN($fechaDesde, $fechaHasta, $status, $comuna);
+        return $solicitudes;
+        }
+    
+    public function imprimirWAN(Request $request){
+        $input = $request->all();
+        $fechaDesde = isset($input['fechaDesde']) ? $input['fechaDesde'] : NULL;
+        $fechaHasta = isset($input['fechaHasta']) ? $input['fechaHasta'] : NULL;
+        $status = isset($input['status']) ? $input['status'] : NULL;
+        $comuna = isset($input['comuna_id']) ? $input['comuna_id'] : NULL;
+        $solicitudes = (new Solicitud)->solicitudesWAN($fechaDesde, $fechaHasta, $status, $comuna);
+
+        $html =
+        <<<HTML
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <style>
+                    body {
+                        font-family: sans-serif;
+                    }
+    
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                    }
+    
+                    th, td {
+                        text-align:center;
+                        border: 1px solid #ddd;
+                    }
+    
+                    th {
+                        font-size: 12px;
+                        background-color: #f0f0f0;
+                    }
+                    td{
+                        font-size: 12px;
+                    }
+            </style>
+        </head>
+        <body>
+        <img src="https://prensa.alcaldiapaez.gob.ve/wp-content/uploads/sites/2/2024/06/CINTILLO-POLITICAS-SOCIALES-Y-COMUNITARIAS-Y-PODER-POPULAR.jpg" alt="" srcset="" width="100%">
+
+        <h3 style="text-align:left;">Direccion Politicas Sociales</h3>
+        <div>
+
+        <table>
+            <tr>
+                <th>Correlativo</th>
+            </tr>
+            <td>
+            <h4 style="text-align:left;">$solicitudes</h4>
+            </td>
+        </table>
+        </div>
+
+        </body>
+        </html>
+        HTML;
+        $options = new Options;
+        $options->set('isRemoteEnabled', true);
+        $dompdf = new Dompdf($options);
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('legal', 'portrait');
+        $dompdf->render();
+
+        // Nombre del archivo
+        $filename = 'reporte_' . time() . '.pdf';
+
+        // Guardar el PDF en el almacenamiento
+        $path = Storage::disk('local')->put('PDF/' . $filename, $dompdf->output());
+
+        // Obtener la ruta completa del archivo
+        $fullPath = storage_path('app/' . $path);
+
+        return $fullPath; 
+
+    }
     public function imprimir(Request $request)
     {        
         $activardenuncia = "";
@@ -1118,11 +1213,17 @@ class SolicitudController extends Controller
         $request = $request->all();
         $idsolicitud = $request["idsolicitud"];
         $solicitud = Solicitud::find($idsolicitud);
-        //**  **/
+        
         $user = User::find($solicitud->users_id);
         $nombreUsuario = $user->name;
-        
-        $direccionAsignada = (new Direccion)->datos_direccion()[$solicitud->direccion_id];
+
+        $direccionid = $solicitud->direccion_id;
+        if($direccionid != NULL){
+            $direccionAsignada = (new Direccion)->datos_direccion()[$direccionid];
+        }else{
+            $direccionAsignada = NULL;
+        }
+
         $idestado = isset($solicitud["estado_id"]) ? $solicitud["estado_id"] : NULL;
         $idmunicipio = isset($solicitud["municipio_id"]) ? $solicitud["municipio_id"] : NULL;
         $idparroquia = isset($solicitud["parroquia_id"]) ? $solicitud["parroquia_id"] : NULL;
@@ -1161,6 +1262,8 @@ class SolicitudController extends Controller
             $grabacionRecaudos = $recaudos[0]["grabacion"];
             $cedulaRecaudos = $recaudos[0]["cedula"];
             $residenciaRecaudos = $recaudos[0]["residencia"];
+            $estado = (new Solicitud)->nombreestado($idestado, $idmunicipio, $idparroquia, $idcomuna, $idcomunidad);
+            foreach($estado as $estado2);
             if($fotoRecaudos === "on"){
                 $activarrecaudoFoto = "checked";
             }
@@ -2980,7 +3083,7 @@ class SolicitudController extends Controller
                 </style>
             </head>
             <body>
-            <img src="https://prensa.alcaldiapaez.gob.ve/wp-content/uploads/sites/2/2024/06/CINTILLO-POLITICAS-SOCIALES-Y-COMUNITARIAS-Y-PODER-POPULAR.jpg" alt="" srcset="" width="100%">
+            <img src="https://i.imgur.com/AoVIaLt.jpeg" alt="" srcset="" width="100%">
                 <table>
                     <tr>
                         <th>Numero de Registro $solicitud_salud_id</th>
@@ -3200,6 +3303,7 @@ class SolicitudController extends Controller
                             <th>Fecha de Solicitud</th>
                             <th>Hora</th>
                         <th>Nombre y Apellido del Ciudadano Solicitante</th>      
+                        <th>Nombre y Apellido del Ciudadano Beneficiado</th>      
                         <th>Solicita</th>                    
                         <th>Nombre del Funcionario Receptor</th>                    
                     </tr>
@@ -3207,6 +3311,7 @@ class SolicitudController extends Controller
                         <td>$fecha</td>
                         <td>$hora</td>
                         <td>$solicitud->nombre</td>
+                        <td>$nombrebeneficiario</td>
                         <td>$solicita</td>
                         <td>$nombreUsuario</td>
                     </tr>
@@ -3221,7 +3326,7 @@ class SolicitudController extends Controller
                         <td></td>
                     </tr>
                 </table>
-                <h5 style="text-align: center">Usted podra solicitar informacion sobre su solicitud en la Direccion Politicas Sociales y Poder Popular a traves del telefono 0416-6408570 y el Correo Electronico politicassocialesycomunitarias@alcaldiapaez.gob.ve</h5>
+                <h5 style="text-align: center">Usted podra solicitar informacion sobre su solicitud en la Direccion Politicas Sociales y Poder Popular a traves del Correo Electronico politicassocialesycomunitarias@alcaldiapaez.gob.ve</h5>
                 <h5 style="text-align: center">Todos los tramites realizados ante esta oficina son absolutamente gratuitos</h5>
                     </body>
                     </html>
@@ -3240,7 +3345,8 @@ class SolicitudController extends Controller
     }
     public function imprimir2(Request $request) {
         $input = $request->all();
-        $fechadesde = $input['fecha_desde'];
+        $fechadesde = isset($input['fecha_desde']) ? $input['fecha_desde'] : '';
+        $fechaHasta = isset($input['fecha_hasta']) ? $input['fecha_hasta'] : '';
         $fechahasta = $input['fecha_hasta'];
         $diadesde = date('d', strtotime($fechadesde));
         $mesdesde = date('m', strtotime($fechadesde));
@@ -3380,8 +3486,8 @@ public function imprimir3(Request $request) {
                     <td>$finalizada->solicitante</td>
                     <td>$finalizada->cedula</td>
                     <td>$finalizada->nombretipo</td>
-                    <td>$participante->beneficiarionombre</td>
-                    <td>$participante->cedula2</td>
+                    <td>$finalizada->beneficiarionombre</td>
+                    <td>$finalizada->cedula2</td>
                 </tr>
         HTML;
         $printSolicitudFinalizadas .= $finalizadas;
