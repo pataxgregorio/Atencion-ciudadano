@@ -70,6 +70,7 @@
                             <option value="OBRERO">OBRERO</option>
                             <option value="JUBILADO">JUBILADO</option>
                             <option value="PENSIONADO">PENSIONADO</option>
+                            <option value="PENSIONADO SOBREVIVIETE ALPAEZ">PENSIONADO SOBREVIVIETE ALPAEZ</option>
                         </select>
                     </div>
                     <div style="text-align:left;">

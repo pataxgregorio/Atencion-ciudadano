@@ -15,7 +15,8 @@ class Servicio extends Model
     ];
 
   public function getServicio(){
-    return DB::table('servicio')->get();
+    return DB::table('servicio')
+    ->select('id','nombre','descripcion')->get();
   }
 }
 

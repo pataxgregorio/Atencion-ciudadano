@@ -11,6 +11,7 @@ use App\Models\User\User;
 use App\Http\Requests\User\StoreUser;
 use App\Http\Requests\User\UpdateUser;
 use App\Models\Security\Rol;
+use App\Models\Almacen\Almacen;
 use Auth;
 use Dompdf\Dompdf;
 use App\Models\Direccion\Direccion;
@@ -141,7 +142,8 @@ class UserController extends Controller
         $direccion =(new Direccion)->datos_direccion();  
         $roles = (new Rol)->datos_roles();
         $array_color = (new Colores)->getColores();       
-        return view('User.user_create',compact('count_notification','titulo_modulo','roles','array_color','direccion'));        
+        $almacen = (new Almacen)->getAlmacen();
+        return view('User.user_create',compact('count_notification','titulo_modulo','almacen','roles','array_color','direccion'));        
     }
 
     /**
@@ -182,7 +184,8 @@ class UserController extends Controller
         $user = new User([
             'avatar' => $avatar,
             'name' => $request->name,
-            'email' => $request->email,                        
+            'email' => $request->email,   
+            'almacen_id' => $request->almacen_id,                   
             'password' => \Hash::make($request->password),
             'activo' => $request->activo,
             'direccion_id' => $request->direccion_id,
