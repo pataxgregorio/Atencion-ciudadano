@@ -144,6 +144,7 @@ class Seguimiento extends Model
             ->join('status', 'solicitud.status_id', '=', 'status.id')
             ->join('tipo_subsolicitud', 'solicitud.tipo_subsolicitud_id', '=', 'tipo_subsolicitud.id')
             ->select('solicitud.beneficiario','solicitud.id','solicitud.solicitud_salud_id as saludID','solicitud.fecha as fecha','users.name as usuario','solicitud.nombre AS solicitante','solicitud.cedula as cedula','tipo_subsolicitud.nombre AS nombretipo','direccion.nombre AS direccionnombre','status.nombre AS nombrestatus')
+            ->where ('solicitud.status_id','!=', 5)
             ->where ('rols_id', '=', $rols_id)
             ->whereBetween ('solicitud.fecha', [$fechaDesde, $fechaHasta])
             ->orderBy('solicitud.solicitud_salud_id', 'desc')

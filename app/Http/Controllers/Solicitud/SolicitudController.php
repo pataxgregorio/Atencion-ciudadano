@@ -524,7 +524,8 @@ class SolicitudController extends Controller
         $comunidad = [];
         $asignacion = array('DIRECCION' => 'DIRECCION', 'ENTER' => 'ENTER');
         $sexo = array('MASCULINO' => 'MASCULINO', 'FEMENINO' => 'FEMENINO');
-        $trabajador = array('NO' => 'NO','EMPLEADO' => 'EMPLEADO', 'OBRERO' => 'OBRERO', 'JUBILADO' => 'JUBILADO', 'PENSIONADO' => 'PENSIONADO');
+        //$trabajador = array('NO' => 'NO','EMPLEADO' => 'EMPLEADO', 'OBRERO' => 'OBRERO', 'JUBILADO' => 'JUBILADO', 'PENSIONADO' => 'PENSIONADO');
+        $trabajador = array('NO' => 'NO', 'EMPLEADO' => 'EMPLEADO', 'OBRERO' => 'OBRERO', 'JUBILADO' => 'JUBILADO', 'PENSIONADO' => 'PENSIONADO','PENSIONADO SOBREVIVIETE ALPAEZ =>' => 'PENSIONADO SOBREVIVIETE ALPAEZ =>');
         $edocivil = array('SOLTERO' => 'SOLTERO', 'CASADO' => 'CASADO', 'VIUDO' => 'VIUDO', 'DIVORCIADO' => 'DIVORCIADO');
         $nivelestudio = array('PRIMARIA' => 'PRIMARIA', 'SECUNDARIA' => 'SECUNDARIA', 'BACHILLERATO' => 'BACHILLERATO', 'UNIVERSITARIO' => 'UNIVERSITARIO', 'ESPECIALIZACION' => 'ESPECIALIZACION');
         $profesion = array('OBREBRO' => 'OBREBRO','JUBILADO' => 'JUBILADO','PENSIONADO' => 'PENSIONADO','OFICIOS DEL HOGAR' => 'OFICIOS DEL HOGAR','OTRO' => 'OTRO','TECNICO MEDIO' => 'TECNICO MEDIO', 'TECNICO SUPERIOR' => 'TECNICO SUPERIOR', 'INGENIERO' => 'INGENIERO', 'ABOGADO' => 'ABOGADO', 'MEDICO CIRUJANO' => 'MEDICO CIRUJANO', 'HISTORIADOR' => 'HISTORIADOR', 'PALEONTOLOGO' => 'PALEONTOLOGO', 'GEOGRAFO' => 'GEOGRAFO', 'BIOLOGO' => 'BIOLOGO', 'PSICOLOGO' => 'PSICOLOGO', 'MATEMATICO' => 'MATEMATICO', 'ARQUITECTO' => 'ARQUITECTO', 'COMPUTISTA' => 'COMPUTISTA', 'PROFESOR' => 'PROFESOR', 'PERIODISTA' => 'PERIODISTA', 'BOTANICO' => 'BOTANICO', 'FISICO' => 'FISICO', 'SOCIOLOGO' => 'SOCIOLOGO', 'FARMACOLOGO' => 'FARMACOLOGO', 'QUIMICO' => 'QUIMICO', 'POLITOLOGO' => 'POLITOLOGO', 'ENFERMERO' => 'ENFERMERO', 'ELECTRICISTA' => 'ELECTRICISTA', 'BIBLIOTECOLOGO' => 'BIBLIOTECOLOGO', 'PARAMEDICO' => 'PARAMEDICO', 'TECNICO DE SONIDO' => 'TECNICO DE SONIDO', 'ARCHIVOLOGO' => 'ARCHIVOLOGO', 'MUSICO' => 'MUSICO', 'FILOSOFO' => 'FILOSOFO', 'SECRETARIA' => 'SECRETARIA', 'TRADUCTOR' => 'TRADUCTOR', 'ANTROPOLOGO' => 'ANTROPOLOGO', 'TECNICO TURISMO' => 'TECNICO TURISMO', 'ECONOMISTA' => 'ECONOMISTA', 'ADMINISTRADOR' => 'ADMINISTRADOR', 'CARPITERO' => 'CARPITERO', 'RADIOLOGO' => 'RADIOLOGO', 'COMERCIANTE' => 'COMERCIANTE', 'CERRAJERO' => 'CERRAJERO', 'COCINERO' => 'COCINERO', 'ALBAÑIL' => 'ALBAÑIL', 'PLOMERO' => 'PLOMERO', 'TORNERO' => 'TORNERO', 'EDITOR' => 'EDITOR', 'ESCULTOR' => 'ESCULTOR', 'ESCRITOR' => 'ESCRITOR', 'BARBERO' => 'BARBERO');
@@ -610,7 +611,9 @@ class SolicitudController extends Controller
         $comunidad = [];
         $asignacion = array('DIRECCION' => 'DIRECCION');
         $sexo = array('MASCULINO' => 'MASCULINO', 'FEMENINO' => 'FEMENINO');
-        $trabajador = array('NO' => 'NO', 'EMPLEADO' => 'EMPLEADO', 'OBRERO' => 'OBRERO', 'JUBILADO' => 'JUBILADO', 'PENSIONADO' => 'PENSIONADO');
+        //$trabajador = array('NO' => 'NO', 'EMPLEADO' => 'EMPLEADO', 'OBRERO' => 'OBRERO', 'JUBILADO' => 'JUBILADO', 'PENSIONADO' => 'PENSIONADO');
+        $trabajador = array('NO' => 'NO', 'EMPLEADO' => 'EMPLEADO', 'OBRERO' => 'OBRERO', 'JUBILADO' => 'JUBILADO', 'PENSIONADO' => 'PENSIONADO','PENSIONADO SOBREVIVIETE ALPAEZ =>' => 'PENSIONADO SOBREVIVIETE ALPAEZ =>');
+
         $edocivil = array('SOLTERO' => 'SOLTERO', 'CASADO' => 'CASADO', 'VIUDO' => 'VIUDO', 'DIVORCIADO' => 'DIVORCIADO');
         $nivelestudio = array('PRIMARIA' => 'PRIMARIA', 'SECUNDARIA' => 'SECUNDARIA', 'BACHILLERATO' => 'BACHILLERATO', 'UNIVERSITARIO' => 'UNIVERSITARIO', 'ESPECIALIZACION' => 'ESPECIALIZACION');
         $profesion = array('OBREBRO' => 'OBREBRO','JUBILADO' => 'JUBILADO','PENSIONADO' => 'PENSIONADO','OFICIOS DEL HOGAR' => 'OFICIOS DEL HOGAR','OTRO' => 'OTRO','TECNICO MEDIO' => 'TECNICO MEDIO', 'TECNICO SUPERIOR' => 'TECNICO SUPERIOR', 'INGENIERO' => 'INGENIERO', 'ABOGADO' => 'ABOGADO', 'MEDICO CIRUJANO' => 'MEDICO CIRUJANO', 'HISTORIADOR' => 'HISTORIADOR', 'PALEONTOLOGO' => 'PALEONTOLOGO', 'GEOGRAFO' => 'GEOGRAFO', 'BIOLOGO' => 'BIOLOGO', 'PSICOLOGO' => 'PSICOLOGO', 'MATEMATICO' => 'MATEMATICO', 'ARQUITECTO' => 'ARQUITECTO', 'COMPUTISTA' => 'COMPUTISTA', 'PROFESOR' => 'PROFESOR', 'PERIODISTA' => 'PERIODISTA', 'BOTANICO' => 'BOTANICO', 'FISICO' => 'FISICO', 'SOCIOLOGO' => 'SOCIOLOGO', 'FARMACOLOGO' => 'FARMACOLOGO', 'QUIMICO' => 'QUIMICO', 'POLITOLOGO' => 'POLITOLOGO', 'ENFERMERO' => 'ENFERMERO', 'ELECTRICISTA' => 'ELECTRICISTA', 'BIBLIOTECOLOGO' => 'BIBLIOTECOLOGO', 'PARAMEDICO' => 'PARAMEDICO', 'TECNICO DE SONIDO' => 'TECNICO DE SONIDO', 'ARCHIVOLOGO' => 'ARCHIVOLOGO', 'MUSICO' => 'MUSICO', 'FILOSOFO' => 'FILOSOFO', 'SECRETARIA' => 'SECRETARIA', 'TRADUCTOR' => 'TRADUCTOR', 'ANTROPOLOGO' => 'ANTROPOLOGO', 'TECNICO TURISMO' => 'TECNICO TURISMO', 'ECONOMISTA' => 'ECONOMISTA', 'ADMINISTRADOR' => 'ADMINISTRADOR', 'CARPITERO' => 'CARPITERO', 'RADIOLOGO' => 'RADIOLOGO', 'COMERCIANTE' => 'COMERCIANTE', 'CERRAJERO' => 'CERRAJERO', 'COCINERO' => 'COCINERO', 'ALBAÑIL' => 'ALBAÑIL', 'PLOMERO' => 'PLOMERO', 'TORNERO' => 'TORNERO', 'EDITOR' => 'EDITOR', 'ESCULTOR' => 'ESCULTOR', 'ESCRITOR' => 'ESCRITOR', 'BARBERO' => 'BARBERO');
@@ -2980,7 +2983,7 @@ class SolicitudController extends Controller
                 </style>
             </head>
             <body>
-            <img src="https://prensa.alcaldiapaez.gob.ve/wp-content/uploads/sites/2/2024/06/CINTILLO-POLITICAS-SOCIALES-Y-COMUNITARIAS-Y-PODER-POPULAR.jpg" alt="" srcset="" width="100%">
+            <img src="https://i.imgur.com/AoVIaLt.jpeg" alt="" srcset="" width="100%">
                 <table>
                     <tr>
                         <th>Numero de Registro $solicitud_salud_id</th>
@@ -3200,6 +3203,7 @@ class SolicitudController extends Controller
                             <th>Fecha de Solicitud</th>
                             <th>Hora</th>
                         <th>Nombre y Apellido del Ciudadano Solicitante</th>      
+                        <th>Nombre y Apellido del Ciudadano Beneficiado</th>      
                         <th>Solicita</th>                    
                         <th>Nombre del Funcionario Receptor</th>                    
                     </tr>
@@ -3207,6 +3211,7 @@ class SolicitudController extends Controller
                         <td>$fecha</td>
                         <td>$hora</td>
                         <td>$solicitud->nombre</td>
+                        <td>$nombrebeneficiario</td>
                         <td>$solicita</td>
                         <td>$nombreUsuario</td>
                     </tr>
@@ -3221,7 +3226,7 @@ class SolicitudController extends Controller
                         <td></td>
                     </tr>
                 </table>
-                <h5 style="text-align: center">Usted podra solicitar informacion sobre su solicitud en la Direccion Politicas Sociales y Poder Popular a traves del telefono 0416-6408570 y el Correo Electronico politicassocialesycomunitarias@alcaldiapaez.gob.ve</h5>
+                <h5 style="text-align: center">Usted podra solicitar informacion sobre su solicitud en la Direccion Politicas Sociales y Poder Popular a traves del Correo Electronico politicassocialesycomunitarias@alcaldiapaez.gob.ve</h5>
                 <h5 style="text-align: center">Todos los tramites realizados ante esta oficina son absolutamente gratuitos</h5>
                     </body>
                     </html>
@@ -3380,8 +3385,8 @@ public function imprimir3(Request $request) {
                     <td>$finalizada->solicitante</td>
                     <td>$finalizada->cedula</td>
                     <td>$finalizada->nombretipo</td>
-                    <td>$participante->beneficiarionombre</td>
-                    <td>$participante->cedula2</td>
+                    <td>$finalizada->beneficiarionombre</td>
+                    <td>$finalizada->cedula2</td>
                 </tr>
         HTML;
         $printSolicitudFinalizadas .= $finalizadas;

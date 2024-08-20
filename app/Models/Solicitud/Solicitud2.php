@@ -61,7 +61,7 @@ class Solicitud extends Model
         ->select(
             'tipo_solicitud.id AS SOLICITUD_ID',
             'tipo_solicitud.nombre AS SOLICITUD_NOMBRE',
-            DB::raw('SUM(CASE WHEN solicitud.status_id IN (1, 5) THEN 1 ELSE 0 END) AS TOTAL_SOLICITUD'),
+            DB::raw('COUNT(*) AS TOTAL_SOLICITUD'),
             DB::raw('COUNT(CASE WHEN solicitud.status_id = 1 THEN 1 END) AS TOTAL_REGISTRADAS'),
             DB::raw('COUNT(CASE WHEN solicitud.status_id = 2 THEN 1 END) AS TOTAL_PROCESADAS'),
             DB::raw('COUNT(CASE WHEN solicitud.status_id = 5 THEN 1 END) AS TOTAL_FINALIZADAS')
@@ -162,7 +162,6 @@ class Solicitud extends Model
                     ->select(
                         'solicitud.id',
                         'solicitud.solicitud_salud_id as saludID',
-                        'solicitud.fecha as fecha',
                         'solicitud.nombre AS solicitante',
                         'solicitud.cedula AS cedula',
                         'tipo_subsolicitud.nombre AS nombretipo',
@@ -246,7 +245,6 @@ class Solicitud extends Model
                     ->select(
                         'solicitud.id',
                         'solicitud.solicitud_salud_id as saludID',
-                        'solicitud.fecha as fecha',
                         'solicitud.nombre AS solicitante',
                         'solicitud.cedula AS cedula',
                         'tipo_subsolicitud.nombre AS nombretipo',
@@ -422,21 +420,21 @@ class Solicitud extends Model
     {
 
         return DB::table('solicitud')
-            ->join('tipo_subsolicitud', 'solicitud.tipo_subsolicitud_id', '=', 'tipo_subsolicitud.id')
+            ->join('tipo_solicitud', 'solicitud.tipo_solicitud_id', '=', 'tipo_solicitud.id')
             ->join('users', 'solicitud.users_id', '=', 'users.id')
-            ->select('tipo_subsolicitud.nombre AS SOLICITUD_NOMBRE', DB::raw('COUNT(solicitud.tipo_subsolicitud_id) AS TOTAL_SOLICITUD'))
-            ->groupBy('tipo_subsolicitud.id')
+            ->select('tipo_solicitud.nombre AS SOLICITUD_NOMBRE', DB::raw('COUNT(solicitud.tipo_solicitud_id) AS TOTAL_SOLICITUD'))
+            ->groupBy('tipo_solicitud.id')
             ->orderByDesc('TOTAL_SOLICITUD')->get();
     }
     public function count_solictud2PorFecha($fechaDesde, $fechaHasta)
     {
             
         return DB::table('solicitud')
-            ->join('tipo_subsolicitud', 'solicitud.tipo_subsolicitud_id', '=', 'tipo_subsolicitud.id')
+            ->join('tipo_solicitud', 'solicitud.tipo_solicitud_id', '=', 'tipo_solicitud.id')
             ->join('users', 'solicitud.users_id', '=', 'users.id')
-            ->select('tipo_subsolicitud.nombre AS SOLICITUD_NOMBRE', DB::raw('COUNT(solicitud.tipo_subsolicitud_id) AS TOTAL_SOLICITUD'))
+            ->select('tipo_solicitud.nombre AS SOLICITUD_NOMBRE', DB::raw('COUNT(solicitud.tipo_solicitud_id) AS TOTAL_SOLICITUD'))
             ->whereBetween('solicitud.fecha', [$fechaDesde, $fechaHasta])
-            ->groupBy('tipo_subsolicitud.id')
+            ->groupBy('tipo_solicitud.id')
             ->orderByDesc('TOTAL_SOLICITUD')->get();
     }
     public function count_solictud3()
@@ -482,10 +480,9 @@ class Solicitud extends Model
         $resultados = DB::table('solicitud')
         ->leftJoin('status', 'solicitud.status_id', '=', 'status.id')
         ->select(
-            DB::raw('SUM(CASE WHEN solicitud.status_id IN (1, 5) THEN 1 ELSE 0 END) AS TOTAL_SOLICITUD'),
-	    DB::raw('COUNT(CASE WHEN solicitud.status_id = 1 THEN 1 END) AS TOTAL_PROCESADAS'),
-            DB::raw('COUNT(CASE WHEN solicitud.status_id = 2 THEN 1 END) AS TOTAL_PROCESADAS2'),
-            DB::raw('COUNT(CASE WHEN solicitud.status_id = 3 THEN 1 END) AS TOTAL_RECHAZADAS'),
+            DB::raw('COUNT(*) AS TOTAL_SOLICITUD'),
+            DB::raw('COUNT(CASE WHEN solicitud.status_id = 1 THEN 1 END) AS TOTAL_REGISTRADAS'),
+            DB::raw('COUNT(CASE WHEN solicitud.status_id = 2 THEN 1 END) AS TOTAL_PROCESADAS'),
             DB::raw('COUNT(CASE WHEN solicitud.status_id = 5 THEN 1 END) AS TOTAL_FINALIZADAS')
         )
         ->first();
@@ -553,39 +550,4 @@ class Solicitud extends Model
         $ultimoResultado = $ultimoResultado[0]->salud_id;
     return $ultimoResultado;
     }
-
-    public function solicitudesWAN($fechaDesde, $fechaHasta, $status, $comuna)
-{
-    $query = DB::table('solicitud'); // Ajusta el nombre de la tabla
-    // Condición para manejar fechas nulas
-    if ($fechaDesde === null && $fechaHasta === null) {
-        // No se aplican filtros de fecha, se devuelven todas las solicitudes
-    } else if ($fechaDesde === null || $fechaHasta === null) {
-        // Error si solo una fecha es nula
-        return 'Error: Debe seleccionar ambas fechas válidas';
-    } else {
-        // Filtrar por fechas (si ambas son válidas)
-        $query->whereBetween('solicitud.fecha', [$fechaDesde, $fechaHasta]);
-    }
-
-    // Filtrar por estado (si se proporciona)
-    if ($status !== null) {
-        $query->where('status_id', $status);
-    }
-
-    // Filtrar por comuna (si se proporciona)
-    if($comuna == null){
-        $solicitudes = $query->get();
-    }
-    elseif ($comuna !== null) {
-        $query->where('solicitud.comuna_id', $comuna);
-    }
-
-    $solicitudes = $query->get();
-
-    // Puedes transformar los resultados aquí si es necesario
-
-    return $solicitudes;
-}
-
 }
