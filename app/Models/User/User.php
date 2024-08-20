@@ -35,6 +35,7 @@ class User extends Authenticatable
         'confirmed_at',
         'colores', 
         'direccion_id', 
+        'almacen_id',
          
     ];
 

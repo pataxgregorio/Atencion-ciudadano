@@ -28,6 +28,21 @@ class ProductoController extends Controller
         $array_color = (new Colores)->getColores();
         return view('Inventario.Producto.producto',compact('count_notification','tipo_alert','array_color'));
     }
+    public function index2(){        
+        $count_notification = (new User)->count_noficaciones_user();
+       
+        $tipo_alert = "";
+        if(session('delete') == true){
+            $tipo_alert = "Delete";
+            session(['delete' => false]);
+        }        
+        if(session('update') == true ){
+            $tipo_alert = "Update";
+            session(['update' => false]);
+        }        
+        $array_color = (new Colores)->getColores();
+        return view('Inventario.Producto.producto2',compact('count_notification','tipo_alert','array_color'));
+    }
     public function create(){
         $titulo_modulo = trans('message.users_action.new_user');
         $count_notification = (new User)->count_noficaciones_user();

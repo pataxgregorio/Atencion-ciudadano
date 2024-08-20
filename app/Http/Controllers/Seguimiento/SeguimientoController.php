@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Http\Controllers\Seguimiento;
-
+use App\Models\SolicitudMovimiento\SolicitudMovimiento;
+use App\Models\Inventario\Inventario;
 use DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User\User;
+use App\Models\Servicio\Servicio;
 use App\Models\Solicitud\Solicitud;
 use App\Models\Seguimiento\Seguimiento;
 use App\Http\Requests\User\StoreUser;
@@ -18,6 +20,7 @@ use App\Models\Parroquia\Parroquia;
 use App\Models\Comuna\Comuna;
 use App\Models\Comunidad\Comunidad;
 use App\Models\Direccion\Direccion;
+use App\Models\Producto\Producto;
 use App\Models\Enter\Enter;
 use App\Models\Coordinacion\Coordinacion;
 use App\Models\Tipo_Solicitud\Tipo_Solicitud;
@@ -143,7 +146,65 @@ class SeguimientoController extends Controller
         }
     }
 
+    public function store2(Request $request){
+        $input=$request->all();
+        $cantidad = $input['cantidad'];
+        $invetario = (new Inventario)->getInventario($input['producto_id']);
+        $existencia = (new Inventario)->getExistencia($input['producto_id']);
+            foreach($invetario as $item){
+                $invetario_update =Inventario::find($item->id);
+                
+                $existencia = $cantidad - $item->cantidad;
+            
+                if ($existencia < 0) {
+                    $existencia = abs($existencia);
+                    $invetario_update->cantidad= $existencia; 
+                    $invetario_update->save();
+                    break;
+                }else{
+                   // $existencia = 0;
+                   $invetario_update->cantidad= 0; 
+                   $invetario_update->save();
+                }
+                
+                if($existencia == 0){
+
+                    break;
+                }else{
+                        $cantidad = $existencia;
+                       
+                    }
+                
+        }
+        $movimiento = new SolicitudMovimiento([
+            'solicitud_id' => $input['solicitud_id'],
+            'producto_id' => $input['producto_id'],
+            'cantidad' => $input['cantidad'],
+            'fecha' => \Carbon\Carbon::now(),
+            'servicio_id' => NULL,
+            'created_at' => \Carbon\Carbon::now(),
+            'updated_at' => \Carbon\Carbon::now(),
+        ]);
+        $movimiento->save();
+      return back();
+    }
+    public function store3(Request $request){
+        $input=$request->all();
+       
+        $movimiento = new SolicitudMovimiento([
+            'solicitud_id' => $input['solicitud_id'],
+            'producto_id' => NULL,
+            'cantidad' => 1,
+            'fecha' => \Carbon\Carbon::now(),
+            'servicio_id' => $input['servicio_id'],
+            'created_at' => \Carbon\Carbon::now(),
+            'updated_at' => \Carbon\Carbon::now(),
+        ]);
+        $movimiento->save();
+      return back();
+    }
     public function getSeguimientoFinalizadas2(Request $request)
+
     {
         try {            
             if ($request->ajax()) { 
@@ -189,7 +250,11 @@ class SeguimientoController extends Controller
         $array_color = (new Colores)->getColores();
         return view('User.profile', compact('count_notification', 'user', 'array_color'));
     }
+public function existencia(Request $request){
 
+    $data = (new Inventario())->getExistencia($request['id']);
+    return $data;
+}
     public function usersPrint()
     {
         //generate some PDFs!
@@ -638,6 +703,7 @@ public function segumientoJson (){
         $direcciones = (new Direccion)->datos_direccion();
         $enter = (new Enter)->datos_enter();
         $comunidad = [];
+        $producto = (new Producto)->getProducto();
         $asignacion = array('DIRECCION' => 'DIRECCION', 'ENTER' => 'ENTER');
         $sexo = array('MASCULINO' => 'MASCULINO', 'FEMENINO' => 'FEMENINO');
         $edocivil = array('SOLTERO' => 'SOLTERO', 'CASADO' => 'CASADO', 'VIUDO' => 'VIUDO', 'DIVORCIADO' => 'DIVORCIADO');
@@ -647,11 +713,12 @@ public function segumientoJson (){
         $comunidad = (new Comunidad)->datos_comunidad($solicitud_edit->comuna_id);
         $coordinacion = (new Coordinacion)->datos_coordinacion($solicitud_edit->direccion_id);  
         $jefecomunidad = (new JefeComunidad)->getJefe($solicitud_edit->comuna_id);  
-
+        $movimiento = (new SolicitudMovimiento)->getMovimiento($solicitud_edit->id);
         $subtiposolicitud = (new Subtiposolicitud)->getSubtiposolicitud();
         $correlativoSALUD = (new Solicitud)->BuscarNumeroSolicitud($id);
-
-        return view('Seguimiento.seguimiento_edit', compact('recaudos','correlativoSALUD','subtiposolicitud','jefecomunidad','count_notification', 'status_solicitud', 'seguimiento_edit', 'titulo_modulo', 'solicitud_edit', 'estado', 'municipio', 'parroquia', 'asignacion', 'comuna', 'comunidad', 'tipo_solicitud', 'direcciones', 'enter', 'sexo', 'edocivil', 'nivelestudio', 'coordinacion', 'denuncia', 'beneficiario', 'quejas', 'sugerecia', 'asesoria', 'reclamo', 'profesion', 'recaudos', 'denunciado', 'array_color'));
+        $servicio=(new Servicio)->getServicio();
+       
+        return view('Seguimiento.seguimiento_edit', compact('recaudos','correlativoSALUD','servicio','movimiento','subtiposolicitud','jefecomunidad','count_notification', 'producto','status_solicitud', 'seguimiento_edit', 'titulo_modulo', 'solicitud_edit', 'estado', 'municipio', 'parroquia', 'asignacion', 'comuna', 'comunidad', 'tipo_solicitud', 'direcciones', 'enter', 'sexo', 'edocivil', 'nivelestudio', 'coordinacion', 'denuncia', 'beneficiario', 'quejas', 'sugerecia', 'asesoria', 'reclamo', 'profesion', 'recaudos', 'denunciado', 'array_color'));
     }
     public function getComunas(Request $request)
     {

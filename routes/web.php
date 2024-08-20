@@ -252,7 +252,7 @@ Route::get('/seguimiento/finalizadas2', 'Seguimiento\SeguimientoController@getSe
 Route::get('/seguimiento/list2', 'Seguimiento\SeguimientoController@getSeguimiento2')->name('seguimiento.list2');
 // *********************************************************************************************************
 
-/* Inventario  */
+/* Almacen de Productos  */
 Route::get('/almacen', 'Almacen\AlmacenController@index')->name('almacen');
 Route::get('/almacen/create', 'Almacen\AlmacenController@create')->name('almacen.create');
 Route::get('/almacen/list', 'Almacen\AlmacenController@getAlmacen')->name('almacen.list');
@@ -263,6 +263,7 @@ Route::post('/almacen/{almacen}', 'Almacen\AlmacenController@update')->name('alm
 
 /*****Producto**********************/
 
+Route::get('/dashproducto', 'Producto\ProductoController@index2')->name('dashproducto');
 Route::get('/producto', 'Producto\ProductoController@index')->name('producto');
 Route::get('/producto/create', 'Producto\ProductoController@create')->name('producto.create');
 Route::get('/producto/list', 'Producto\ProductoController@getProducto')->name('producto.list');
@@ -280,3 +281,18 @@ Route::get('/servicio/{servicio}/edit', 'Servicio\ServicioController@edit')->nam
 Route::get('/servicio/{servicio}/show', 'Servicio\ServicioController@show')->name('servicio.view');
 Route::post('/servicio/store', 'Servicio\ServicioController@store')->name('servicio.store');
 Route::post('/servicio/{servicio}', 'Servicio\ServicioController@update')->name('servicio.update');
+
+/************ Inventario **************/
+Route::get('/inventario', 'Inventario\InventarioController@index')->name('inventario');
+Route::get('/inventario/create', 'Inventario\InventarioController@create')->name('inventario.create');
+Route::get('/inventario/{inventario}/edit', 'Inventario\InventarioController@edit')->name('inventario.edit');
+Route::get('/inventario/{inventario}/show', 'Inventario\InventarioController@show')->name('inventario.view');
+Route::post('/inventario/store', 'Inventario\InventarioController@store')->name('inventario.store');
+Route::post('/inventario/{inventario}', 'Inventario\InventarioController@update')->name('inventario.update');
+Route::get('/inventario/list', 'Inventario\InventarioController@getInventario')->name('inventario.list');
+
+####################################################
+Route::post('/movimientoSolicitud/movimientoSolicitud', 'Seguimiento\SeguimientoController@addSeguimiento')->name('movimientoSolicitud');
+Route::post('/movimientoSolicitud/store2', 'Seguimiento\SeguimientoController@store2')->name('seguimiento.store2');
+Route::post('/movimientoSolicitud/store3', 'Seguimiento\SeguimientoController@store3')->name('seguimiento.store3');
+Route::get('/movimientoSolicitud/existencia', 'Seguimiento\SeguimientoController@existencia')->name('existencia');
