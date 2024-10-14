@@ -5,7 +5,14 @@
 @endsection
 
 @section('contentheader_title')
-    <h2 class="mb-4">{{ trans('message.dashboard') }}</h2> 
+<div >
+      <h2 class="mb-4" style="text-align: center; display: flex; justify-content: space-between; margin-bottom: -50px">
+        <img src="{{ url('/images/icons/logo.png') }}" alt="logo" height="100px">
+        <p style="margin-top: 40px; font-size: 36px">SIA - Sistema Integral de Atención al Ciudadano</p>
+        <img src="{{ url('/images/icons/logoSIA.png') }}" alt="logo" height="150px" style="margin-top: -15px">
+      </h2> 
+    </div>
+
 @endsection
 
 @section('main-content')
@@ -13,13 +20,13 @@
  
 <div class="row">        
     <div class="col-lg-4 col-md-6 col-xs-12">            
-		<a href="/solicitud"><x-box titulo="Total Solicitudes Registrada" cantidad="{{$total_solicitudes_registradas2}}" name="Solitudes Registradas"  color="bg-red"></x-box>		</a>
+		<a href="/solicitud"><x-box titulo="Total Solicitudes Registrada" cantidad="{{$total_solicitudes_registradas2}}" name="Solitudes Registradas"  color="bg-red"></x-box></a>
 	</div>
 	<div class="col-lg-4 col-md-6 col-xs-12">            		
 		<a href="/seguimiento"><x-box titulo="Total Solicitudes en Proceso" cantidad="{{$total_solicitudes_procesadas2}}" name="Solitudes en Proceso" color="bg-yellow"></x-box></a>
 	</div>
 	<div class="col-lg-4 col-md-6 col-xs-12">            		
-		<x-box titulo="Total Solicitudes Terminadas" cantidad="{{$total_solicitudes_finalizadas2}}" name="Solitudes Terminadas" color="bg-green"></x-box>
+	  <a href="/solicitudfinalizadas"><x-box titulo="Total Solicitudes Terminadas" cantidad="{{$total_solicitudes_finalizadas2}}" name="Solitudes Terminadas" color="bg-green"></x-box></a>
 	</div>
 </div>
 	<!--  CANVAS de las Metricas Para User, Rol y Notificaciones, para View-->

@@ -9,18 +9,10 @@
 @endsection
 
 @section('contentheader_title')
-<!-- Componente Button Para todas las Ventanas de los Módulos, no Borrar.--> 
-@component('components.button',['titulo_modulo' => trans('message.request'),
-                                'router_modulo_create' => route('solicitud.create'),
-                                'id_new_modulo' => 'new_solicitud',
-                                'boton_crear' => trans('message.request'),
-                                'route_print' => route('solicitud.solicitudPrint'),
-                                'route_download' => route('solicitud.solicitudPrint'),
-                                'route_upload' => route('solicitud.solicitudPrint'),
-                                'tooltip' => trans('message.tooltip.new_module'),
-                                'color' => $array_color['group_button_color']])
-Componentes para los Módulos del Sistema, (New,Print,Download and Upload)
-@endcomponent
+<h2 style="margin: -25px 0px -25px 0px"><img src="{{ url('/images/icons/logoSIA.png') }}" alt="logo" height="100px" >Listar Solicitudes</h2>
+
+<a href="/solicitud/create"><button style="color: white; background-color: black; width: 200px;border-radius: 7px;height: 30px; font-size: 16px;">Nueva Solicitud</button></a>
+
   
     
 @endsection
@@ -45,6 +37,7 @@ Componentes para los Módulos del Sistema, (New,Print,Download and Upload)
                             <tr>
                                 <th>Nro Solicitud</th>
                                 <th>Nombre de Solicitante</th>
+                                <th>Fecha</th>
                                 <th>Cedula de Solicitante</th>
                                 @if(Auth::user()->rols_id === 1)
                                     <th>Cedula 2</th>
@@ -75,6 +68,7 @@ Componentes para los Módulos del Sistema, (New,Print,Download and Upload)
 <script src="{{ url ('/js_datatable/responsive.bootstrap.min.js') }}" type="text/javascript"></script>
 <script src="{{ url ('/js_datatable/dataTables.buttons.min.js') }}" type="text/javascript"></script>
 <script src="{{ url ('/js_delete/sweetalert.min.js') }}" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 <script type="text/javascript">
   $(function () {
     
@@ -93,6 +87,14 @@ Componentes para los Módulos del Sistema, (New,Print,Download and Upload)
                 }
             },
             {data: 'solicitante', name: 'solicitante'},
+            {
+                    data: 'fecha', name: 'fecha',
+                    "render": function ( data, type, row ) {
+                        var fechaMoment = moment(data);
+                        var fechaFormateada = fechaMoment.format('DD-MM-YYYY, HH:mm');
+                        return fechaFormateada;
+                    }
+                },
             {data: 'cedula', name: 'cedula'}, 
             {data: 'nombretipo', name: 'nombretipo'}, 
             {data: 'beneficiarionombre', name: 'nombrebeneficiario'}, 

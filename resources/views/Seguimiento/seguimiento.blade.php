@@ -10,6 +10,8 @@
 
 @section('contentheader_title')
 <!-- Componente Button Para todas las Ventanas de los Módulos, no Borrar.--> 
+<h2 style="margin-bottom: -50px"><img src="{{ url('/images/icons/logoSIA.png') }}" alt="logo" height="100px" >Lista Solicitudes</h2>
+
 
   
     
@@ -35,6 +37,7 @@
                         <tr>
                                 <th>Nro Solicitud</th>
                                 <th>Nombre de Solicitante</th>
+                                <th>Fecha</th>
                                 <th>Cedula de Solicitante</th>
                                 @if(Auth::user()->rols_id === 1)
                                     <th>Cedula 2</th>
@@ -64,6 +67,7 @@
 <script src="{{ url ('/js_datatable/responsive.bootstrap.min.js') }}" type="text/javascript"></script>
 <script src="{{ url ('/js_datatable/dataTables.buttons.min.js') }}" type="text/javascript"></script>
 <script src="{{ url ('/js_delete/sweetalert.min.js') }}" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 <script type="text/javascript">
   $(function () {
     
@@ -83,6 +87,14 @@
                 }
             },
             {data: 'solicitante', name: 'solicitante'},
+            {
+                    data: 'fecha', name: 'fecha',
+                    "render": function ( data, type, row ) {
+                        var fechaMoment = moment(data);
+                        var fechaFormateada = fechaMoment.format('DD-MM-YYYY, HH:mm');
+                        return fechaFormateada;
+                    }
+                },
             {data: 'cedula', name: 'cedula'}, 
             {data: 'nombretipo', name: 'nombretipo'}, 
             {data: 'beneficiarionombre', name: 'nombrebeneficiario'}, 

@@ -27,6 +27,7 @@
 @component('components.alert_msg',['tipo_alert'=>$tipo_alert])
  Componentes para los mensajes de Alert, No Eliminar
 @endcomponent
+<h2 style="margin: -25px 0px -25px 0px; text-align: center"><img src="{{ url('/images/icons/logoSIA.png') }}" alt="logo" height="100px" >Reporte Solicitudes</h2>
 
 <div class="container-fluid">
     <div class="card">
@@ -50,6 +51,7 @@
                     <tr>
                         <th>Nro Solicitud</th>
                         <th>Funcionario Receptor</th>
+                        <th>Fecha</th>
                         <th>Nombre de Solicitante</th>
                         <th>Cedula de Solicitante</th>
                         <th>Tipo de Solicitud</th>
@@ -76,6 +78,7 @@
 <script src="{{ url ('/js_datatable/responsive.bootstrap.min.js') }}" type="text/javascript"></script>
 <script src="{{ url ('/js_datatable/dataTables.buttons.min.js') }}" type="text/javascript"></script>
 <script src="{{ url ('/js_delete/sweetalert.min.js') }}" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 <script type="text/javascript">
     $(function () {
         $('#btn_listado').click(function() {
@@ -124,9 +127,17 @@
                     data: 'saludID', name: 'saludID',
                     "render": function ( data, type, row ) { 
                         return '<div style="text-align:center;"><b>'+data+'</b></div>';
-                    }
+                    }                    
                 },
                 {data: 'usuario', name: 'usuario'}, 
+                {
+                    data: 'fecha', name: 'fecha',
+                    "render": function ( data, type, row ) {
+                        var fechaMoment = moment(data);
+                        var fechaFormateada = fechaMoment.format('DD-MM-YYYY, HH:mm');
+                        return fechaFormateada;
+                    }
+                },
                 {data: 'solicitante', name: 'solicitante'},
                 {data: 'cedula', name: 'cedula'}, 
                 {data: 'nombretipo', name: 'nombretipo'}, 

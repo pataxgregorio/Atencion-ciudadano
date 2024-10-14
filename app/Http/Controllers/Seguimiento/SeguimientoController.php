@@ -651,7 +651,10 @@ public function segumientoJson (){
         $subtiposolicitud = (new Subtiposolicitud)->getSubtiposolicitud();
         $correlativoSALUD = (new Solicitud)->BuscarNumeroSolicitud($id);
 
-        return view('Seguimiento.seguimiento_edit', compact('recaudos','correlativoSALUD','subtiposolicitud','jefecomunidad','count_notification', 'status_solicitud', 'seguimiento_edit', 'titulo_modulo', 'solicitud_edit', 'estado', 'municipio', 'parroquia', 'asignacion', 'comuna', 'comunidad', 'tipo_solicitud', 'direcciones', 'enter', 'sexo', 'edocivil', 'nivelestudio', 'coordinacion', 'denuncia', 'beneficiario', 'quejas', 'sugerecia', 'asesoria', 'reclamo', 'profesion', 'recaudos', 'denunciado', 'array_color'));
+        $trabajador = array('NO' => 'NO', 'EMPLEADO' => 'EMPLEADO', 'OBRERO' => 'OBRERO', 'JUBILADO' => 'JUBILADO', 'PENSIONADO' => 'PENSIONADO','PENSIONADO SOBREVIVIETE ALPAEZ =>' => 'PENSIONADO SOBREVIVIETE ALPAEZ =>');
+
+
+        return view('Seguimiento.seguimiento_edit', compact('recaudos','correlativoSALUD','trabajador','subtiposolicitud','jefecomunidad','count_notification', 'status_solicitud', 'seguimiento_edit', 'titulo_modulo', 'solicitud_edit', 'estado', 'municipio', 'parroquia', 'asignacion', 'comuna', 'comunidad', 'tipo_solicitud', 'direcciones', 'enter', 'sexo', 'edocivil', 'nivelestudio', 'coordinacion', 'denuncia', 'beneficiario', 'quejas', 'sugerecia', 'asesoria', 'reclamo', 'profesion', 'recaudos', 'denunciado', 'array_color'));
     }
     public function getComunas(Request $request)
     {
@@ -699,8 +702,13 @@ public function segumientoJson (){
         $verificarJSON = Seguimiento::find($id);
         $input = $request->all();        
         $imagen = $request->file('image');
-        $nombreImagen = uniqid() . '.' . $imagen->getClientOriginalExtension();
-        $ruta = $imagen->move('images/Evidencias', $nombreImagen);
+
+        if ($imagen) {
+            $nombreImagen = uniqid() . '.' . $imagen->getClientOriginalExtension();
+            $ruta = $imagen->move('images/Evidencias', $nombreImagen);
+        } else {
+            $ruta = null; // O puedes asignar un valor predeterminado si lo prefieres
+        }
         $fullPath = (string) $ruta;
 
         if ($verificarJSON["seguimiento"] == NULL) {

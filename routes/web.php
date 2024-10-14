@@ -178,6 +178,7 @@ Route::get('register/confirm/{confirmation_code}', 'Auth\RegisterController@conf
 /* Rutas de Control Diario, para todas las operaciones, con el Middleware (permiso) Integrado, para cada caso.
 */
 Route::get('/solicitud', 'Solicitud\SolicitudController@index')->name('solicitud.index')->middleware('permiso:solicitud,view');
+Route::get('/solicitudfinalizadas', 'Solicitud\SolicitudController@indexfinalizadas')->name('solicitud.indexfinalizadas')->middleware('permiso:solicitud,view');
 Route::get('/solicitud/create', 'Solicitud\SolicitudController@create')->name('solicitud.create')->middleware('permiso:solicitud,add');
 Route::post('/solicitud', 'Solicitud\SolicitudController@store')->name('solicitud.store')->middleware('permiso:solicitud,add');
 Route::get('/solicitud/{solicitud}/view', 'Solicitud\SolicitudController@view')->name('solicitud.view')->middleware('permiso:solicitud,view');
@@ -192,6 +193,7 @@ Route::get('/solicitud/getTelefonoJefeComunidad', 'JefeComunidad\JefeComunidadCo
 Route::get('/solicitud/getJefeComunidad', 'JefeComunidad\JefeComunidadController@getJefeComunidad')->name('getJefeComunidad');
 Route::get('/solicitud/getCoodinacion', 'Solicitud\SolicitudController@getCoodinacion')->name('getCoodinacion2')->middleware('permiso:solicitud,view');
 Route::get('/solicitud/list', 'Solicitud\SolicitudController@getSolicitud')->name('solicitud.list')->middleware('permiso:solicitud,view, edit');
+Route::get('/solicitud/listfin', 'Solicitud\SolicitudController@getSolicitudfin')->name('solicitud.finalizadas')->middleware('permiso:solicitud,view, edit');
 Route::get('/solicitud/print', 'Solicitud\SolicitudController@solicitudPrint')->name('solicitud.solicitudPrint')->middleware('permiso:solicitud,print');
 Route::get('/solicitud/solicitudTipo', 'Solicitud\SolicitudController@solicitudTipo')->name('solicitud.solicitudTipo');
 
@@ -207,9 +209,11 @@ Route::get('/solicitud/solicitudTipo3', 'Solicitud\SolicitudController@solicitud
 Route::get('/solicitud/solicitudTipo4', 'Solicitud\SolicitudController@solicitudTipo4')->name('solicitud.solicitudTipo4');
 Route::get('/solicitud/solicitudTipo4PorFecha', 'Solicitud\SolicitudController@solicitudTipo4PorFecha')->name('solicitud.solicitudTipo4PorFecha');
 Route::get('/solicitud/solicitudTipo5', 'Solicitud\SolicitudController@solicitudTipo5')->name('solicitud.solicitudTipo5');
+Route::get('/solicitud/solicitudTipo5PorFecha', 'Solicitud\SolicitudController@solicitudTipo5PorFecha')->name('solicitud.solicitudTipo5PorFecha');
 Route::get('/solicitud/solicitudTotalTipo', 'Solicitud\SolicitudController@solicitudTotalTipo')->name('solicitud.solicitudTotalTipo');
 Route::get('/solicitud/list2', 'Solicitud\SolicitudController@getSolicitud2')->name('solicitud.list2');
 Route::get('/solicitud/list3', 'Solicitud\SolicitudController@getSolicitud3')->name('solicitud.list3');
+Route::get('/solicitud/totales', 'Solicitud\SolicitudController@getSolicitudTotales')->name('solicitud.totales');
 Route::get('/solicitud/totalFinalizadas3', 'Solicitud\SolicitudController@getFinalizadas')->name('solicitud.solicitudTotalFinalizadas3');
 Route::get('/solicitud/totalFinalizadasConFecha', 'Solicitud\SolicitudController@getFinalizadasConFecha')->name('solicitud.solicitudTotalFinalizadasConFecha');
 
@@ -251,3 +255,5 @@ Route::get('/seguimiento/finalizadas2', 'Seguimiento\SeguimientoController@getSe
 
 Route::get('/seguimiento/list2', 'Seguimiento\SeguimientoController@getSeguimiento2')->name('seguimiento.list2');
 // *********************************************************************************************************
+Route::get('/solicitud/buscarsolicitud', 'Solicitud\SolicitudController@BuscarIndex')->name('solicitud.buscarindex')->middleware('permiso:solicitud,view');
+Route::get('/solicitud/buscargeneral', 'Solicitud\SolicitudController@getSolicitudGeneral')->name('solicitud.buscargeneral')->middleware('permiso:solicitud,view');
