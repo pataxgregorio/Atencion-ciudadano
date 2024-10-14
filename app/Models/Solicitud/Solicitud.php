@@ -978,6 +978,7 @@ class Solicitud extends Model
             ->where('solicitud.status_id','!=', 2)
             ->whereBetween('solicitud.fecha', [$fechaDesde, $fechaHasta])
             ->groupBy('status.id')
+
             ->orderByDesc('TOTAL_SOLICITUD')->get();
     }
     public function count_solictud3()

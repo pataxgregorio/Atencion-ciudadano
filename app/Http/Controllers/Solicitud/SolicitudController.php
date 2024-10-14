@@ -3475,6 +3475,7 @@ public function imprimir3(Request $request) {
                     <td>$finalizada->cedula2</td>
                     <td>$finalizada->beneficiarionombre</td>
                     <td>$finalizada->cedula2</td>
+
                 </tr>
         HTML;
         $printSolicitudFinalizadas .= $finalizadas;
