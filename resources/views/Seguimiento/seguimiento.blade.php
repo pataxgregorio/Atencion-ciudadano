@@ -10,6 +10,8 @@
 
 @section('contentheader_title')
 <!-- Componente Button Para todas las Ventanas de los Módulos, no Borrar.--> 
+<h2 style="margin-bottom: -50px"><img src="{{ url('/images/icons/logoSIA.png') }}" alt="logo" height="100px" >Lista Solicitudes</h2>
+
 
   
     

@@ -10,7 +10,8 @@
 
 @section('contentheader_title')
 <div>
-    <h2 class="mb-4">CREAR SOLICITUD</h2>
+<h2 style="margin: -25px 0px 0px 25pxpx"><img src="{{ url('/images/icons/logoSIA.png') }}" alt="logo" height="100px" >Crear Solicitud</h2>
+
     @component('components.boton_back', ['ruta' => route('solicitud.index'), 'color' => $array_color['back_button_color']])
     Botón de retorno
     @endcomponent
@@ -51,14 +52,11 @@
                 {{ csrf_field() }}
                 <div class="form-group ">
                     <div style="text-align:left;">
-                        {!! Form::label('tipo_solicitud_id', trans('message.solicitud_action.tipo_solicitud'), ['class' => 'control-label']) !!}<span
-                            class="required" style="color:red;">*</span>
-                        {!! Form::select('tipo_solicitud_id', $tipo_solicitud, $rols_id == 10 ? 6 : old('tipo_solicitud_id'), ['placeholder' => trans('message.solicitud_action.tipo_solicitud'), 'class' => 'form-control', 'id' => 'tipo_solicitud_id', $rols_id == 10 ? 'disabled' : '']) !!}
                         @if($rols_id == 10)
                         <input type="text" name="tipo_solicitud_id" id="tipo_solicitud_id" value=6 hidden>
                         @endif                        
                     </div>
-                    <h3>Datos del Solicitante </h3>
+                    <h3>DATOS DEL BENEFICIARIO </h3>
                     <br>
                     <div style="text-align:left;">
                         <label>TRABAJADOR DE LA ALCALDIA <span
@@ -80,32 +78,32 @@
                         <input type="text" name="solicitud_salud_id" id="solicitud_salud_id" value="{{ $correlativoSALUD }}" hidden>
                     </div>
                     <div style="text-align:left;">
-                        {!! Form::label('nombre', trans('message.users_action.nombre'), ['class' => 'control-label']) !!}<span
-                            class="required" style="color:red;">*</span>
-                        {!! Form::text('nombre', old('nombre'), ['placeholder' => trans('message.users_action.nombre'), 'class' => 'form-control', 'id' => 'nombre_user', 'required' => true]) !!}
-                    </div>
-                    <div style="text-align:left;">
-                        {!! Form::label('cedula', trans('message.solicitud_action.cedula'), ['class' => 'control-label']) !!}<span
-                            class="required" style="color:red;">*</span>
-                        {!! Form::text('cedula', old('cedula'), ['placeholder' => trans('message.solicitud_action.cedula'), 'class' => 'form-control', 'id' => 'cedula_user', 'required' => true]) !!}
-                    </div>
-                    <div style="text-align:left;">
-                        {!! Form::label('telefono', trans('message.solicitud_action.telefono'), ['class' => 'control-label']) !!}<span
-                            class="required" style="color:red;">*</span>
-                        {!! Form::text('telefono', old('telefono'), ['placeholder' => trans('message.solicitud_action.telefono'), 'class' => 'form-control', 'id' => 'telefono_user', 'required' => true]) !!}
-                    </div>
+                            {!! Form::label('nombrebeneficiario', trans('message.solicitud_action.nombrebeneficiario'), ['class' => 'control-label']) !!}<span
+                                class="required" style="color:red;">*</span>
+                            {!! Form::text('nombrebeneficiario', old('nombrebeneficiario'), ['placeholder' => trans('message.solicitud_action.nombrebeneficiario'), 'class' => 'form-control', 'id' => 'nombrebeneficiario_user', 'required' => true]) !!}
+                        </div>
+                        <div style="text-align:left;">
+                            {!! Form::label('cedulabeneficiario', trans('message.solicitud_action.cedulabeneficiario'), ['class' => 'control-label']) !!}<span
+                                class="required" style="color:red;">*</span>
+                            {!! Form::text('cedulabeneficiario', old('cedulabeneficiario'), ['placeholder' => trans('message.solicitud_action.cedulabeneficiario'), 'class' => 'form-control', 'id' => 'cedulabeneficiario_user', 'required' => true]) !!}
+                        </div>
+                        <div style="text-align:left;">
+                            {!! Form::label('edadbeneficiario', 'EDAD BENEFICIARIO', ['class' => 'control-label']) !!}<span
+                                class="required" style="color:red;">*</span>
+                            {!! Form::text('edadbeneficiario', old('edadbeneficiario'), ['placeholder' => 'EDAD BENEFICIARIO', 'class' => 'form-control', 'id' => 'edadbeneficiario_user', 'required' => true]) !!}
+                        </div>                    
                     @if($rols_id != 10)
                     <div style="text-align:left;">
-                        {!! Form::label('telefono2', trans('message.solicitud_action.telefono2'), ['class' => 'control-label']) !!}
+                        {!! Form::label('telefono2', 'TELEFONO DE CASA', ['class' => 'control-label']) !!}
                         {!! Form::text('telefono2', old('telefono2'), ['placeholder' => trans('message.solicitud_action.telefono2'), 'class' => 'form-control', 'id' => 'telefono2_user']) !!}
                     </div>
                     <div style="text-align:left;">
-                        {!! Form::label('email', trans('message.users_action.email_user'), ['class' => 'control-label']) !!}
+                        {!! Form::label('email', 'CORREO', ['class' => 'control-label']) !!}
                         {!! Form::email('email', old('email'), ['placeholder' => trans('message.users_action.mail_ejemplo'), 'class' => 'form-control', 'id' => 'email_user']) !!}
                     </div>
                     @endif
                     <div style="text-align:left;">
-                        <label>Sexo <span style="color:red;">*</span></label>
+                        <label>SEXO <span style="color:red;">*</span></label>
                             <select name="sexo" id="sexo" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" required>
                             <option value="">SELECCIONE UNA OPCION</option>
                             <option value="MASCULINO">MASCULINO</option>
@@ -203,34 +201,26 @@
                         </select>
                     </div>
                     @endif
-
-                    @if($rols_id = 10)
-                    <div style="text-align:left;">
-                        <label>EDAD</label><span
-                        class="required" style="color:red;">*</span>
-                        <input type="text" id="fechanacimiento" name="fechanacimiento" class="form-control" required>
-                    </div>
-                    @endif
                     
                     <div style="text-align:left;">
-                        {!! Form::label('estado_id', trans('message.solicitud_action.estado'), ['class' => 'control-label']) !!}<span
+                        {!! Form::label('estado_id', 'ESTADO', ['class' => 'control-label']) !!}<span
                             class="required" style="color:red;">*</span>
                         {!! Form::select('estado_id', $estado, old('estado_id'), ['placeholder' => trans('message.solicitud_action.estado'), 'class' => 'form-control', 'id' => 'estado_id', 'required' => true]) !!}
                     </div>
                     <div style="text-align:left;">
-                        {!! Form::label('municipio_id', trans('message.solicitud_action.municipio'), ['class' => 'control-label']) !!}<span
+                        {!! Form::label('municipio_id', 'MUNICIPIO', ['class' => 'control-label']) !!}<span
                             class="required" style="color:red;">*</span>
                         {!! Form::select('municipio_id', $municipio, old('municipio_id'), ['placeholder' => trans('message.solicitud_action.municipio'), 'class' => 'form-control', 'id' => 'municipio_id', 'required' => true]) !!}
                     </div>
 
                     <div style="text-align:left;">
-                        {!! Form::label('parroquia_id', trans('message.solicitud_action.parroquia'), ['class' => 'control-label', 'id' => 'parroquia_id_label']) !!}<span
+                        {!! Form::label('parroquia_id', 'PARROQUIA', ['class' => 'control-label', 'id' => 'parroquia_id_label']) !!}<span
                             class="required" style="color:red;" id="parroquia_id_span">*</span>
                         {!! Form::select('parroquia_id', $parroquia, old('parroquia_id'), ['placeholder' => trans('message.solicitud_action.parroquia'), 'class' => 'form-control', 'id' => 'parroquia_id']) !!}
                     </div>
 
                     <div style="text-align:left;">
-                        {!! Form::label('comuna_id', trans('message.solicitud_action.comuna'), ['class' => 'control-label', 'id' => 'comuna_id_label']) !!}<span
+                        {!! Form::label('comuna_id', 'COMUNA', ['class' => 'control-label', 'id' => 'comuna_id_label']) !!}<span
                             class="required" style="color:red;" id="comuna_id_span">*</span>
                         <select required name="comuna_id" id="comuna_id" class="form-control">
                             @foreach($comuna as $key => $value)
@@ -239,12 +229,12 @@
                         </select>
                     </div>
                     <div style="text-align:left;">
-                        {!! Form::label('comunidad_id', trans('message.solicitud_action.comunidad'), ['class' => 'control-label', 'id' => 'comunidad_id_label']) !!}<span
+                        {!! Form::label('comunidad_id', 'COMUNIDAD', ['class' => 'control-label', 'id' => 'comunidad_id_label']) !!}<span
                             class="required" style="color:red;" id="comunidad_id_span">*</span>
                         {!! Form::select('comunidad_id', $comunidad, old('comunidad_id'), ['placeholder' => trans('message.solicitud_action.comunidad'), 'class' => 'form-control', 'id' => 'comunidad_id']) !!}
                     </div>
                     <div style="text-align:left;">
-                        {!! Form::label('jefecomunidad_id', 'Jefe de Comunidad', ['class' => 'control-label', 'id' => 'jefecomunidad_Label']) !!}
+                        {!! Form::label('jefecomunidad_id', 'JEFE DE COMUNIDAD', ['class' => 'control-label', 'id' => 'jefecomunidad_Label']) !!}
                         <select name="jefecomunidad_id" id="jefecomunidad_id" class="form-control">
                             @foreach($jefecomunidad as $key => $value)
                                 <option value="{{ $value->id }}" @if(old('jefecomunidad_id', $solicitud_edit->jefecomunidad_id) == $value->id) selected @endif>
@@ -255,7 +245,7 @@
                     </div>
                     @if($rols_id != 10)
                     <div style="text-align:left;">
-                        {!! Form::label('telefonoJEFE_label', 'Telefono de Jefe de Comunidad', ['class' => 'control-label', 'id' => 'telefonoJEFE_label']) !!}<span
+                        {!! Form::label('telefonoJEFE_label', 'TELEFONO DEL JEFE DE COMUNIDAD', ['class' => 'control-label', 'id' => 'telefonoJEFE_label']) !!}<span
                             class="required" style="color:red;" id="telefonoJEFE_span">*</span>
                         <p name="telefonoJEFE" id="telefonoJEFE" class="form-control" disabled>
                             @foreach($jefecomunidad as $key => $value)
@@ -267,7 +257,7 @@
                     </div>
                     @endif
                     <div style="text-align:left;">
-                        {!! Form::label('nombreUBCH_label', 'Nombre de UBCH', ['class' => 'control-label', 'id' => 'nombreUBCH_label']) !!}
+                        {!! Form::label('nombreUBCH_label','NOMBRE DE UBCH', ['class' => 'control-label', 'id' => 'nombreUBCH_label']) !!}
                         <p name="nombreUBCH" id="nombreUBCH" class="form-control" disabled>
                             @foreach($jefecomunidad as $key => $value)
                                 <option value="{{ $value->id }}" @if(old('jefecomunidad_id', $solicitud_edit->jefecomunidad_id) == $value->id) selected @endif>
@@ -278,7 +268,7 @@
                     </div>
 
                     <div style="text-align:left;">
-                        {!! Form::label('nomjefeUBCH_label', 'Nombre de Jefe UBCH', ['class' => 'control-label', 'id' => 'nomjefeUBCH_label']) !!}
+                        {!! Form::label('nomjefeUBCH_label', 'NOMBRES DEL JEFE DE UBCH', ['class' => 'control-label', 'id' => 'nomjefeUBCH_label']) !!}
                         <p name="nomjefeUBCH" id="nomjefeUBCH" class="form-control" disabled>
                             @foreach($jefecomunidad as $key => $value)
                                 <option value="{{ $value->id }}" @if(old('jefecomunidad_id', $solicitud_edit->jefecomunidad_id) == $value->id) selected @endif>
@@ -289,7 +279,7 @@
                     </div>
 
                     <div style="text-align:left;">
-                        {!! Form::label('teljefeUBCH_label', 'Telefono de Jefe UBCH', ['class' => 'control-label', 'id' => 'teljefeUBCH_label']) !!}
+                        {!! Form::label('teljefeUBCH_label', 'TELEFONO DEL JEFE DE UBCH', ['class' => 'control-label', 'id' => 'teljefeUBCH_label']) !!}
                         <p name="teljefeUBCH" id="teljefeUBCH" class="form-control" disabled>
                             @foreach($jefecomunidad as $key => $value)
                                 <option value="{{ $value->id }}" @if(old('jefecomunidad_id', $solicitud_edit->jefecomunidad_id) == $value->id) selected @endif>
@@ -298,15 +288,9 @@
                             @endforeach
                         </p>
                     </div>
-                    <div style="text-align:left;">
-                        {!! Form::label('direccion', trans('message.solicitud_action.direccion'), ['class' => 'control-label']) !!}<span
-                            class="required" style="color:red;">*</span>
-                        {!! Form::text('direccion', old('direccion'), ['placeholder' => trans('message.solicitud_action.direccion'), 'class' => 'form-control', 'id' => 'direccion_user', 'required' => true]) !!}
-                    </div>                    
-                    
                     @if($rols_id == 10)
                     <div style="text-align:left;">
-                    {!! Form::label('tipo_subsolicitud_id', trans('message.solicitud_action.tipo_solicitud'), ['class' => 'control-label']) !!}<span
+                    {!! Form::label('tipo_subsolicitud_id', 'TIPO SOLICITUD', ['class' => 'control-label']) !!}<span
                             class="required" style="color:red;">*</span>
                         <select required name="tipo_subsolicitud_id" id="tipo_subsolicitud_id" class="form-control">                           
                             @foreach($subtiposolicitud as $subtipo)
@@ -315,8 +299,27 @@
                         </select>
                     </div>
                     @endif
+                    <div style="text-align:left;">
+                        {!! Form::label('solicita', 'SOLICITA', ['class' => 'control-label']) !!}<span
+                            class="required" style="color:red;">*</span>
+                        {!! Form::text('solicita', isset($valores[0]["solicita"]) ? $valores[0]["solicita"] : '', ['placeholder' => 'Solicita', 'class' => 'form-control', 'id' => 'solicita_user', 'required' => true]) !!}
+                    </div>
+                    <div style="text-align:left;">
+                        {!! Form::label('venApp', 'CODIGO VENAPP', ['class' => 'control-label']) !!}
+                        {!! Form::text('venApp', isset($valores[0]["venApp"]) ? $valores[0]["venApp"] : '', ['placeholder' => 'Codigo', 'class' => 'form-control', 'id' => 'venApp_user']) !!}
+                    </div>
+                    <div style="text-align:left;">
+                        {!! Form::label('direccionbeneficiario', trans('message.solicitud_action.direccionbeneficiario'), ['class' => 'control-label']) !!}<span
+                            class="required" style="color:red;">*</span>
+                        {!! Form::text('direccionbeneficiario', old('direccionbeneficiario'), ['placeholder' => trans('message.solicitud_action.direccionbeneficiario'), 'class' => 'form-control', 'id' => 'direccionbeneficiario_user', 'required' => true]) !!}
+                    </div>   
+                    <div style="text-align:left;">
+                        {!! Form::label('observacionbeneficiario', "OBSERVACION", ['class' => 'control-label']) !!}<span
+                            class="required" style="color:red;">*</span>
+                        {!! Form::textarea('observacionbeneficiario', old('observacionbeneficiario'), ['placeholder' => "OBSERVACION", 'class' => 'form-control', 'id' => 'observacionbeneficiario_user', 'required' => true]) !!}
+                    </div>   
                     <div id="denunciado">
-                        <h3>Datos de Denuncia, Reclamo o Queja </h3>
+                        <h3>DATOS DEL DENUNCIADO </h3>
                         <br>
                         <div style="text-align:left;">
                             {!! Form::label('ceduladenunciado', trans('message.solicitud_action.ceduladenunciado'), ['class' => 'control-label']) !!}<span
@@ -374,7 +377,7 @@
                                 class="required" style="color:red;">*</span>
                             {!! Form::text('explique2', old('observacion'), ['placeholder' => trans('message.solicitud_action.explique'), 'class' => 'form-control', 'id' => 'explique_user']) !!}
                         </div>
-                        <h3>Recuados de la Solicitud</h3>
+                        <h3>RECAUDOS DE LA DENUNCIA</h3>
                         <br>
                         <div class="col">
                             <div style="text-align:left;">
@@ -423,81 +426,79 @@
                     </div>
 
                     <div id="beneficiario">
-                        <h3>Solicitud</h3>
+                        <h3>DATOS DEL SOLICITANTE</h3>
                         <div style="text-align:left;">
-                            {!! Form::label('nombrebeneficiario', trans('message.solicitud_action.nombrebeneficiario'), ['class' => 'control-label']) !!}<span
+                        {!! Form::label('nombre', 'NOMBRES', ['class' => 'control-label']) !!}<span
+                            class="required" style="color:red;">*</span>
+                        {!! Form::text('nombre', old('nombre'), ['placeholder' => trans('message.users_action.nombre'), 'class' => 'form-control', 'id' => 'nombre_user', 'required' => true]) !!}
+                        </div>
+                        <div style="text-align:left;">
+                            {!! Form::label('cedula', 'CEDULA', ['class' => 'control-label']) !!}<span
                                 class="required" style="color:red;">*</span>
-                            {!! Form::text('nombrebeneficiario', old('nombrebeneficiario'), ['placeholder' => trans('message.solicitud_action.nombrebeneficiario'), 'class' => 'form-control', 'id' => 'nombrebeneficiario_user', 'required' => true]) !!}
+                            {!! Form::text('cedula', old('cedula'), ['placeholder' => trans('message.solicitud_action.cedula'), 'class' => 'form-control', 'id' => 'cedula_user', 'required' => true]) !!}
                         </div>
                         <div style="text-align:left;">
-                            {!! Form::label('cedulabeneficiario', trans('message.solicitud_action.cedulabeneficiario'), ['class' => 'control-label']) !!}<span
+                            {!! Form::label('telefono', 'TELEFONO', ['class' => 'control-label']) !!}<span
                                 class="required" style="color:red;">*</span>
-                            {!! Form::text('cedulabeneficiario', old('cedulabeneficiario'), ['placeholder' => trans('message.solicitud_action.cedulabeneficiario'), 'class' => 'form-control', 'id' => 'cedulabeneficiario_user', 'required' => true]) !!}
+                            {!! Form::text('telefono', old('telefono'), ['placeholder' => trans('message.solicitud_action.telefono'), 'class' => 'form-control', 'id' => 'telefono_user', 'required' => true]) !!}
                         </div>
+                        @if($rols_id = 10)
                         <div style="text-align:left;">
-                            {!! Form::label('edadbeneficiario', 'EDAD BENEFICIARIO', ['class' => 'control-label']) !!}<span
+                            <label>EDAD</label><span
+                            class="required" style="color:red;">*</span>
+                            <input type="text" id="fechanacimiento" name="fechanacimiento" class="form-control" required>
+                        </div>
+                        @endif
+                        <div style="text-align:left;">
+                            {!! Form::label('direccion','DIRECCION', ['class' => 'control-label']) !!}<span
                                 class="required" style="color:red;">*</span>
-                            {!! Form::text('edadbeneficiario', old('edadbeneficiario'), ['placeholder' => 'EDAD BENEFICIARIO', 'class' => 'form-control', 'id' => 'edadbeneficiario_user', 'required' => true]) !!}
-                        </div>
-                        <div style="text-align:left;">
-                            {!! Form::label('direccionbeneficiario', trans('message.solicitud_action.direccionbeneficiario'), ['class' => 'control-label']) !!}<span
-                                class="required" style="color:red;">*</span>
-                            {!! Form::text('direccionbeneficiario', old('direccionbeneficiario'), ['placeholder' => trans('message.solicitud_action.direccionbeneficiario'), 'class' => 'form-control', 'id' => 'direccionbeneficiario_user', 'required' => true]) !!}
-                        </div>
-                        <div style="text-align:left;">
-                            {!! Form::label('solicita', 'Solicita', ['class' => 'control-label']) !!}<span
-                                class="required" style="color:red;">*</span>
-                            {!! Form::text('solicita', isset($valores[0]["solicita"]) ? $valores[0]["solicita"] : '', ['placeholder' => 'Solicita', 'class' => 'form-control', 'id' => 'solicita_user', 'required' => true]) !!}
-                        </div>
-                        <div style="text-align:left;">
-                            {!! Form::label('venApp', 'Codigo venApp', ['class' => 'control-label']) !!}
-                            {!! Form::text('venApp', isset($valores[0]["venApp"]) ? $valores[0]["venApp"] : '', ['placeholder' => 'Codigo', 'class' => 'form-control', 'id' => 'venApp_user']) !!}
-                        </div>
-                        <h3>Recaudos de la Solicitud</h3>
+                            {!! Form::text('direccion', old('direccion'), ['placeholder' => trans('message.solicitud_action.direccion'), 'class' => 'form-control', 'id' => 'direccion_user', 'required' => true]) !!}
+                        </div>                        
+                        <h3>RECAUDOS DE LA SOLICITUD</h3>
                         <br>
                         <div style="text-align:left;">
                             <input type="checkbox" id="checkcedula2" name="checkcedula2">
-                            <label class="form-check-label" for="defaultCheck1">Copia Cedula Solicitante</label>
+                            <label class="form-check-label" for="defaultCheck1">COPIA CEDULA SOLICITANTE</label>
                         </div>
                         <div style="text-align:left;">
                             <input type="checkbox" id="checkmotivo3" name="checkmotivo3">
-                            <label class="form-check-label" for="defaultCheck1">Exposicion de Motivo</label>
+                            <label class="form-check-label" for="defaultCheck1">EXPOSICION DE MOTIVO</label>
                         </div>
                         <div style="text-align:left;">
                             <input type="checkbox" id="recipe" name="recipe">
-                            <label class="form-check-label" for="defaultCheck1">Recipe</label>
+                            <label class="form-check-label" for="defaultCheck1">RECIPES</label>
                         </div>
                         <div style="text-align:left;">
                             <input type="checkbox" id="checkinforme" name="checkinforme">
-                            <label class="form-check-label" for="defaultCheck1">Informe Medico</label>
+                            <label class="form-check-label" for="defaultCheck1">INFORME MEDICO</label>
                         </div>
                         <div style="text-align:left;">
                             <input type="checkbox" id="checkcedulabeneficiario" name="checkcedulabeneficiario">
-                            <label class="form-check-label" for="defaultCheck1">Copia Cedula Beneficiario</label>
+                            <label class="form-check-label" for="defaultCheck1">COPIA CEDULA BENEFICIARIO</label>
                         </div>
                         <div style="text-align:left;">
                             <input type="checkbox" id="checkpresupuesto" name="checkpresupuesto">
-                            <label class="form-check-label" for="defaultCheck1">Presupuesto (BS)</label>
+                            <label class="form-check-label" for="defaultCheck1">PRESUPUESTO (BS)</label>
                         </div>
                         <div style="text-align:left;">
                             <input type="checkbox" id="evifotobeneficiario" name="evifotobeneficiario">
-                            <label class="form-check-label" for="defaultCheck1">Evidencia Fotografica</label>
+                            <label class="form-check-label" for="defaultCheck1">EVIDENCIA FOTOGRAFICA</label>
                         </div>
                         <div style="text-align:left;">
                             <input type="checkbox" id="permisoinhumacion" name="permisoinhumacion">
-                            <label class="form-check-label" for="defaultCheck1">Permiso de Inhumacion</label>
+                            <label class="form-check-label" for="defaultCheck1">PERMISO DE INHUMACION</label>
                         </div>
                         <div style="text-align:left;">
                             <input type="checkbox" id="certificadodefuncion" name="certificadodefuncion">
-                            <label class="form-check-label" for="defaultCheck1">Certificado de Defuncion</label>
+                            <label class="form-check-label" for="defaultCheck1">CERTIFICADO DE DEFUNSION</label>
                         </div>
                         <div style="text-align:left;">
                             <input type="checkbox" id="ordenexamen" name="ordenexamen">
-                            <label class="form-check-label" for="defaultCheck1">Orden de Examen</label>
+                            <label class="form-check-label" for="defaultCheck1">ORDEN DE EXAMEN</label>
                         </div>
                         <div style="text-align:left;">
                             <input type="checkbox" id="ordenestudio" name="ordenestudio">
-                            <label class="form-check-label" for="defaultCheck1">Orden de Estudio</label>
+                            <label class="form-check-label" for="defaultCheck1">ORDEN DE ESTUDIO</label>
                         </div>
                     </div>
                     <div style="text-align:left;">
@@ -850,5 +851,9 @@
         });
     })
 </script>
-
+<style>
+section.content{
+        background-image: url("{{ url('/images/siacreate.jpg') }}");
+}
+</style>
 @endsection

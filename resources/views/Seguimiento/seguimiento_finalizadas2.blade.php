@@ -27,6 +27,7 @@
 @component('components.alert_msg',['tipo_alert'=>$tipo_alert])
  Componentes para los mensajes de Alert, No Eliminar
 @endcomponent
+<h2 style="margin: -25px 0px -25px 0px; text-align: center"><img src="{{ url('/images/icons/logoSIA.png') }}" alt="logo" height="100px" >Reporte Solicitudes</h2>
 
 <div class="container-fluid">
     <div class="card">

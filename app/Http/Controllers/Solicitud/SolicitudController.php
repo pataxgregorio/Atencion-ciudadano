@@ -56,11 +56,53 @@ class SolicitudController extends Controller
         return view('Solicitud.solicitud', compact('count_notification', 'tipo_alert', 'array_color'));
     }
 
+    public function indexfinalizadas()
+    {
+        $count_notification = (new User)->count_noficaciones_user();
+        $tipo_alert = "";
+        if (session('delete') == true) {
+            $tipo_alert = "Delete";
+            session(['delete' => false]);
+        }
+        if (session('update') == true) {
+            $tipo_alert = "Update";
+            session(['update' => false]);
+        }
+        $array_color = (new Colores)->getColores();
+        $solcomunas = (new Solicitud)->getSolicitudporComunas();
+        return view('Solicitud.solicitudfinalizadas', compact('count_notification', 'tipo_alert', 'array_color','solcomunas'));
+    }
+
     public function getSolicitud(Request $request)
     {
         try {
             if ($request->ajax()) {
                 $data = (new Solicitud)->getSolicitudList_DataTable();
+                return datatables()->of($data)
+                    ->addColumn('edit', function ($data) {
+                        $user = Auth::user();
+                        if (($user->id != 1)) {
+                            $edit = '<a href="' . route('solicitud.edit', $data->id) . '" id="edit_' . $data->id . '" class="btn btn-xs btn-primary" style="background-color: #2962ff;"><b><i class="fa fa-pencil"></i>&nbsp;' . trans('message.botones.edit') . '</b></a>';
+                        } else {
+                            $edit = '<a href="' . route('solicitud.edit', $data->id) . '" id="edit_' . $data->id . '" class="btn btn-xs btn-primary" style="background-color: #2962ff;"><b><i class="fa fa-pencil"></i>&nbsp;' . trans('message.botones.edit') . '</b></a>';
+                        }
+                        return $edit;
+                    })
+                    ->addColumn('view', function ($data) {
+                        return '<a style="background-color: #5333ed;" href="' . route('solicitud.view', $data->id) . '" id="view_' . $data->id . '" class="btn btn-xs btn-primary"><b><i class="fa fa-eye"></i>&nbsp;' . trans('message.botones.view') . '</b></a>';
+                    })
+
+                    ->rawColumns(['edit', 'view', 'del'])->toJson();
+            }
+        } catch (Throwable $e) {
+            echo "Captured Throwable: " . $e->getMessage(), "\n";
+        }
+    }
+    public function getSolicitudfin(Request $request)
+    {
+        try {
+            if ($request->ajax()) {
+                $data = (new Solicitud)->getSolicitudList_DataTablefin();
                 return datatables()->of($data)
                     ->addColumn('edit', function ($data) {
                         $user = Auth::user();
@@ -91,6 +133,36 @@ class SolicitudController extends Controller
         $data = (new Solicitud)->getSolicitudList_DataTable4($request['params']);
         return response()->json($data);
     }
+    public function getSolicitudTotales(Request $request){
+        $fechaDesde = $request->input('fechaDesde'); 
+        $fechaHasta = $request->input('fechaHasta');
+        $status_id = $request->input('status_id');
+    
+        $data = (new Solicitud)->getSolicitudListWAN_Totales($fechaDesde, $fechaHasta, $status_id);
+        return response()->json($data);
+    }
+    public function BuscarIndex(Request $request)
+    {
+        $tipo = $request->tipo;
+
+        $count_notification = (new User)->count_noficaciones_user();
+        $tipo_alert = "";
+        if (session('delete') == true) {
+            $tipo_alert = "Delete";
+            session(['delete' => false]);
+        }
+        if (session('update') == true) {
+            $tipo_alert = "Update";
+            session(['update' => false]);
+        }
+        $array_color = (new Colores)->getColores();
+        return view('Solicitud.buscar', compact('count_notification','tipo', 'tipo_alert', 'array_color'));
+    }
+    public function getSolicitudGeneral(Request $request){
+        $data = (new Solicitud)->getSolicitudList_DataTableGeneral($request['params']);
+        return response()->json($data);
+    }
+
     public function profile()
     {
         $count_notification = (new User)->count_noficaciones_user();
@@ -183,7 +255,7 @@ class SolicitudController extends Controller
         // Target URL
         DB::beginTransaction();
         try {
-            $input = $request->all();            
+            $input = $request->all();       
             $input['users_id'] = Auth::user()->id;
             //  $data['is_deleted'] = false;
             $recaudos = NULL;
@@ -354,6 +426,7 @@ class SolicitudController extends Controller
                         "edadbeneficiario" => isset($input['edadbeneficiario']) ? $input['edadbeneficiario'] : NULL,
                         "nombre" => isset($input['nombrebeneficiario']) ? $input['nombrebeneficiario'] : NULL,
                         "direccion" => isset($input['direccionbeneficiario']) ? $input['direccionbeneficiario'] : NULL,
+                        "observacion" => isset($input['observacionbeneficiario']) ? $input['observacionbeneficiario'] : NULL,
                         "solicita" => isset($input['solicita']) ? $input['solicita'] : NULL,
                         "venApp" => isset($input['venApp']) ? $input['venApp'] : NULL,
                     ]
@@ -819,6 +892,7 @@ class SolicitudController extends Controller
                     "edadbeneficiario" => isset($input['edadbeneficiario']) ? $input['edadbeneficiario'] : NULL,
                     "nombre" => isset($input['nombrebeneficiario']) ? $input['nombrebeneficiario'] : NULL,
                     "direccion" => isset($input['direccionbeneficiario']) ? $input['direccionbeneficiario'] : NULL,
+                    "observacion" => isset($input['observacionbeneficiario']) ? $input['observacionbeneficiario'] : NULL,
                     "solicita" => isset($input['solicita']) ? $input['solicita'] : NULL,
                     "venApp" => isset($input['venApp']) ? $input['venApp'] : NULL,
                 ]
@@ -990,6 +1064,16 @@ class SolicitudController extends Controller
             return $array;
        
     }
+    public function solicitudTipo5PorFecha(Request $request)
+    {
+            $input = $request->all();
+            $fechaDesde = $input['fecha_desde'];
+            $fechaHasta = $input['fecha_hasta'];
+            $countSolicitud = (new Solicitud)->count_solicitud5PorFecha($fechaDesde, $fechaHasta);
+            $array = [$countSolicitud];
+            return $array;
+       
+    }
         public function solicitudTotalTipo(Request $request)
     {
         if ($request->ajax()) {
@@ -1078,12 +1162,24 @@ class SolicitudController extends Controller
     $solfinalizadas = (new Solicitud)->reportetotalcasosatendidosSALUD();
     return $solfinalizadas;
     }
+    public function getFinalizadascomunas(Request $request){
+        $solfinalizadas = (new Solicitud)->reportetotalcomunas();
+        return $solfinalizadas;
+        }
+        public function ultimasEntradas(Request $request){
+            $solfinalizadas = (new Solicitud)->ultimasEntradas();
+            return $solfinalizadas;
+            }
     public function getFinalizadasConFecha(Request $request){
         $input = $request->all();
         $fechaDesde = $input['fecha_desde'];
         $fechaHasta = $input['fecha_hasta'];
         $solfinalizadas = (new Solicitud)->reportetotalcasosatendidosSALUDConFecha($fechaDesde, $fechaHasta);
         return $solfinalizadas;
+        }
+
+        public function medicinacomunas(){
+           return (new Solicitud)->medicinacomunas();
         }
     public function imprimir(Request $request)
     {        
@@ -2831,11 +2927,13 @@ class SolicitudController extends Controller
             $beneficiario = $solicitud->beneficiario;      
             $beneficiario = json_decode($beneficiario, true);
             $cedulabeneficiario = $beneficiario[0]["cedula"];
-            $edadbeneficiario = isset($beneficiario[0]["edad"]) ? $beneficiario[0]["edad"]: 'N/A';
+            $edadbeneficiario = isset($beneficiario[0]["edadbeneficiario"]) ? $beneficiario[0]["edadbeneficiario"]: 'N/A';
             $nombrebeneficiario = $beneficiario[0]["nombre"];
             $direccionbeneficiario = $beneficiario[0]["direccion"];
             $codigovenapp = isset($beneficiario[0]["venApp"]) ? $beneficiario[0]["venApp"]: 'N/A';
             
+            $observacion = isset($beneficiario[0]["observacion"]) ? $beneficiario[0]["observacion"]: 'N/A';
+
             $solicita = isset($beneficiario[0]["solicita"]) ? $beneficiario[0]["solicita"]: 'N/A';
             $recaudos = $solicitud->recaudos;
             $recaudos = json_decode($recaudos, true);
@@ -2997,25 +3095,27 @@ class SolicitudController extends Controller
                 
                 <table>
                     <tr>
-                        <th>Datos del ciudadano(a) Solicitante</th>
+                        <th>Datos del Ciudadano Beneficiario(a)/Comunidad</th>
                     </tr>
                 </table>
                 <table class="table table-bordered" border="0">
                     <tr>
                         <th class="text-primary" >Nombre Y Apellido</th>
                         <th>Cedula</th>
-                        <th>Telefono</th>
+                        <th>Solicita</th>
                         <th>Sexo</th>
                         <th>Edad</th>
-                        <!-- <th>Ocupacion O/U Oficio</th> -->
+                        <th>Trabajador de la alcaldia</th>
+                        <th>Codigo VenApp</th>
                     </tr>
                     <tr>
-                        <td>$solicitud->nombre</td>
-                        <td>$solicitud->cedula</td>
-                        <td>$solicitud->telefono</td>
+                        <td>$nombrebeneficiario</td>
+                        <td>$cedulabeneficiario</td>
+                        <td>$solicita</td>
                         <td>$solicitud->sexo</td>
-                        <td>$solicitud->fechaNacimiento</td>
-                        <!-- <td>$solicitud->profesion</td>  -->
+                        <td>$edadbeneficiario</td>
+                        <td>$verificaTrabajador</td>
+                        <td>$codigovenapp</td>
                     </tr>
             </table>
     
@@ -3026,7 +3126,7 @@ class SolicitudController extends Controller
                         <th>Parroquia</th>
                         <th>Comuna</th>
                         <th>Comunidad</th>
-                        <th>Direccion Habitacion</th>
+                        <th>Direccion de Benificiario</th>
                         <th>Tipo de Solicitud</th>
                     </tr>
                     <tr>
@@ -3035,7 +3135,7 @@ class SolicitudController extends Controller
                         <td>$parroquia</td>
                         <td>$comuna</td>
                         <td>$comunidad</td>
-                        <td>$solicitud->direccion</td>
+                        <td>$direccionbeneficiario</td>
                         <td>$tiposolicitud</td>
                     </tr>
                         </table>
@@ -3075,40 +3175,26 @@ class SolicitudController extends Controller
 
                 <table>
                     <tr>
-                        <th>Datos del Ciudadano Beneficiario(a)/Comunidad</th>
+                        <th>Datos del ciudadano(a) Solicitante</th>
                     </tr>
                 </table>
 
                 <table>
                     <tr>
+                        <th>Apellido y Nombre</th>
                         <th>Cedula de Identidad</th>
                         <th>Edad</th>
-                        <!-- <th>Tipo de Registro</th> -->
-                        <th>Apellido y Nombre</th>
-                        <th>Trabajador de la alcaldia</th>
-                        <th>Direccion de Benificiario</th>
-                        <th>Solicita</th>
-                        <th>Codigo VenApp</th>
-                        <!-- <th>Estado Civil</th>
-                        <th>Fecha de nacimiento</th>
-                        <th>Nivel Educativo</th>
-                        <th>Profesion</th>
-                        <th>Parentesco</th> -->
+                        <th>Telefono</th>
+                        <th>Direccion Habitacion</th>
+
                     </tr>
                     <tr>
-                        <td>$cedulabeneficiario</td>
-                        <td>$edadbeneficiario</td>
-                        <!-- <td></td> -->
-                        <td>$nombrebeneficiario</td>
-                        <td>$verificaTrabajador</td>
-                        <td>$direccionbeneficiario</td>
-                        <td>$solicita</td>
-                        <td>$codigovenapp</td>
-                        <!-- <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td> -->
+                        <td>$solicitud->nombre</td>
+                        <td>$solicitud->cedula</td>
+                        <td>$solicitud->fechaNacimiento</td>
+                        <td>$solicitud->telefono</td>
+                        <td>$solicitud->direccion</td>
+
                     </tr>
                 </table>
                 
@@ -3169,10 +3255,10 @@ class SolicitudController extends Controller
 
                 <table>
                     <tr>
-                        <th>Descripcion de el tramite</th>
+                        <th>Observacion</th>
                     </tr>
                     <tr>
-                        <td style="padding: 1.7rem"></td>
+                        <td style="padding: 1.7rem">$observacion</td>
                     </tr>
                 </table>
                 <table>
@@ -3387,6 +3473,9 @@ public function imprimir3(Request $request) {
                     <td>$finalizada->nombretipo</td>
                     <td>$finalizada->beneficiarionombre</td>
                     <td>$finalizada->cedula2</td>
+                    <td>$finalizada->beneficiarionombre</td>
+                    <td>$finalizada->cedula2</td>
+
                 </tr>
         HTML;
         $printSolicitudFinalizadas .= $finalizadas;

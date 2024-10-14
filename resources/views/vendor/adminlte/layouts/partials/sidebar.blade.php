@@ -35,14 +35,52 @@
         <!-- /.search form -->
 
         <!-- Sidebar Menu -->
+        @if(Auth::user()->direccion_id === 15)
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">{{ trans('message.header') }}</li>
             <!-- Optionally, you can add icons to the links -->
             <li><a href="{{ url('/dashboard') }}"><i class='fa fa-link'></i> <span>{{ trans('message.dashboard') }}</span></a></li>            
             <!-- Optionally, you can add icons to the links -->
-            @if(Auth::user()->rols_id === 1 )
+            <li><a href="{{ url('/solicitud') }}"><i class='fa fa-link'></i> <span>{{ trans('message.request') }}</span></a></li>
+
+        </ul><!-- /.sidebar-menu -->
+        @endif
+        @if(Auth::user()->direccion_id === 5 )
+        <ul class="sidebar-menu" data-widget="tree">
+            <li class="header">{{ trans('message.header') }}</li>
+            <!-- Optionally, you can add icons to the links -->
+            <li><a href="{{ url('/dashboard') }}"><i class='fa fa-link'></i> <span>{{ trans('message.dashboard') }}</span></a></li>            
+            <!-- Optionally, you can add icons to the links -->
+            <li><a href="{{ url('/solicitud/buscarsolicitud') }}"><i class='fa fa-link'></i> <span>{{'Buscar Solicitudes'}}</span></a></li>            
+            
+            <li class="treeview">
+                <a href="#"><i class='fa fa-link'></i> <span>Solicitudes</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                <li><a href="{{ url('/solicitud/create') }}"><i class='fa fa-link'></i> <span>Crear Solicitudes</span></a></li>
+                <li><a href="{{ url('/solicitud') }}"><i class='fa fa-link'></i> <span>Ver Solicitudes</span></a></li>
+                </ul>
+            </li>
+          
+                <li><a href="{{ url('/seguimiento') }}"><i class='fa fa-link'></i> <span>Seguimiento</span></a></li>
+ 
+              
+            <li class="treeview">
+                <a href="#"><i class='fa fa-link'></i> <span>Reporte</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                    <li><a href="{{ url('/finalizadas') }}"><i class='fa fa-link'></i> <span>Finalizadas</span></a></li>
+                    <li><a href="{{ url('/finalizadas2') }}"><i class='fa fa-link'></i> <span>Solicitudes</span></a></li>
+                </ul>
+            </li>
+            <li><a href="{{ url('/users/color_view') }}"><i class='fa fa-link'></i> <span>{{ trans('message.menu_color') }}</span></a></li>
+        </ul><!-- /.sidebar-menu -->
+        @endif
+        @if(Auth::user()->rols_id === 1 )
+        <ul class="sidebar-menu" data-widget="tree">
+            <li class="header">{{ trans('message.header') }}</li>
+            <!-- Optionally, you can add icons to the links -->
+            <li><a href="{{ url('/dashboard') }}"><i class='fa fa-link'></i> <span>{{ trans('message.dashboard') }}</span></a></li>            
+            <!-- Optionally, you can add icons to the links -->
             <li><a href="{{ url('/users') }}"><i class='fa fa-link'></i> <span>{{ trans('message.users') }}</span></a></li>
-            @endif
             <li><a href="{{ url('/solicitud') }}"><i class='fa fa-link'></i> <span>{{ trans('message.request') }}</span></a></li>
             <li><a href="{{ url('/seguimiento') }}"><i class='fa fa-link'></i> <span>Seguimiento</span></a></li>
             <li class="treeview">
@@ -52,7 +90,16 @@
                     <li><a href="{{ url('/finalizadas2') }}"><i class='fa fa-link'></i> <span>Solicitudes</span></a></li>
                 </ul>
             </li>
-
+            <li class="treeview">
+                <a href="#"><i class='fa fa-link'></i> <span>Inventario</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                    <li><a href="{{ url('/dashproducto') }}"><i class='fa fa-link'></i> <span>Tablero</span></a></li>
+                    <li><a href="{{ url('/almacen') }}"><i class='fa fa-link'></i> <span>Almacen</span></a></li>
+                    <li><a href="{{ url('/producto') }}"><i class='fa fa-link'></i> <span>Producto</span></a></li>
+                    <li><a href="{{ url('/servicio') }}"><i class='fa fa-link'></i> <span>Servicios</span></a></li>
+                    <li><a href="{{ url('/inventario') }}"><i class='fa fa-link'></i> <span>Inventario</span></a></li>
+                </ul>
+            </li>
             @if(Auth::user()->rols_id === 1 )
             <li><a href="{{ url('/notificaciones') }}"><i class='fa fa-link'></i> <span>{{ trans('message.menu_notificaciones') }}</span></a></li>
             <li class="treeview">
@@ -63,9 +110,9 @@
                     <li><a href="{{ url('/permisos') }}">{{ trans('message.menu_permiso') }}</a></li>
                 </ul>
             </li>
-            @endif
             <li><a href="{{ url('/users/color_view') }}"><i class='fa fa-link'></i> <span>{{ trans('message.menu_color') }}</span></a></li>
         </ul><!-- /.sidebar-menu -->
+        @endif
     </section>
     <!-- /.sidebar -->
 </aside>

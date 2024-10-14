@@ -19,93 +19,90 @@
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
                 <!-- Messages: style can be found in dropdown.less-->
-                <li class="dropdown messages-menu">
+                <!-- <li class="dropdown messages-menu"> -->
                     <!-- Menu toggle button -->
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <!-- <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-envelope-o"></i>
                         <span class="label label-success">4</span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li class="header">{{ trans('message.tabmessages') }}</li>
-                        <li>
+                    </a> -->
+                    <!-- <ul class="dropdown-menu"> -->
+                        <!-- <li class="header">{{ trans('message.tabmessages') }}</li> -->
+                        <!-- <li> -->
                             <!-- inner menu: contains the messages -->
-                            <ul class="menu">
-                                <li><!-- start message -->
-                                    <a href="{{ url('/mail') }}">
-                                        <div class="pull-left">
+                            <!-- <ul class="menu"> -->
+                                <!-- <li>start message -->
+                                    <!-- <a href="{{ url('/mail') }}"> -->
+                                        <!-- <div class="pull-left"> -->
                                             <!-- User Image -->
-                                            <img src="{{ Gravatar::get($user->email) }}" class="img-circle" alt="User Image"/>
-                                        </div>
+                                            <!-- <img src="{{ Gravatar::get($user->email) }}" class="img-circle" alt="User Image"/> -->
+                                        <!-- </div> -->
                                         <!-- Message title and timestamp -->
-                                        <h4>
-                                            {{ trans('message.supteam') }}
-                                            <small><i class="fa fa-clock-o"></i> 5 mins</small>
-                                        </h4>
+                                        <!-- <h4> -->
+                                            <!-- {{ trans('message.supteam') }} -->
+                                            <!-- <small><i class="fa fa-clock-o"></i> 5 mins</small> -->
+                                        <!-- </h4> -->
                                         <!-- The message -->
-                                        <p>{{ trans('message.awesometheme') }}</p>
-                                    </a>
-                                </li><!-- end message -->
-                            </ul><!-- /.menu -->
-                        </li>
-                        <li class="footer"><a href="#">c</a></li>
-                    </ul>
-                </li><!-- /.messages-menu -->
+                                        <!-- <p>{{ trans('message.awesometheme') }}</p> -->
+                                    <!-- </a> -->
+                                <!-- </li>end message -->
+                            <!-- </ul>/.menu -->
+                        <!-- </li> -->
+                        <!-- <li class="footer"><a href="#">c</a></li> -->
+                    <!-- </ul> -->
+                <!-- </li>/.messages-menu -->
 
                 <!-- Notifications Menu -->
-                <li class="dropdown notifications-menu">
+                <!-- <li class="dropdown notifications-menu"> -->
                     <!-- Menu toggle button -->
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <!-- <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-bell-o"></i>
                         <span class="label label-warning">{{$count_notification}}</span>
-                    </a>
-                    <ul class="dropdown-menu">
+                    </a> -->
+                    <!-- <ul class="dropdown-menu">
                         <li class="header">{{ trans('message.notifications') }}{{$count_notification}}{{ trans('message.notifications_2') }}</li>
                         <li>
-                            <!-- Inner Menu: contains the notifications -->
                             <ul class="menu">
-                                <li><!-- start notification -->
                                     <a href="{{ url('/notificaciones') }}">
                                         <i class="fa fa-bell text-aqua"></i> {{ trans('message.notifications') }}{{$count_notification}}{{ trans('message.notifications_2') }}
                                     </a>
-                                </li><!-- end notification -->
                             </ul>
                         </li>
                         <li class="footer"><a href="#">{{ trans('message.viewall') }}</a></li>
-                    </ul>
-                </li>
+                    </ul> -->
+                <!-- </li> -->
                 <!-- Tasks Menu -->
                 <li class="dropdown tasks-menu">
                     <!-- Menu Toggle Button -->
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <!-- <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-flag-o"></i>
                         <span class="label label-danger">3</span>
-                    </a>
+                    </a> -->
                     <ul class="dropdown-menu">
-                        <li class="header">{{ trans('message.tasks') }}</li>
+                        <!-- <li class="header">{{ trans('message.tasks') }}</li> -->
                         <li>
                             <!-- Inner menu: contains the tasks -->
-                            <ul class="menu">
-                                <li><!-- Task item -->
-                                    <a href="{{ url('/homework') }}">
+                            <!-- <ul class="menu"> -->
+                                <!-- <li>Task item -->
+                                    <!-- <a href="{{ url('/homework') }}"> -->
                                         <!-- Task title and progress text -->
-                                        <h3>
+                                        <!-- <h3>
                                             {{ trans('message.tasks') }}
                                             <small class="pull-right">20%</small>
-                                        </h3>
+                                        </h3> -->
                                         <!-- The progress bar -->
-                                        <div class="progress xs">
+                                        <!-- <div class="progress xs"> -->
                                             <!-- Change the css width attribute to simulate progress -->
-                                            <div class="progress-bar progress-bar-aqua" style="width: 20%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                                            <!-- <div class="progress-bar progress-bar-aqua" style="width: 20%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
                                                 <span class="sr-only">20% {{ trans('message.complete') }}</span>
                                             </div>
-                                        </div>
-                                    </a>
-                                </li><!-- end task item -->
-                            </ul>
+                                        </div> -->
+                                    <!-- </a> -->
+                                <!-- </li>end task item -->
+                            <!-- </ul> -->
                         </li>
-                        <li class="footer">
+                        <!-- <li class="footer">
                             <a href="#">{{ trans('message.alltasks') }}</a>
-                        </li>
+                        </li> -->
                     </ul>
                 </li>
                 @if (Auth::guest())
@@ -136,11 +133,11 @@
                                 @endif
                                 <p>
                                     <span data-toggle="tooltip" title="{{ Auth::user()->name }}">{{ Auth::user()->name }}</span>
-                                    <small>{{ trans('message.login') }} Nov. 2012</small>
+                                    <!-- <small>{{ trans('message.login') }} Nov. 2012</small> -->
                                 </p>
                             </li>
                             <!-- Menu Body -->
-                            <li class="user-body">
+                            <!-- <li class="user-body">
                                 <div class="col-xs-4 text-center">
                                     <a href="#">{{ trans('message.followers') }}</a>
                                 </div>
@@ -150,7 +147,7 @@
                                 <div class="col-xs-4 text-center">
                                     <a href="#">{{ trans('message.friends') }}</a>
                                 </div>
-                            </li>
+                            </li> -->
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-left">
@@ -175,9 +172,9 @@
                 @endif
 
                 <!-- Control Sidebar Toggle Button -->
-                <li>
+                <!-- <li>
                     <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-                </li>
+                </li> -->
             </ul>
         </div>
     </nav>

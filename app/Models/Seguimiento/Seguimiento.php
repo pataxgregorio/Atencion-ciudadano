@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models\Seguimiento;
-
+use App\Models\SolicitudMovimiento\SolicitudMovimiento;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -57,10 +57,11 @@ class Seguimiento extends Model
             ->join('tipo_solicitud', 'solicitud.tipo_solicitud_id', '=', 'tipo_solicitud.id')
             ->join('direccion', 'solicitud.direccion_id', '=', 'direccion.id')
             ->join('users' , 'solicitud.users_id', '=', 'users.id')
+            ->join('comuna', 'solicitud.comuna_id', '=', 'comuna.id')
             ->join('rols', 'users.rols_id', '=', 'rols.id')
             ->join('status', 'solicitud.status_id', '=', 'status.id')
             ->join('tipo_subsolicitud', 'solicitud.tipo_subsolicitud_id', '=', 'tipo_subsolicitud.id')
-            ->select('solicitud.beneficiario','solicitud.id','solicitud.solicitud_salud_id as saludID','solicitud.fecha as fecha','users.name as usuario','solicitud.nombre AS solicitante','solicitud.cedula as cedula','tipo_subsolicitud.nombre AS nombretipo','direccion.nombre AS direccionnombre','status.nombre AS nombrestatus')
+            ->select('solicitud.beneficiario','solicitud.id','solicitud.solicitud_salud_id as saludID','comuna.codigo as comuna','solicitud.fecha as fecha','users.name as usuario','solicitud.nombre AS solicitante','solicitud.cedula as cedula','tipo_subsolicitud.nombre AS nombretipo','direccion.nombre AS direccionnombre','status.nombre AS nombrestatus')
             ->where ('tipo_solicitud.id', '!=',4)
             ->where ('tipo_solicitud.id', '!=',5)
             ->where ('rols_id', '=', $rols_id)
@@ -83,10 +84,11 @@ class Seguimiento extends Model
             ->join('tipo_solicitud', 'solicitud.tipo_solicitud_id', '=', 'tipo_solicitud.id')
             ->join('direccion', 'solicitud.direccion_id', '=', 'direccion.id')
             ->join('users' , 'solicitud.users_id', '=', 'users.id')
+            ->join('comuna', 'solicitud.comuna_id', '=', 'comuna.id')
             ->join('rols', 'users.rols_id', '=', 'rols.id')
             ->join('status', 'solicitud.status_id', '=', 'status.id')
             ->join('tipo_subsolicitud', 'solicitud.tipo_subsolicitud_id', '=', 'tipo_subsolicitud.id')
-            ->select('solicitud.beneficiario','solicitud.id','solicitud.solicitud_salud_id as saludID','solicitud.fecha as fecha','users.name as usuario','solicitud.nombre AS solicitante','solicitud.cedula as cedula','tipo_subsolicitud.nombre AS nombretipo','direccion.nombre AS direccionnombre','status.nombre AS nombrestatus')
+            ->select('solicitud.beneficiario','solicitud.id','solicitud.solicitud_salud_id as saludID','comuna.codigo as comuna','solicitud.fecha as fecha','users.name as usuario','solicitud.nombre AS solicitante','solicitud.cedula as cedula','tipo_subsolicitud.nombre AS nombretipo','direccion.nombre AS direccionnombre','status.nombre AS nombrestatus')
             ->where ('tipo_solicitud.id', '!=',4)
             ->where ('tipo_solicitud.id', '!=',5)
             ->where ('rols_id', '=', $rols_id)
@@ -181,7 +183,29 @@ class Seguimiento extends Model
             return $solicitud;
         }
     }
+    public function getproductos(){
+
+       
+$totalCantidad = DB::table('solicitudmovimiento')->where('solicitudmovimiento.producto_id', '!=', NULL)->sum('cantidad');
+
+$porcentajes = DB::table('solicitudmovimiento')
+                ->join('producto', 'solicitudmovimiento.producto_id', '=', 'producto.id')
+                ->select(
+                    'producto.nombre',
+                    DB::raw('round((SUM(solicitudmovimiento.cantidad) / ' . $totalCantidad . ') * 100) as porcentaje')
+                )
+                ->where('solicitudmovimiento.producto_id', '!=', NULL)
+                ->groupBy('producto.id', 'producto.nombre')
+                ->get();
+
+// Formatear el resultado como un arreglo [nombre_producto => porcentaje]
+$resultado = $porcentajes->pluck('porcentaje', 'nombre')->toArray();
+// Convertir el arreglo a JSON
+//$jsonResultado = json_encode($resultado);
+return $resultado;
     
+   
+    }
     public function count_solictud(){        
         return DB::table('solicitud')
             ->join('tipo_solicitud', 'solicitud.tipo_solicitud_id', '=', 'tipo_solicitud.id')

@@ -51,7 +51,7 @@ return [
     'createdby'               => 'Creado por',
     'seecode'                 => 'Ver código versión 1.0 en',
     'online'                  => 'En Línea',
-    'home_1'                  => 'Inicio',
+    'home_1'                  => 'SIA',
     'header'                  => 'ENCABEZAMIENTO',
     'anotherlink'             => 'Otro enlace',
     'multilevel'              => 'Multinivel',
