@@ -607,7 +607,10 @@ public function segumientoJson (){
         return view('Solicitud.show', compact('count_notification', 'titulo_modulo', 'solicitud_edit', 'estado', 'municipio', 'parroquia', 'asignacion', 'comuna', 'comunidad', 'tipo_solicitud', 'direcciones', 'enter', 'sexo', 'edocivil', 'nivelestudio', 'coordinacion', 'denuncia', 'beneficiario', 'quejas', 'sugerecia', 'asesoria', 'reclamo', 'profesion', 'recaudos', 'denunciado', 'array_color'));
 
     }
-
+    public function getproductos () {
+        $comunidad = (new Seguimiento)->getproductos();
+        return $comunidad;
+    }
     /**
      * Show the form for editing the specified resource.
      *

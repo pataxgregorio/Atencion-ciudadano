@@ -6,11 +6,22 @@
     <link href="{{ url ('/css_datatable/responsive.bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ url ('/css_datatable/buttons.dataTables.min.css') }}" rel="stylesheet">
 @endsection
-
+@section('contentheader_title')
+<!-- Componente Button Para todas las Ventanas de los Módulos, no Borrar.--> 
+<div >
+      <h2 class="mb-4" style="text-align: center; display: flex; justify-content: space-between; margin-bottom: -50px">
+      <img src="{{ url('/images/icons/logoSIA.png') }}" alt="logo" height="150px" style="margin-top: -15px">
+        <p style="margin-top: 40px; font-size: 36px">Inventario</p>
+        <img src="{{ url('/images/icons/logo.png') }}" alt="logo" height="100px">
+      </h2> 
+    </div>
+  
+    
+@endsection
     
 @section('main-content')
+
 <div>
-<h2 style="text-align: center;">Inventario</h2>
 
 </div>
 <div class="container-fluid">

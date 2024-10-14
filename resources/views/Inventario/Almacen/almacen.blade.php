@@ -10,17 +10,13 @@
 
 @section('contentheader_title')
 <!-- Componente Button Para todas las Ventanas de los Módulos, no Borrar.--> 
-@component('components.button',['titulo_modulo' => 'Almacenes',
-                                'router_modulo_create' => route('almacen.create'),
-                                'id_new_modulo' => 'new_almacen',
-                                'boton_crear' => 'Almacen',
-                                'route_print' => '',
-                                'route_download' => '',
-                                'route_upload' => route('solicitud.solicitudPrint'),
-                                'tooltip' => trans('message.tooltip.new_module'),
-                                'color' => $array_color['group_button_color']])
-Componentes para los Módulos del Sistema, (New,Print,Download and Upload)
-@endcomponent
+<div >
+      <h2 class="mb-4" style="text-align: center; display: flex; justify-content: space-between; margin-bottom: -50px">
+      <img src="{{ url('/images/icons/logoSIA.png') }}" alt="logo" height="150px" style="margin-top: -15px">
+        <p style="margin-top: 40px; font-size: 36px">Almacen</p>
+        <img src="{{ url('/images/icons/logo.png') }}" alt="logo" height="100px">
+      </h2> 
+    </div>
   
     
 @endsection

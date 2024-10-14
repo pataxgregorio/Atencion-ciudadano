@@ -10,9 +10,7 @@
     <div id="app">
 
         <div class="login-box">
-        <div class="login-logo">
-            <a href="{{ url('/dashboard') }}"><b>Dashboard</a>
-        </div><!-- /.login-logo -->
+       
 
         @if (session('status'))
             <div class="alert alert-success">
