@@ -20,23 +20,23 @@
 <div class="container table-borderless" >
     <div class="col-md-6 col-sm-6 table-borderless" >
         <div class="row table-borderless">
-        <iframe class="embed-responsive-item" style="width: 100%; height: 800px" src="http://0.0.0.0:4000/producto2" allowfullscreen seamless frameborder="0"></iframe>
+        <iframe class="embed-responsive-item" style="width: 100%; height: 800px" src="http://156.235.91.67:4000/producto2" allowfullscreen seamless frameborder="0"></iframe>
         </div>
     </div>
     <div class="col-md-6 col-sm-6 table-borderless" >
         <div class="row table-borderless">
-            <iframe class="embed-responsive-item" style="width: 100%; height: 800px" src="http://127.0.0.1:9000/#/consultar" allowfullscreen frameborder="0"></iframe>
+            <iframe class="embed-responsive-item" style="width: 100%; height: 800px" src="http://156.235.91:9000/#/consultar" allowfullscreen frameborder="0"></iframe>
         </div>
     </div>
     
     <div class="col-md-6 col-sm-6 table-borderless" >
         <div class="row">
-            <iframe class="embed-responsive-item" style="width: 100%; height: 1000px" src="http://127.0.0.1:9000/#/pie" allowfullscreen frameborder="0"></iframe>  
+            <iframe class="embed-responsive-item" style="width: 100%; height: 1000px" src="http://156.235.91:9000/#/pie" allowfullscreen frameborder="0"></iframe>  
         </div>
     </div>
     <div class="col-md-6 col-sm-6 table-borderless" >
         <div class="row">
-            <iframe class="embed-responsive-item" style="width: 100%; height: 1000px" src="http://127.0.0.1:9000/#/pie2" allowfullscreen frameborder="0"></iframe>  
+            <iframe class="embed-responsive-item" style="width: 100%; height: 1000px" src="http://156.235.91:9000/#/pie2" allowfullscreen frameborder="0"></iframe>  
         </div>
     </div>
 </div>
