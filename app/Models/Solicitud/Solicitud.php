@@ -783,6 +783,45 @@ class Solicitud extends Model
             return $solicitud;
         }
     }
+    public function reportetotalcomunas (){
+       $solicitud = DB::table('solicitud')
+       ->join('tipo_solicitud', 'solicitud.tipo_solicitud_id', '=', 'tipo_solicitud.id')
+       ->join('comuna', 'solicitud.comuna_id', '=', 'comuna.id')
+       ->join('tipo_subsolicitud', 'solicitud.tipo_subsolicitud_id', '=', 'tipo_subsolicitud.id')
+       ->select(  
+           'comuna.codigo  as comuna',        
+           DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "MEDICINA" THEN 1 END) AS MEDICINA'),
+           DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "INSUMOS" THEN 1 END) AS INSUMOS'),
+       )
+       ->where(function ($query) {
+           $query->where('solicitud.tipo_subsolicitud_id', '=', 1)
+                 ->orWhere('solicitud.tipo_subsolicitud_id', '=', 4);
+       })
+       ->where('solicitud.status_id', '=', 5)
+       ->groupBy('comuna.id')
+       ->get();
+        
+       return $solicitud;
+    }
+    public function medicinacomunas (){
+        $solicitud = DB::table('solicitud AS s')
+    ->join('comuna AS c', 's.comuna_id', '=', 'c.id')    
+    ->join('tipo_subsolicitud AS ts', 's.tipo_solicitud_id', '=', 'ts.id')  
+    ->select('c.codigo as comuna', DB::raw('SUM(s.tipo_subsolicitud_id = 1) AS MEDICINA'),
+    DB::raw('SUM(s.tipo_subsolicitud_id = 4) AS INSUMOS')) 
+    ->where('s.status_id', '=', 5)
+    ->groupBy('c.id')  
+    ->get();
+        return $solicitud;
+    }
+    public function ultimasEntradas (){
+        $solicitud = DB::table('inventario')
+        ->join('producto', 'inventario.producto_id', '=', 'producto.id')
+        ->select('producto.nombre','inventario.cantidad_entrada','inventario.fecha','inventario.tipoentrada')
+        ->orderBy('inventario.id', 'desc')->limit(10)->get();
+   
+        return $solicitud;
+    }
     public function getSolicitudList_DataTable4($params){
         try {
             return $solicitud = DB::table('solicitud')

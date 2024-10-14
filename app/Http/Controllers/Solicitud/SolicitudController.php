@@ -1162,12 +1162,24 @@ class SolicitudController extends Controller
     $solfinalizadas = (new Solicitud)->reportetotalcasosatendidosSALUD();
     return $solfinalizadas;
     }
+    public function getFinalizadascomunas(Request $request){
+        $solfinalizadas = (new Solicitud)->reportetotalcomunas();
+        return $solfinalizadas;
+        }
+        public function ultimasEntradas(Request $request){
+            $solfinalizadas = (new Solicitud)->ultimasEntradas();
+            return $solfinalizadas;
+            }
     public function getFinalizadasConFecha(Request $request){
         $input = $request->all();
         $fechaDesde = $input['fecha_desde'];
         $fechaHasta = $input['fecha_hasta'];
         $solfinalizadas = (new Solicitud)->reportetotalcasosatendidosSALUDConFecha($fechaDesde, $fechaHasta);
         return $solfinalizadas;
+        }
+
+        public function medicinacomunas(){
+           return (new Solicitud)->medicinacomunas();
         }
     public function imprimir(Request $request)
     {        
@@ -3459,6 +3471,8 @@ public function imprimir3(Request $request) {
                     <td>$finalizada->solicitante</td>
                     <td>$finalizada->cedula</td>
                     <td>$finalizada->nombretipo</td>
+                    <td>$finalizada->beneficiarionombre</td>
+                    <td>$finalizada->cedula2</td>
                     <td>$finalizada->beneficiarionombre</td>
                     <td>$finalizada->cedula2</td>
                 </tr>

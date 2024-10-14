@@ -288,15 +288,130 @@
                 </div>
             </div>
             {!! Form::close() !!}
-            @if($rols_id === 1)
-                <div style="text-align:left;">
-                    {!! Form::label('status_id', 'Estado de Solicitud', ['class' =>
-                    'control-label']) !!}<span class="required" style="color:red;">*</span>
-                    {!! Form::select('status_id', $status_solicitud, $status_solicitud, ['placeholder' => 'Seleccionar Estado','class'
-                    => 'form-control','id' =>
-                    'status_id']) !!}
+
+           
+         <div class="card">
+                <div class="-header">
+                        <h3 style="justify-content: center; font-size:20px;">Agregar Medicinas/Insumos/Estudios</h3>
                 </div>
-            @endif
+          <div class="card-body">
+            <table class="table table-bordered users_all">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre Medicina/Insumo/Estudio</th>
+                        <th>Cantidad</th>
+                      
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($movimiento as $movimiento2)
+                        <tr>
+                            <td>{{ $movimiento2->id }}</td>
+                            <td>{{isset($movimiento2->producto_id) ?$movimiento2->producto : $movimiento2->servicio}}</td>
+                            <td>{{$movimiento2->cantidad}}</td>
+                           
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        <div>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalMedicinas">Medic./Insum.</button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalEstudios">Estudios.</button>
+        </div>
+    </div>
+        <div>
+        
+
+<div class="modal fade" id="modalMedicinas" tabindex="-1" role="dialog" aria-labelledby="modalMedicinasLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalMedicinasLabel">Agregar Medicinas</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="formMedicinas" method="POST" action="{{ route('seguimiento.store2') }}">
+          @csrf
+          <input type="text" hidden value="{{$solicitud_edit->id}}" name="solicitud_id">
+          <div style="text-align:left;">
+                            {!! Form::label('compra_id', 'Producto', ['class' => 'control-label', 'id' => 'producto_Label']) !!}
+                            <select name="producto_id" id="producto_id" class="form-control">
+                            @foreach($producto as $key => $value)
+                                <option value="{{ $value->id }}" @if(old('producto_id',$value->id ) ) selected @endif>
+                                    {{ $value->nombre }}
+                                </option>
+                            @endforeach
+                            </select>
+         </div> 
+         <div class="form-group">
+            
+            <label for="cantidad">Exixtencia</label>
+            <input type="text" class="form-control" id="existencia" name="existencia" disabled>
+          </div>
+          <div class="form-group">
+            <label for="cantidad">Cantidad</label>
+            <input type="text" class="form-control" id="cantidad" name="cantidad" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="submit" id ="formMedicinasbtn" form="formMedicinas" class="btn btn-primary" >Agregar</button>
+      </div>
+    </div>
+  </div>
+</div>
+                      
+        </div>
+        <div>
+        <div class="modal fade" id="modalEstudios" tabindex="-1" role="dialog" aria-labelledby="modalMedicinasLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalMedicinasLabel">Agregar Medicinas</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="formEstudios" method="POST" action="{{ route('seguimiento.store3') }}">
+          @csrf
+          <input type="text" hidden value="{{$solicitud_edit->id}}" name="solicitud_id">
+          <div style="text-align:left;">
+                            {!! Form::label('compra_id', 'Producto', ['class' => 'control-label', 'id' => 'producto_Label']) !!}
+                            <select name="servicio_id" id="producto_id" class="form-control">
+                            @foreach($servicio as $key => $value)
+                                <option value="{{ $value->id }}" @if(old('servicio_id',$value->id ) ) selected @endif>
+                                    {{ $value->nombre }}
+                                </option>
+                            @endforeach
+                            </select>
+         </div> 
+         
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="submit" id ="formMedicinasbtn" form="formEstudios" class="btn btn-primary" >Agregar</button>
+      </div>
+    </div>
+  </div>
+</div>
+                      
+
+
+        </div>
+    <div style="text-align:left;">
+                {!! Form::label('status_id', 'Estado de Solicitud', ['class' =>
+                'control-label']) !!}<span class="required" style="color:red;">*</span>
+                {!! Form::select('status_id', $status_solicitud, $status_solicitud, ['placeholder' => 'Seleccionar Estado','class'
+                => 'form-control','id' =>
+                'status_id']) !!}
+            </div>
             <?php                
                 foreach ($seguimiento_edit as $index => $seguimientoID) {
                     if ($seguimientoID->id !== null) {  // Verificar si el ID existe
@@ -318,6 +433,8 @@
             @section('script_datatable')
             <script type="text/javascript">        
             $(document).ready(function() {
+                $('#formMedicinasbtn').prop('disabled', true);
+
                 if(jefecomunidadID == ''){
                 $("#jefecomunidad_id").html('<option value="">Seleccione Jefe de Comunidad</option>'); // Opción inicial
                 $("#telefonoJEFE").text('');
@@ -380,6 +497,41 @@
             }
         }
     ?>
+ $('#producto_id').on('change', function() {
+
+    var productoID = $(this).val();
+    $.ajax({
+                    url: '{{ route('existencia') }}',
+                    method: 'GET',
+                    data: { 
+                        id: productoID
+                    },
+                    success: function(response) {
+                        $('#existencia').val(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error en la actualización: ' + error);
+                    }
+                });
+
+  });
+
+  $('#cantidad').on('input', function() {
+    var existencia = parseInt($('#existencia').val());
+    var cantidad = parseInt($(this).val());
+
+    if (!isNaN(existencia) && !isNaN(cantidad)) {
+        if (cantidad <= existencia) {
+            $('#formMedicinasbtn').prop('disabled', false);
+        } else {
+            $('#formMedicinasbtn').prop('disabled', true);
+        }
+    } else {
+        // Si alguno de los valores no es un número, deshabilitamos el botón
+        $('#formMedicinasbtn').prop('disabled', true);
+    }
+});
+
 
     $('#status_id').on('change', function() {
         if (seguimientoID !== null) { // Verificamos si seguimientoID ya tiene un valor

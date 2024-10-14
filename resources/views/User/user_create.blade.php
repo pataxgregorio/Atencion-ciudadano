@@ -75,6 +75,16 @@
                             {!! Form::select('direccion_id', $direccion, old('direccion_id'), ['placeholder' => trans('message.solicitud_action.direcciones'),'class' => 'form-control','id' => 'direccion_id']) !!}
                         </div>
                         <div style="text-align:left;">
+                            {!! Form::label('almacen_id', 'Almacen', ['class' => 'control-label', 'id' => 'almacen_Label']) !!}
+                            <select name="almacen_id" id="almacen_id" class="form-control">
+                            @foreach($almacen as $key => $value)
+                                <option value="{{ $value->id }}" @if(old('almacen_id',$value->id ) ) selected @endif>
+                                    {{ $value->nombre }}
+                                </option>
+                            @endforeach
+                            </select>
+                        </div>       
+                        <div style="text-align:left;">
                             {!! Form::label('rols_id',trans('message.permisos_rol.roles'), ['class' => 'control-label']) !!}<span class="required" style="color:red;">*</span>
                             {!! Form::select('rols_id', $roles, old('rols_id'), ['placeholder' => trans('message.permisos_rol.opcion'),'class' => 'form-control','id' => 'rols_id']) !!}
                         </div>
