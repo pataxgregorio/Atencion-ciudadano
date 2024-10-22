@@ -10,15 +10,16 @@
 
 @section('contentheader_title')
 <div>
-    <h2 class="mb-4">Crear Inventario</h2>
+<h2 style="margin: -25px 0px 0px 25pxpx"><img src="{{ url('/images/icons/logoSIA.png') }}" alt="logo" height="100px" >Crear Inventario</h2>
+
     @component('components.boton_back',['ruta' => route('inventario'),'color' => $array_color['back_button_color']])
         Botón de retorno
-    @endcomponent   
+    @endcomponent
 </div>
-    
+
 @endsection
 
-    
+
 @section('main-content')
 
 <div class="contenedor">
@@ -36,8 +37,8 @@
                 @endif
                 {!! Form::open(array('route' => array('inventario.store'),
                 'method'=>'POST','id' => 'form_rols_id','enctype' =>'multipart/form-data')) !!}
-                <div class="form-group col-lg-12 col-xs-12">                
-                    <div class="estilo-almacen">    
+                <div class="form-group col-lg-12 col-xs-12">
+                    <div class="estilo-almacen">
                     <div style="text-align:left;">
                             {!! Form::label('almacen_id', 'Almacen', ['class' => 'control-label', 'id' => 'almacen_Label']) !!}
                             <select name="almacen_id" id="almacen_id" class="form-control">
@@ -47,7 +48,7 @@
                                 </option>
                             @endforeach
                             </select>
-                        </div>       
+                        </div>
                         <div style="text-align:left;">
                             {!! Form::label('compra_id', 'Compra', ['class' => 'control-label', 'id' => 'producto_Label']) !!}
                             <select name="producto_id" id="producto_id" class="form-control">
@@ -57,7 +58,7 @@
                                 </option>
                             @endforeach
                             </select>
-                        </div> 
+                        </div>
                         <div style="text-align:left;">
                         <label>TIPO ENTRADA*</label>
                         <select required name="tipoentrada" id="tipoentrada" class="selectpicker form-control"
@@ -67,7 +68,7 @@
                             <option value="DONACIONES">DONACIONES</option>
                         </select>
                     </div>
-                            
+
                         <div style="text-align:left;">
                             {!! Form::label('numerofactura','Nro Factura', ['class' => 'control-label', 'id' => 'label_numerofactura']) !!}
                             {!! Form::text('numerofactura',old('numerofactura'),['placeholder' => 'Nro factura','class' => 'form-control','id' => 'numerofactura']) !!}
@@ -83,18 +84,18 @@
                         <div style="text-align:left;">
                             {!! Form::label('fechavencimiento','Fecha Vencimiento', ['class' => 'control-label']) !!}<span class="required" style="color:red;">*</span>
                             {!! Form::date('fechavencimiento',old('fechavencimiento'),['placeholder' => 'Fecha Vencimiento','class' => 'form-control','id' => 'fechavencimiento']) !!}
-                        </div>     
-                        
-                                                             
-                    </div>    
+                        </div>
+
+
+                    </div>
                     <br>
                     <br>
                     <span class="boton">
-                        {!! Form::submit('Guardar Prod.',['class'=> 'form-control btn btn-primary','title' => 'Guardar Almacen','data-toggle' => 'tooltip','style' => 'background-color:'.$array_color['group_button_color'].';']) !!}                     
-                    </span>   
-                </div> 
+                        {!! Form::submit('Guardar Prod.',['class'=> 'form-control btn btn-primary','title' => 'Guardar Almacen','data-toggle' => 'tooltip','style' => 'background-color:'.$array_color['group_button_color'].';']) !!}
+                    </span>
+                </div>
                 {!!  Form::close() !!}
-            </div>             
+            </div>
         </div>
     </div>
 </div>
@@ -131,7 +132,7 @@ $(document).ready(function () {
             $('#numerodonacion').hide();
             $('#label_numerodonacion').hide();
             $('#label_numerofactura').show();
-        } 
+        }
         if (a == 'SELECCIONE UNA OPCION') {
             $('#numerofactura').hide();
             $('#numerodonacion').hide();

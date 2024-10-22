@@ -16,6 +16,7 @@
         <img src="{{ url('/images/icons/logo.png') }}" alt="logo" height="100px">
       </h2>
     </div>
+    <a href="/producto/create"><button style="color: white; background-color: black; width: 200px;border-radius: 7px;height: 30px; font-size: 16px;">Nuevo Producto</button></a>
 
 
 @endsection

@@ -14,10 +14,11 @@
       <img src="{{ url('/images/icons/logoSIA.png') }}" alt="logo" height="150px" style="margin-top: -15px">
         <p style="margin-top: 40px; font-size: 36px">Servicios</p>
         <img src="{{ url('/images/icons/logo.png') }}" alt="logo" height="100px">
-      </h2> 
+      </h2>
     </div>
-  
-    
+
+    <a href="/servicio/create"><button style="color: white; background-color: black; width: 200px;border-radius: 7px;height: 30px; font-size: 16px;">Nuevo Servicio</button></a>
+
 @endsection
 
 @section('link_css_datatable')
@@ -27,14 +28,14 @@
     <link href="{{ url ('/css_datatable/buttons.dataTables.min.css') }}" rel="stylesheet">
 @endsection
 
-    
+
 @section('main-content')
 @component('components.alert_msg',['tipo_alert'=>$tipo_alert])
  Componentes para los mensajes de Alert, No Eliminar
 @endcomponent
 <div class="container-fluid">
     <div class="card">
-        <div class="card-body">            
+        <div class="card-body">
                 <table class="table table-bordered solicitud_all">
                         <thead>
                             <tr>
@@ -61,15 +62,15 @@
 <script src="{{ url ('/js_delete/sweetalert.min.js') }}" type="text/javascript"></script>
 <script type="text/javascript">
   $(function () {
-    
+
     var table = $('.solicitud_all').DataTable({
         processing: true,
         serverSide: true,
         responsive: true,
-        autoWidth : false,        
+        autoWidth : false,
         ajax: "{{ route('servicio.list') }}",
-        
-        columns: [          
+
+        columns: [
             {
                 data: 'id', name: 'id',
                 "render": function ( data, type, row ) {
@@ -77,10 +78,10 @@
                 }
             },
             {data: 'nombre', name: 'nombre'},
-            {data: 'descripcion', name: 'descripcion'}, 
+            {data: 'descripcion', name: 'descripcion'},
             {
                 data: 'edit', name: 'edit', orderable: false, searchable: false,
-                "render": function ( data, type, row ) {                    
+                "render": function ( data, type, row ) {
                     return '<div style="text-align:center;">'+data+'</div>';
                 }
             },
@@ -95,9 +96,9 @@
             "paginate": {
                 "next": "Siguiente",
                 "previous": "Anterior",
-            }            
+            }
         }
-    });        
+    });
   });
 </script>
 <script src="{{ url ('/js_delete/delete_confirm.min.js') }}"></script>
@@ -109,7 +110,7 @@
         text-align: center;
     }
 </style>
-@endsection  
+@endsection
 <style>
 
 </style>

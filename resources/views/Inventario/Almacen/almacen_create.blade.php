@@ -10,15 +10,16 @@
 
 @section('contentheader_title')
 <div>
-    <h2 class="mb-4">{{ $titulo_modulo}}</h2>
+<h2 style="margin: -25px 0px 0px 25pxpx"><img src="{{ url('/images/icons/logoSIA.png') }}" alt="logo" height="100px" >Crear Almacén</h2>
+
     @component('components.boton_back',['ruta' => route('almacen'),'color' => $array_color['back_button_color']])
         Botón de retorno
-    @endcomponent   
+    @endcomponent
 </div>
-    
+
 @endsection
 
-    
+
 @section('main-content')
 
 <div class="contenedor">
@@ -36,8 +37,8 @@
                 @endif
                 {!! Form::open(array('route' => array('almacen.store'),
                 'method'=>'POST','id' => 'form_rols_id','enctype' =>'multipart/form-data')) !!}
-                <div class="form-group">                
-                    <div class="estilo-almacen">                    
+                <div class="form-group">
+                    <div class="estilo-almacen">
                         <div style="text-align:left;">
                             {!! Form::label('nombre','Nombre Almacen', ['class' => 'control-label']) !!}<span class="required" style="color:red;">*</span>
                             {!! Form::text('nombre',old('nombre'),['placeholder' => 'Nombre Almacen','class' => 'form-control','id' => 'nombre_almacen']) !!}
@@ -45,15 +46,15 @@
                         <div style="text-align:left;">
                             {!! Form::label('ubicacion','Ubicacion', ['class' => 'control-label']) !!}<span class="required" style="color:red;">*</span>
                             {!! Form::text('ubicacion',old('ubicacion'),['placeholder' => 'Ubicacion','class' => 'form-control','id' => 'ubicacion_almacen']) !!}
-                        </div>                            
-                    </div>     
+                        </div>
+                    </div>
                     <br>
                     <span class="boton">
-                        {!! Form::submit('Guardar Almac.',['class'=> 'form-control btn btn-primary','title' => 'Guardar Almacen','data-toggle' => 'tooltip','style' => 'background-color:'.$array_color['group_button_color'].';']) !!}                     
-                    </span>   
-                </div> 
+                        {!! Form::submit('Guardar Almac.',['class'=> 'form-control btn btn-primary','title' => 'Guardar Almacen','data-toggle' => 'tooltip','style' => 'background-color:'.$array_color['group_button_color'].';']) !!}
+                    </span>
+                </div>
                 {!!  Form::close() !!}
-            </div>             
+            </div>
         </div>
     </div>
 </div>
