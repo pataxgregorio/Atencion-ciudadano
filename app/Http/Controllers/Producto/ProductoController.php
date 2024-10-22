@@ -13,50 +13,49 @@ use App\Models\Categoria\Categoria;
 use App\Http\Controllers\User\Colores;
 class ProductoController extends Controller
 {
-    public function index(){        
+    public function index(){
         $count_notification = (new User)->count_noficaciones_user();
-       
+
         $tipo_alert = "";
         if(session('delete') == true){
             $tipo_alert = "Delete";
             session(['delete' => false]);
-        }        
+        }
         if(session('update') == true ){
             $tipo_alert = "Update";
             session(['update' => false]);
-        }        
+        }
         $array_color = (new Colores)->getColores();
         return view('Inventario.Producto.producto',compact('count_notification','tipo_alert','array_color'));
     }
-    public function index3(){        
-        $count_notification = (new User)->count_noficaciones_user();
-  
+    public function index3(){
+
         $tipo_alert = "";
         if(session('delete') == true){
             $tipo_alert = "Delete";
             session(['delete' => false]);
-        }        
+        }
         if(session('update') == true ){
             $tipo_alert = "Update";
             session(['update' => false]);
-        }        
+        }
         $array_color = (new Colores)->getColores();
         $categorias = (new Categoria)->getCategoria();
-       
-        return view('Inventario.Producto.producto2',compact('count_notification','categorias','tipo_alert','array_color'));
+
+        return view('Inventario.Producto.producto2',compact('categorias','tipo_alert','array_color'));
     }
-    public function index2(){        
+    public function index2(){
         $count_notification = (new User)->count_noficaciones_user();
-       
+
         $tipo_alert = "";
         if(session('delete') == true){
             $tipo_alert = "Delete";
             session(['delete' => false]);
-        }        
+        }
         if(session('update') == true ){
             $tipo_alert = "Update";
             session(['update' => false]);
-        }        
+        }
         $array_color = (new Colores)->getColores();
         $categorias = (new Categoria)->getCategoria();
         return view('Inventario.Producto.dashboard',compact('count_notification','categorias','tipo_alert','array_color'));
@@ -71,10 +70,9 @@ class ProductoController extends Controller
         return view('Inventario.Producto.producto_create', compact('count_notification', 'titulo_modulo','categoria', 'roles', 'array_color'));
     }
     public function getProducto(Request $request){
-        //
         try {
             if ($request->ajax()) {
-                $data = (new Producto)->getProducto();
+                $data = (new Producto)->getProducto()->toArray();
                 return datatables()->of($data)
                     ->addColumn('edit', function ($data) {
                         $user = Auth::user();
@@ -100,39 +98,37 @@ class ProductoController extends Controller
         $producto = Producto::findOrFail($id);
         return response()->json($producto);
     }
-    public function update2(Request $request, $producto) 
-{
-       
+    public function update2(Request $request, $producto)
+    {
     $producto = Producto::findOrFail($producto); // Busca el producto o lanza una excepción
-
-    $producto->nombre = $request->input('nombre');
-    $producto->descripcion = $request->input('descripcion');
-    $producto->cantidad = $request->input('cantidad');
-    $producto->precio = $request->input('precio');
-    $producto->precio = $request->input('categoria');
-    $producto->updated_at = \Carbon\Carbon::now();      
+    $producto->nombre = $request->nombre;
+    $producto->descripcion = $request->descripcion;
+    $producto->cantidad = $request->cantidad;
+    $producto->precio = $request->precio;
+    $producto->categoria_id = $request->categoria;
+    $producto->updated_at = \Carbon\Carbon::now();
     $tipo_alert = "";
     if(session('delete') == true){
         $tipo_alert = "Delete";
         session(['delete' => false]);
-    }        
+    }
     if(session('update') == true ){
         $tipo_alert = "Update";
         session(['update' => false]);
-    }        
+    }
     $producto->save();
     $count_notification = (new User)->count_noficaciones_user();
     $array_color = (new Colores)->getColores();
     $categorias = (new Categoria)->getCategoria();
-   
+
     return view('Inventario.Producto.producto2',compact('count_notification','categorias','tipo_alert','array_color'));
 }
 
 public function store(Request $request){
     $input  = $request->all();
-   
+
     $count_notification = (new User)->count_noficaciones_user();
-    $producto = new Producto([                            
+    $producto = new Producto([
                     'nombre' =>$request->nombre,
                     'descripcion'=> $request->descripcion,
                     'cantidad'=> $request->cantidad,
@@ -141,16 +137,16 @@ public function store(Request $request){
                     'created_at' => \Carbon\Carbon::now(),
                     'updated_at' => \Carbon\Carbon::now(),
                 ]);
-    $producto->save();        
+    $producto->save();
     $tipo_alert = "Create";
     $array_color = (new Colores)->getColores();
     return view('Inventario.Producto.producto',compact('count_notification','tipo_alert','array_color'));
 }
 public function store2(Request $request){
     $input  = $request->all();
-  
+
     $count_notification = (new User)->count_noficaciones_user();
-    $producto = new Producto([                            
+    $producto = new Producto([
                     'nombre' =>$request->nombre,
                     'descripcion'=> $request->descripcion,
                     'cantidad'=> $request->cantidad,
@@ -159,11 +155,11 @@ public function store2(Request $request){
                     'created_at' => \Carbon\Carbon::now(),
                     'updated_at' => \Carbon\Carbon::now(),
                 ]);
-    $producto->save();        
+    $producto->save();
     $tipo_alert = "Create";
     $array_color = (new Colores)->getColores();
     $categorias = (new Categoria)->getCategoria();
-       
+
     return view('Inventario.Producto.producto2',compact('count_notification','tipo_alert','categorias','array_color'));
 }
 

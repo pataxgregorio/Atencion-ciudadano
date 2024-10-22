@@ -41,7 +41,7 @@ class SeguimientoController extends Controller
      * Display a listing of the resource.
      * @author Tarsicio Carrizales telecom.com.ve@gmail.com
      * @return \Illuminate\Http\Response
-     */    
+     */
      public function index()
     {
         $count_notification = (new User)->count_noficaciones_user();
@@ -71,7 +71,10 @@ class SeguimientoController extends Controller
             session(['update' => false]);
         }
         $array_color = (new Colores)->getColores();
-        return view('Seguimiento.seguimiento_finalizadas', compact('count_notification', 'tipo_alert', 'array_color'));
+        $comuna = (new Comuna)->getComunasFilter();
+        $comunidad = (new Comunidad)->datos_comunidad($comuna);
+        $tipo_subsolicitud = subtiposolicitud::all()->pluck('nombre', 'id')->toArray();
+        return view('Seguimiento.seguimiento_finalizadas', compact('count_notification','tipo_subsolicitud', 'tipo_alert','comuna','comunidad', 'array_color'));
     }
 
     public function finalizadas2()
@@ -92,10 +95,10 @@ class SeguimientoController extends Controller
 
     public function getSeguimiento(Request $request)
     {
-        try {            
+        try {
             if ($request->ajax()) {
                 $data = (new Solicitud)->getSolicitudList_DataTable2();
-                
+
                 return datatables()->of($data)
 
                     ->addColumn('edit', function ($data) {
@@ -120,10 +123,10 @@ class SeguimientoController extends Controller
 
     public function getSeguimientoFinalizadas(Request $request)
     {
-        try {            
-            if ($request->ajax()) { 
-                $data = (new Seguimiento)->getSolicitudList_Finalizadas($request->fecha_desde, $request->fecha_hasta);
-                
+        try {
+            if ($request->ajax()) {
+                $data = (new Seguimiento)->getSolicitudList_Finalizadas($request->fecha_desde, $request->fecha_hasta, $request->tipo_subsolicitud, $request->comuna, $request->comunidad);
+
                 return datatables()->of($data)
 
                     ->addColumn('edit', function ($data) {
@@ -140,7 +143,7 @@ class SeguimientoController extends Controller
                     })
 
                     ->rawColumns(['edit', 'view', 'del'])->toJson();
-            }            
+            }
         } catch (Throwable $e) {
             echo "Captured Throwable: " . $e->getMessage(), "\n";
         }
@@ -153,28 +156,28 @@ class SeguimientoController extends Controller
         $existencia = (new Inventario)->getExistencia($input['producto_id']);
             foreach($invetario as $item){
                 $invetario_update =Inventario::find($item->id);
-                
+
                 $existencia = $cantidad - $item->cantidad;
-            
+
                 if ($existencia < 0) {
                     $existencia = abs($existencia);
-                    $invetario_update->cantidad= $existencia; 
+                    $invetario_update->cantidad= $existencia;
                     $invetario_update->save();
                     break;
                 }else{
                    // $existencia = 0;
-                   $invetario_update->cantidad= 0; 
+                   $invetario_update->cantidad= 0;
                    $invetario_update->save();
                 }
-                
+
                 if($existencia == 0){
 
                     break;
                 }else{
                         $cantidad = $existencia;
-                       
+
                     }
-                
+
         }
         $movimiento = new SolicitudMovimiento([
             'solicitud_id' => $input['solicitud_id'],
@@ -190,7 +193,7 @@ class SeguimientoController extends Controller
     }
     public function store3(Request $request){
         $input=$request->all();
-       
+
         $movimiento = new SolicitudMovimiento([
             'solicitud_id' => $input['solicitud_id'],
             'producto_id' => NULL,
@@ -206,10 +209,10 @@ class SeguimientoController extends Controller
     public function getSeguimientoFinalizadas2(Request $request)
 
     {
-        try {            
-            if ($request->ajax()) { 
+        try {
+            if ($request->ajax()) {
                 $data = (new Seguimiento)->getSolicitudList_Finalizadas2($request->fecha_desde, $request->fecha_hasta);
-                
+
                 return datatables()->of($data)
 
                     ->addColumn('edit', function ($data) {
@@ -226,7 +229,7 @@ class SeguimientoController extends Controller
                     })
 
                     ->rawColumns(['edit', 'view', 'del'])->toJson();
-            }            
+            }
         } catch (Throwable $e) {
             echo "Captured Throwable: " . $e->getMessage(), "\n";
         }
@@ -306,8 +309,8 @@ public function existencia(Request $request){
         $comunidad = [];
         return view('Solicitud.solicitud_create', compact('count_notification', 'titulo_modulo', 'roles', 'municipio', 'comuna', 'comunidad', 'direcciones', 'parroquia', 'estado', 'coordinacion', 'enter', 'tipo_solicitud', 'array_color'));
     }
-public function segumientoJson (){   
-    
+public function segumientoJson (){
+
     $seguimiento ="Esto esta retornando";
     return   response()->json($seguimiento);
 }
@@ -324,7 +327,7 @@ public function segumientoJson (){
          * php artisan queue:work database --tries=3 --backoff=10
          * o instalar en su servidor linux (Debian ó Ubuntu) el supervisor de la siguiente manera
          * sudo apt-get install supervisor
-         * Si no realiza ninguna configuración todos los trabajos se iran guardando en la 
+         * Si no realiza ninguna configuración todos los trabajos se iran guardando en la
          * tabla jobs, y una vez configure, los trabajos en cola se iran ejecutando
          * Si se ejecuta algún error estos se guardan en la tabla failed_jobs.
          * Para ejcutar los trabajos en failed_jobs ejecute:
@@ -714,8 +717,8 @@ public function segumientoJson (){
         $profesion = array('TECNICO MEDIO' => 'TECNICO MEDIO', 'TECNICO SUPERIOR' => 'TECNICO SUPERIOR', 'INGENIERO' => 'INGENIERO', 'ABOGADO' => 'ABOGADO', 'MEDICO CIRUJANO' => 'MEDICO CIRUJANO', 'HISTORIADOR' => 'HISTORIADOR', 'PALEONTOLOGO' => 'PALEONTOLOGO', 'GEOGRAFO' => 'GEOGRAFO', 'BIOLOGO' => 'BIOLOGO', 'PSICOLOGO' => 'PSICOLOGO', 'MATEMATICO' => 'MATEMATICO', 'ARQUITECTO' => 'ARQUITECTO', 'COMPUTISTA' => 'COMPUTISTA', 'PROFESOR' => 'PROFESOR', 'PERIODISTA' => 'PERIODISTA', 'BOTANICO' => 'BOTANICO', 'FISICO' => 'FISICO', 'SOCIOLOGO' => 'SOCIOLOGO', 'FARMACOLOGO' => 'FARMACOLOGO', 'QUIMICO' => 'QUIMICO', 'POLITOLOGO' => 'POLITOLOGO', 'ENFERMERO' => 'ENFERMERO', 'ELECTRICISTA' => 'ELECTRICISTA', 'BIBLIOTECOLOGO' => 'BIBLIOTECOLOGO', 'PARAMEDICO' => 'PARAMEDICO', 'TECNICO DE SONIDO' => 'TECNICO DE SONIDO', 'ARCHIVOLOGO' => 'ARCHIVOLOGO', 'MUSICO' => 'MUSICO', 'FILOSOFO' => 'FILOSOFO', 'SECRETARIA' => 'SECRETARIA', 'TRADUCTOR' => 'TRADUCTOR', 'ANTROPOLOGO' => 'ANTROPOLOGO', 'TECNICO TURISMO' => 'TECNICO TURISMO', 'ECONOMISTA' => 'ECONOMISTA', 'ADMINISTRADOR' => 'ADMINISTRADOR', 'CARPITERO' => 'CARPITERO', 'RADIOLOGO' => 'RADIOLOGO', 'COMERCIANTE' => 'COMERCIANTE', 'CERRAJERO' => 'CERRAJERO', 'COCINERO' => 'COCINERO', 'ALBAÑIL' => 'ALBAÑIL', 'PLOMERO' => 'PLOMERO', 'TORNERO' => 'TORNERO', 'EDITOR' => 'EDITOR', 'ESCULTOR' => 'ESCULTOR', 'ESCRITOR' => 'ESCRITOR', 'BARBERO' => 'BARBERO');
         $comuna = (new Comuna)->datos_comuna($solicitud_edit->parroquia_id);
         $comunidad = (new Comunidad)->datos_comunidad($solicitud_edit->comuna_id);
-        $coordinacion = (new Coordinacion)->datos_coordinacion($solicitud_edit->direccion_id);  
-        $jefecomunidad = (new JefeComunidad)->getJefe($solicitud_edit->comuna_id);  
+        $coordinacion = (new Coordinacion)->datos_coordinacion($solicitud_edit->direccion_id);
+        $jefecomunidad = (new JefeComunidad)->getJefe($solicitud_edit->comuna_id);
         $movimiento = (new SolicitudMovimiento)->getMovimiento($solicitud_edit->id);
         $subtiposolicitud = (new Subtiposolicitud)->getSubtiposolicitud();
         $correlativoSALUD = (new Solicitud)->BuscarNumeroSolicitud($id);
@@ -768,7 +771,7 @@ public function segumientoJson (){
         // $count_notification = (new User)->count_noficaciones_user();
         // $verificarJSON = (new Solicitud)->verificarJSON($id);
         $verificarJSON = Seguimiento::find($id);
-        $input = $request->all();        
+        $input = $request->all();
         $imagen = $request->file('image');
 
         if ($imagen) {
@@ -822,8 +825,8 @@ public function segumientoJson (){
             'tipo_solicitud_id'=> $input['tipo_solicitud_id'],
             'fecha'=> \Carbon\Carbon::now('America/Caracas')
         ]);
-        
-       
+
+
         $log->save();
 
         }
@@ -835,7 +838,7 @@ public function segumientoJson (){
         $id = $request->solicitudID;
         $user_id = auth()->user()->id;
         $solicitud_Update = Solicitud::find($id);
-       
+
         $log =new LogSeguimiento([
             'users_id' =>   $user_id,
             'accion' => 'CAMBIO DE ESTADO',
@@ -843,20 +846,20 @@ public function segumientoJson (){
             'tipo_solicitud_id'=> $solicitud_Update['tipo_solicitud_id'],
             'fecha'=> \Carbon\Carbon::now('America/Caracas')
         ]);
-        
-       
+
+
         $log->save();
         $solicitud_Update['status_id'] = $request->nuevo_valor;
         $solicitud_Update->save();
         $user_id = auth()->user()->id;
-       
+
         return redirect('/seguimiento');
     }
 
 
     private function update_image($request, $avatar_viejo, &$user_Update)
     {
-        /** Se actualizan todos los datos solicitados por el Cliente 
+        /** Se actualizan todos los datos solicitados por el Cliente
          *  y eliminamos del Storage/avatars, el archivo indicado.
          */
         if ($request->hasFile('avatar')) {

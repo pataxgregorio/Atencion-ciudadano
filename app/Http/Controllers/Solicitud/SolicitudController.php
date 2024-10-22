@@ -134,10 +134,10 @@ class SolicitudController extends Controller
         return response()->json($data);
     }
     public function getSolicitudTotales(Request $request){
-        $fechaDesde = $request->input('fechaDesde'); 
+        $fechaDesde = $request->input('fechaDesde');
         $fechaHasta = $request->input('fechaHasta');
         $status_id = $request->input('status_id');
-    
+
         $data = (new Solicitud)->getSolicitudListWAN_Totales($fechaDesde, $fechaHasta, $status_id);
         return response()->json($data);
     }
@@ -224,7 +224,7 @@ class SolicitudController extends Controller
         $jefecomunidad = [];
 
         $consulta = (new Solicitud)->ObtenerNumeroSolicitud();
-        $correlativoSALUD = $consulta ? $consulta + 1 : 4024; 
+        $correlativoSALUD = $consulta ? $consulta + 1 : 4024;
 
 
         return view('Solicitud.solicitud_create', compact('count_notification', 'titulo_modulo', 'roles','correlativoSALUD', 'municipio', 'comuna', 'comunidad','jefecomunidad', 'direcciones', 'parroquia', 'estado', 'coordinacion', 'enter', 'tipo_solicitud','subtiposolicitud', 'array_color'));
@@ -243,7 +243,7 @@ class SolicitudController extends Controller
          * php artisan queue:work database --tries=3 --backoff=10
          * o instalar en su servidor linux (Debian ó Ubuntu) el supervisor de la siguiente manera
          * sudo apt-get install supervisor
-         * Si no realiza ninguna configuración todos los trabajos se iran guardando en la 
+         * Si no realiza ninguna configuración todos los trabajos se iran guardando en la
          * tabla jobs, y una vez configure, los trabajos en cola se iran ejecutando
          * Si se ejecuta algún error estos se guardan en la tabla failed_jobs.
          * Para ejcutar los trabajos en failed_jobs ejecute:
@@ -255,7 +255,7 @@ class SolicitudController extends Controller
         // Target URL
         DB::beginTransaction();
         try {
-            $input = $request->all();       
+            $input = $request->all();
             $input['users_id'] = Auth::user()->id;
             //  $data['is_deleted'] = false;
             $recaudos = NULL;
@@ -409,7 +409,7 @@ class SolicitudController extends Controller
                 $input['coordinacion_id'] =  NULL;
                 $input['enter_descentralizados_id'] =  NULL;
                 $input['enter_id'] =  NULL;
-                $input['asignacion'] =  NULL; 
+                $input['asignacion'] =  NULL;
                 if($input['municipio_id'] == 2){
                     $input['parroquia_id'] = NULL;
                     $input['comuna_id'] = NULL;
@@ -417,9 +417,9 @@ class SolicitudController extends Controller
                     $input['jefecomunidad_id'] = NULL;
                 }
                 // if($input['jefecomunidad_id'] == NULL){
-                    
+
                 // }
-                
+
                 $beneficiario = [
                     [
                         "cedula" => isset($input['cedulabeneficiario']) ? $input['cedulabeneficiario'] : NULL,
@@ -430,7 +430,7 @@ class SolicitudController extends Controller
                         "solicita" => isset($input['solicita']) ? $input['solicita'] : NULL,
                         "venApp" => isset($input['venApp']) ? $input['venApp'] : NULL,
                     ]
-                ];            
+                ];
                 $recaudos = [
                     [
                         "cedula" => isset($input['checkcedula2']) ? $input['checkcedula2'] : NULL,
@@ -440,7 +440,7 @@ class SolicitudController extends Controller
                         "beneficiario" => isset($input['checkcedulabeneficiario']) ? $input['checkcedulabeneficiario'] : NULL,
                         "checkpresupuesto" => isset($input['checkpresupuesto']) ? $input['checkpresupuesto'] : NULL,
                         "evifotobeneficiario" => isset($input['evifotobeneficiario']) ? $input['evifotobeneficiario'] : NULL,
-                        "certificadodefuncion" => isset($input['certificadodefuncion']) ? $input['certificadodefuncion'] : NULL,                        
+                        "certificadodefuncion" => isset($input['certificadodefuncion']) ? $input['certificadodefuncion'] : NULL,
                         "permisoinhumacion" => isset($input['permisoinhumacion']) ? $input['permisoinhumacion'] : NULL,
                         "ordenexamen" => isset($input['ordenexamen']) ? $input['ordenexamen'] : NULL,
                         "ordenestudio" =>  isset($input['ordenestudio']) ? $input['ordenestudio']:NULL,
@@ -456,9 +456,9 @@ class SolicitudController extends Controller
             }else{
                 $nuevoNumero = NULL;
             }
-            
+
             $solicitud = new Solicitud([
-                'solicitud_salud_id' => $nuevoNumero, 
+                'solicitud_salud_id' => $nuevoNumero,
                 'users_id' => $input['users_id'],
                 'trabajador' => $input['trabajador'],
                 'direccion_id' => $input['direcciones_id'],
@@ -471,7 +471,7 @@ class SolicitudController extends Controller
                 'parroquia_id' => $input['parroquia_id'],
                 'comuna_id' => $input['comuna_id'],
                 'comunidad_id' => $input['comunidad_id'],
-                'jefecomunidad_id' => $input['jefecomunidad_id'],
+                'jefecomunidad_id' => null,
                 'codigo_control' => $input['codigocontrol'],
                 'status_id' => 1,
                 'nombre' => $input['nombre'],
@@ -500,7 +500,7 @@ class SolicitudController extends Controller
                 'created_at' => \Carbon\Carbon::now('America/Caracas'),
                 'updated_at' => \Carbon\Carbon::now('America/Caracas'),
             ]);
-        
+
             $solicitud->save();
             DB::commit();
         } catch (\Exception $e) {
@@ -513,8 +513,8 @@ class SolicitudController extends Controller
 
         $conseguirID = Solicitud::latest()->value('id');
         $seguimiento_edit = DB::table("seguimiento")->where("solicitud_id", $conseguirID)->get();
-        $solicitud_edit = Solicitud::find($conseguirID);      
-        
+        $solicitud_edit = Solicitud::find($conseguirID);
+
         $seguimiento = new Seguimiento([
             'solicitud_id' => $conseguirID,
             'seguimiento' => NULL
@@ -525,7 +525,7 @@ class SolicitudController extends Controller
 
         $solicitud_Update->save();
 
-        return view('Solicitud.solicitud', compact('count_notification', 'tipo_alert', 'array_color'));
+        return redirect()->to('seguimiento/'.$conseguirID.'/edit');
     }
 
     /**
@@ -607,7 +607,7 @@ class SolicitudController extends Controller
 
         $comunidad = (new Comunidad)->datos_comunidad($solicitud_edit->comuna_id);
         $coordinacion = (new Coordinacion)->datos_coordinacion($solicitud_edit->direccion_id);
-        $jefecomunidad = (new JefeComunidad)->getJefe($solicitud_edit->comuna_id);   
+        $jefecomunidad = (new JefeComunidad)->getJefe($solicitud_edit->comuna_id);
         $subtiposolicitud = (new subtiposolicitud)->getSubtiposolicitudbyID($solicitud_edit->tipo_subsolicitud_id);
         $correlativoSALUD = (new Solicitud)->BuscarNumeroSolicitud($id);
 
@@ -696,7 +696,7 @@ class SolicitudController extends Controller
         $comunidad = (new Comunidad)->datos_comunidad($solicitud_edit->comuna_id);
         $coordinacion = (new Coordinacion)->datos_coordinacion($solicitud_edit->direccion_id);
         $jefecomunidad2 = (new JefeComunidad)->getJefe($solicitud_edit->comuna_id);
-        $jefecomunidad = (new JefeComunidad)->getJefe2($solicitud_edit->jefecomunidad_id);   
+        $jefecomunidad = (new JefeComunidad)->getJefe2($solicitud_edit->jefecomunidad_id);
         $subtiposolicitud = (new Subtiposolicitud)->getSubtiposolicitud();
         $correlativoSALUD = (new Solicitud)->BuscarNumeroSolicitud($id);
 
@@ -706,7 +706,7 @@ class SolicitudController extends Controller
     {
 
         $comuna = (new Comuna)->datos_comuna($request['parroquia']);
-        
+
         return $comuna;
 
     }
@@ -951,7 +951,7 @@ class SolicitudController extends Controller
 
     private function update_image($request, $avatar_viejo, &$user_Update)
     {
-        /** Se actualizan todos los datos solicitados por el Cliente 
+        /** Se actualizan todos los datos solicitados por el Cliente
          *  y eliminamos del Storage/avatars, el archivo indicado.
          */
         if ($request->hasFile('avatar')) {
@@ -1010,11 +1010,11 @@ class SolicitudController extends Controller
     }
     public function solicitudTipo2(Request $request)
     {
-      
+
             $countSolicitud = (new Solicitud)->count_solictud2();
 
             return response()->json($countSolicitud);
-       
+
     }
     public function solicitudTipo2PorFecha(Request $request)
         {
@@ -1025,25 +1025,25 @@ class SolicitudController extends Controller
             $countSolicitud = (new Solicitud)->count_solictud2PorFecha($fechaDesde, $fechaHasta);
 
             return response()->json($countSolicitud);
-       
+
     }
 
     public function solicitudTipo3(Request $request)
     {
-      
+
             $countSolicitud = (new Solicitud)->count_solictud3();
 
             return response()->json($countSolicitud);
-       
+
     }
 
     public function solicitudTipo4(Request $request)
     {
-      
+
             $countSolicitud = (new Solicitud)->count_solictud4();
 
             return response()->json($countSolicitud);
-       
+
     }
 
     public function solicitudTipo4PorFecha(Request $request)
@@ -1054,15 +1054,15 @@ class SolicitudController extends Controller
             $countSolicitud = (new Solicitud)->count_solictud4PorFecha($fechaDesde, $fechaHasta);
 
             return response()->json($countSolicitud);
-       
+
     }
     public function solicitudTipo5(Request $request)
     {
-      
+
             $countSolicitud = (new Solicitud)->count_solictud5();
             $array = [$countSolicitud];
             return $array;
-       
+
     }
     public function solicitudTipo5PorFecha(Request $request)
     {
@@ -1072,7 +1072,7 @@ class SolicitudController extends Controller
             $countSolicitud = (new Solicitud)->count_solicitud5PorFecha($fechaDesde, $fechaHasta);
             $array = [$countSolicitud];
             return $array;
-       
+
     }
         public function solicitudTotalTipo(Request $request)
     {
@@ -1166,6 +1166,12 @@ class SolicitudController extends Controller
         $solfinalizadas = (new Solicitud)->reportetotalcomunas();
         return $solfinalizadas;
         }
+        public function getFinalizadascomunas2(Request $request){
+            $solfinalizadas = (new Solicitud)->reportetotalcomunassalidas();
+            return $solfinalizadas;
+            }
+        
+
         public function ultimasEntradas(Request $request){
             $solfinalizadas = (new Solicitud)->ultimasEntradas();
             return $solfinalizadas;
@@ -1182,7 +1188,7 @@ class SolicitudController extends Controller
            return (new Solicitud)->medicinacomunas();
         }
     public function imprimir(Request $request)
-    {        
+    {
         $activardenuncia = "";
         $activarqueja = "";
         $activarsugerencia = "";
@@ -1197,7 +1203,7 @@ class SolicitudController extends Controller
         $activarrecaudoCedulaTestigo = "";
         $activarrecaudoCartaResidencia = "";
         $activarrecaudoInforme = "";
-        
+
         $activarrecaudoRecipe = "";
         $activarrecaudoInforme = "";
         $activarrecaudoBeneficiario = "";
@@ -1220,7 +1226,7 @@ class SolicitudController extends Controller
         //**  **/
         $user = User::find($solicitud->users_id);
         $nombreUsuario = $user->name;
-        
+
         $direccionAsignada = (new Direccion)->datos_direccion()[$solicitud->direccion_id];
         $idestado = isset($solicitud["estado_id"]) ? $solicitud["estado_id"] : NULL;
         $idmunicipio = isset($solicitud["municipio_id"]) ? $solicitud["municipio_id"] : NULL;
@@ -1291,17 +1297,17 @@ class SolicitudController extends Controller
                     body {
                         font-family: sans-serif;
                     }
-    
+
                     table {
                         width: 100%;
                         border-collapse: collapse;
                     }
-    
+
                     th, td {
                         text-align:center;
                         border: 1px solid #ddd;
                     }
-    
+
                     th {
                         font-size: 12px;
                         background-color: #f0f0f0;
@@ -1323,7 +1329,7 @@ class SolicitudController extends Controller
                         <th>Año: $anno</th>
                     </tr>
                 </table>
-                
+
                 <table>
                     <tr>
                         <th>Denuncia</th>
@@ -1369,11 +1375,11 @@ class SolicitudController extends Controller
                         <td>$solicitud->sexo</td>
                         <td>$solicitud->edocivil</td>
                         <td>$solicitud->fechaNacimiento</td>
-                        <td>$solicitud->nivelestudio</td> 
-                        <td>$solicitud->profesion</td> 
+                        <td>$solicitud->nivelestudio</td>
+                        <td>$solicitud->profesion</td>
                     </tr>
             </table>
-    
+
             <table>
             <tr >
                         <th class="text-primary" >Estado</th>
@@ -1487,7 +1493,7 @@ class SolicitudController extends Controller
                 </table>
                 <table>
                     <tr>
-                        <th style="padding:1rem;">Declaro que los datos suministrados son fidedignos y estoy en conocimiento que cualquier falta o falsedad, en los mismos involucra sanciones o a la no aceptacion de la solicitud.</th>                            
+                        <th style="padding:1rem;">Declaro que los datos suministrados son fidedignos y estoy en conocimiento que cualquier falta o falsedad, en los mismos involucra sanciones o a la no aceptacion de la solicitud.</th>
                     </tr>
                 </table>
                 <table>
@@ -1578,8 +1584,8 @@ class SolicitudController extends Controller
                         <tr>
                             <th>Fecha de Solicitud</th>
                             <th>Hora</th>
-                        <th>Nombre y Apellido del Ciudadano Solicitante</th>                    
-                        <th>Nombre del Funcionario Receptor</th>                    
+                        <th>Nombre y Apellido del Ciudadano Solicitante</th>
+                        <th>Nombre del Funcionario Receptor</th>
                     </tr>
                     <tr>
                         <td>$fecha</td>
@@ -1662,17 +1668,17 @@ class SolicitudController extends Controller
                     body {
                         font-family: sans-serif;
                     }
-    
+
                     table {
                         width: 100%;
                         border-collapse: collapse;
                     }
-    
+
                     th, td {
                         text-align:center;
                         border: 1px solid #ddd;
                     }
-    
+
                     th {
                         font-size: 12px;
                         background-color: #f0f0f0;
@@ -1694,7 +1700,7 @@ class SolicitudController extends Controller
                         <th>Año: $anno</th>
                     </tr>
                 </table>
-                
+
                 <table>
                     <tr>
                         <th>Denuncia</th>
@@ -1740,11 +1746,11 @@ class SolicitudController extends Controller
                         <td>$solicitud->sexo</td>
                         <td>$solicitud->edocivil</td>
                         <td>$solicitud->fechaNacimiento</td>
-                        <td>$solicitud->nivelestudio</td> 
-                        <td>$solicitud->profesion</td> 
+                        <td>$solicitud->nivelestudio</td>
+                        <td>$solicitud->profesion</td>
                     </tr>
             </table>
-    
+
             <table>
             <tr >
                         <th class="text-primary" >Estado</th>
@@ -1858,7 +1864,7 @@ class SolicitudController extends Controller
                 </table>
                 <table>
                     <tr>
-                        <th style="padding:1rem;">Declaro que los datos suministrados son fidedignos y estoy en conocimiento que cualquier falta o falsedad, en los mismos involucra sanciones o a la no aceptacion de la solicitud.</th>                            
+                        <th style="padding:1rem;">Declaro que los datos suministrados son fidedignos y estoy en conocimiento que cualquier falta o falsedad, en los mismos involucra sanciones o a la no aceptacion de la solicitud.</th>
                     </tr>
                 </table>
                 <table>
@@ -1949,8 +1955,8 @@ class SolicitudController extends Controller
                         <tr>
                             <th>Fecha de Solicitud</th>
                             <th>Hora</th>
-                        <th>Nombre y Apellido del Ciudadano Solicitante</th>                    
-                        <th>Nombre del Funcionario Receptor</th>                    
+                        <th>Nombre y Apellido del Ciudadano Solicitante</th>
+                        <th>Nombre del Funcionario Receptor</th>
                     </tr>
                     <tr>
                         <td>$fecha</td>
@@ -1984,11 +1990,11 @@ class SolicitudController extends Controller
             $recaudos = json_decode($recaudos, true);
             $denunciado = $solicitud->denunciado;
             $denunciado = json_decode($denunciado, true);
-            
+
             $cedulaDenunciado = $denunciado[0]["cedula"];
             $nombreDenunciado = $denunciado[0]["nombre"];
             $testigoDenunciado = $denunciado[0]["testigo"];
-            
+
             $quejas = $solicitud->reclamo;
             $quejas = json_decode($quejas, true);
             $quejasRelato = $quejas[0]["relato"];
@@ -2034,17 +2040,17 @@ class SolicitudController extends Controller
                     body {
                         font-family: sans-serif;
                     }
-    
+
                     table {
                         width: 100%;
                         border-collapse: collapse;
                     }
-    
+
                     th, td {
                         text-align:center;
                         border: 1px solid #ddd;
                     }
-    
+
                     th {
                         font-size: 12px;
                         background-color: #f0f0f0;
@@ -2066,7 +2072,7 @@ class SolicitudController extends Controller
                         <th>Año: $anno</th>
                     </tr>
                 </table>
-                
+
                 <table>
                     <tr>
                         <th>Denuncia</th>
@@ -2112,11 +2118,11 @@ class SolicitudController extends Controller
                         <td>$solicitud->sexo</td>
                         <td>$solicitud->edocivil</td>
                         <td>$solicitud->fechaNacimiento</td>
-                        <td>$solicitud->nivelestudio</td> 
-                        <td>$solicitud->profesion</td> 
+                        <td>$solicitud->nivelestudio</td>
+                        <td>$solicitud->profesion</td>
                     </tr>
             </table>
-    
+
             <table>
             <tr >
                         <th class="text-primary" >Estado</th>
@@ -2230,7 +2236,7 @@ class SolicitudController extends Controller
                 </table>
                 <table>
                     <tr>
-                        <th style="padding:1rem;">Declaro que los datos suministrados son fidedignos y estoy en conocimiento que cualquier falta o falsedad, en los mismos involucra sanciones o a la no aceptacion de la solicitud.</th>                            
+                        <th style="padding:1rem;">Declaro que los datos suministrados son fidedignos y estoy en conocimiento que cualquier falta o falsedad, en los mismos involucra sanciones o a la no aceptacion de la solicitud.</th>
                     </tr>
                 </table>
                 <table>
@@ -2321,8 +2327,8 @@ class SolicitudController extends Controller
                         <tr>
                             <th>Fecha de Solicitud</th>
                             <th>Hora</th>
-                        <th>Nombre y Apellido del Ciudadano Solicitante</th>                    
-                        <th>Nombre del Funcionario Receptor</th>                    
+                        <th>Nombre y Apellido del Ciudadano Solicitante</th>
+                        <th>Nombre del Funcionario Receptor</th>
                     </tr>
                     <tr>
                         <td>$fecha</td>
@@ -2364,17 +2370,17 @@ class SolicitudController extends Controller
                     body {
                         font-family: sans-serif;
                     }
-    
+
                     table {
                         width: 100%;
                         border-collapse: collapse;
                     }
-    
+
                     th, td {
                         text-align:center;
                         border: 1px solid #ddd;
                     }
-    
+
                     th {
                         font-size: 12px;
                         background-color: #f0f0f0;
@@ -2396,7 +2402,7 @@ class SolicitudController extends Controller
                         <th>Año: $anno</th>
                     </tr>
                 </table>
-                
+
                 <table>
                     <tr>
                         <th>Denuncia</th>
@@ -2442,11 +2448,11 @@ class SolicitudController extends Controller
                         <td>$solicitud->sexo</td>
                         <td>$solicitud->edocivil</td>
                         <td>$solicitud->fechaNacimiento</td>
-                        <td>$solicitud->nivelestudio</td> 
-                        <td>$solicitud->profesion</td> 
+                        <td>$solicitud->nivelestudio</td>
+                        <td>$solicitud->profesion</td>
                     </tr>
             </table>
-    
+
             <table>
             <tr >
                         <th class="text-primary" >Estado</th>
@@ -2500,7 +2506,7 @@ class SolicitudController extends Controller
                         <td>$observacionAsesoria</td>
                     </tr>
                 </table>
-                
+
                     <table>
                         <tr>
                             <th>Documentos que anexa</th>
@@ -2516,7 +2522,7 @@ class SolicitudController extends Controller
                     </table>
                 <table>
                     <tr>
-                        <th style="padding:1rem;">Declaro que los datos suministrados son fidedignos y estoy en conocimiento que cualquier falta o falsedad, en los mismos involucra sanciones o a la no aceptacion de la solicitud.</th>                            
+                        <th style="padding:1rem;">Declaro que los datos suministrados son fidedignos y estoy en conocimiento que cualquier falta o falsedad, en los mismos involucra sanciones o a la no aceptacion de la solicitud.</th>
                     </tr>
                 </table>
                 <table>
@@ -2607,8 +2613,8 @@ class SolicitudController extends Controller
                         <tr>
                         <th>Fecha de Solicitud</th>
                         <th>Hora</th>
-                        <th>Nombre y Apellido del Ciudadano Solicitante</th>                    
-                        <th>Nombre del Funcionario Receptor</th>                    
+                        <th>Nombre y Apellido del Ciudadano Solicitante</th>
+                        <th>Nombre del Funcionario Receptor</th>
                     </tr>
                     <tr>
                         <td>$fecha</td>
@@ -2651,17 +2657,17 @@ class SolicitudController extends Controller
                     body {
                         font-family: sans-serif;
                     }
-    
+
                     table {
                         width: 100%;
                         border-collapse: collapse;
                     }
-    
+
                     th, td {
                         text-align:center;
                         border: 1px solid #ddd;
                     }
-    
+
                     th {
                         font-size: 12px;
                         background-color: #f0f0f0;
@@ -2683,7 +2689,7 @@ class SolicitudController extends Controller
                         <th>Año: $anno</th>
                     </tr>
                 </table>
-                
+
                 <table>
                     <tr>
                         <th>Denuncia</th>
@@ -2729,11 +2735,11 @@ class SolicitudController extends Controller
                         <td>$solicitud->sexo</td>
                         <td>$solicitud->edocivil</td>
                         <td>$solicitud->fechaNacimiento</td>
-                        <td>$solicitud->nivelestudio</td> 
-                        <td>$solicitud->profesion</td> 
+                        <td>$solicitud->nivelestudio</td>
+                        <td>$solicitud->profesion</td>
                     </tr>
             </table>
-    
+
             <table>
             <tr >
                         <th class="text-primary" >Estado</th>
@@ -2787,15 +2793,15 @@ class SolicitudController extends Controller
                         <td>$observacionAsesoria</td>
                     </tr>
                 </table>
-                
+
                     <table>
                         <tr>
-                            <th>Documentos que anexa</th>                            
+                            <th>Documentos que anexa</th>
                         </tr>
                         <tr>
                             <td>
-                                <div style="display:flex; justify-content: space-between;">                                    
-                                    Carta Exposicion de Motivo 
+                                <div style="display:flex; justify-content: space-between;">
+                                    Carta Exposicion de Motivo
                                     <input type='checkbox' $activarrecaudoMotivo>
                                 </div>
                             </td>
@@ -2803,7 +2809,7 @@ class SolicitudController extends Controller
                     </table>
                 <table>
                     <tr>
-                        <th style="padding:1rem;">Declaro que los datos suministrados son fidedignos y estoy en conocimiento que cualquier falta o falsedad, en los mismos involucra sanciones o a la no aceptacion de la solicitud.</th>                            
+                        <th style="padding:1rem;">Declaro que los datos suministrados son fidedignos y estoy en conocimiento que cualquier falta o falsedad, en los mismos involucra sanciones o a la no aceptacion de la solicitud.</th>
                     </tr>
                 </table>
                 <table>
@@ -2857,7 +2863,7 @@ class SolicitudController extends Controller
                     </tr>
                 </table>
                 <p>----------------------------------------------------------------------------------------------------------------------------------------</p>
-                
+
                 <table style="margin-top: 20px">
                     <tr>
                         <th>Oficina de Atencion Ciudadana <span style="text-align: right">Numero de Registro $idsolicitud</span></th>
@@ -2895,8 +2901,8 @@ class SolicitudController extends Controller
                         <tr>
                             <th>Fecha de Solicitud</th>
                             <th>Hora</th>
-                        <th>Nombre y Apellido del Ciudadano Solicitante</th>                    
-                        <th>Nombre del Funcionario Receptor</th>                    
+                        <th>Nombre y Apellido del Ciudadano Solicitante</th>
+                        <th>Nombre del Funcionario Receptor</th>
                     </tr>
                     <tr>
                         <td>$fecha</td>
@@ -2922,16 +2928,16 @@ class SolicitudController extends Controller
             HTML;
         }
 
-        if ($solicitud["tipo_solicitud_id"] === 6) {       
-            $urlActual = $_SERVER['HTTP_HOST'];          
-            $beneficiario = $solicitud->beneficiario;      
+        if ($solicitud["tipo_solicitud_id"] === 6) {
+            $urlActual = $_SERVER['HTTP_HOST'];
+            $beneficiario = $solicitud->beneficiario;
             $beneficiario = json_decode($beneficiario, true);
             $cedulabeneficiario = $beneficiario[0]["cedula"];
             $edadbeneficiario = isset($beneficiario[0]["edadbeneficiario"]) ? $beneficiario[0]["edadbeneficiario"]: 'N/A';
             $nombrebeneficiario = $beneficiario[0]["nombre"];
             $direccionbeneficiario = $beneficiario[0]["direccion"];
             $codigovenapp = isset($beneficiario[0]["venApp"]) ? $beneficiario[0]["venApp"]: 'N/A';
-            
+
             $observacion = isset($beneficiario[0]["observacion"]) ? $beneficiario[0]["observacion"]: 'N/A';
 
             $solicita = isset($beneficiario[0]["solicita"]) ? $beneficiario[0]["solicita"]: 'N/A';
@@ -2953,20 +2959,20 @@ class SolicitudController extends Controller
 
             $trabajadorAlcaldia = $solicitud->trabajador;
             $verificaTrabajador = isset($trabajadorAlcaldia) ? $trabajadorAlcaldia : 'NO';
-            
+
             $jefecomunidadID = $solicitud->jefecomunidad_id;
             $jefecomunidad = (new JefeComunidad)->getJefe2($jefecomunidadID);
-            $jefe = $jefecomunidad->first();            
+            $jefe = $jefecomunidad->first();
             $municipioID = $solicitud->municipio_id;
             $solicitud_salud_id = $solicitud->solicitud_salud_id;
             $subtiposolicitud = (new subtiposolicitud)->getSubtiposolicitudbyID($solicitud->tipo_subsolicitud_id);
-            
+
             $tiposolicitud = $subtiposolicitud->nombre;
 
             $estado = (new Solicitud)->nombreestado($idestado, $idmunicipio, $idparroquia, $idcomuna, $idcomunidad);
             foreach($estado as $estado2)
 
-            /* A ESTA SOLICITUD NO SE LE AGREGO ESTADO POR ENDE DA ERROR SI NO SE LE ADJUNTA ESE VALOR */ 
+            /* A ESTA SOLICITUD NO SE LE AGREGO ESTADO POR ENDE DA ERROR SI NO SE LE ADJUNTA ESE VALOR */
             if($solicitud_salud_id == 3928){
                 $estadoSolicitud = 'N/A';
             }
@@ -3060,17 +3066,17 @@ class SolicitudController extends Controller
                     body {
                         font-family: sans-serif;
                     }
-    
+
                     table {
                         width: 100%;
                         border-collapse: collapse;
                     }
-    
+
                     th, td {
                         text-align:center;
                         border: 1px solid #ddd;
                     }
-    
+
                     th {
                         font-size: 12px;
                         background-color: #f0f0f0;
@@ -3091,8 +3097,8 @@ class SolicitudController extends Controller
                         <th>Mes: $mes</th>
                         <th>Año: $anno</th>
                     </tr>
-                </table>               
-                
+                </table>
+
                 <table>
                     <tr>
                         <th>Datos del Ciudadano Beneficiario(a)/Comunidad</th>
@@ -3118,7 +3124,7 @@ class SolicitudController extends Controller
                         <td>$codigovenapp</td>
                     </tr>
             </table>
-    
+
             <table>
             <tr >
                         <th class="text-primary" >Estado</th>
@@ -3197,7 +3203,7 @@ class SolicitudController extends Controller
 
                     </tr>
                 </table>
-                
+
                     <table>
                         <tr><th>
                             Documentos que anexa
@@ -3234,7 +3240,7 @@ class SolicitudController extends Controller
                 </table>
                 <table>
                     <tr>
-                        <th style="padding:1rem;">Declaro que los datos suministrados son fidedignos y estoy en conocimiento que cualquier falta o falsedad, en los mismos involucra sanciones o a la no aceptacion de la solicitud.</th>                            
+                        <th style="padding:1rem;">Declaro que los datos suministrados son fidedignos y estoy en conocimiento que cualquier falta o falsedad, en los mismos involucra sanciones o a la no aceptacion de la solicitud.</th>
                     </tr>
                 </table>
                 <table>
@@ -3280,18 +3286,18 @@ class SolicitudController extends Controller
                     </tr>
                 </table>
 
-                
 
-                    
+
+
                 </table>
                 <table>
                         <tr>
                             <th>Fecha de Solicitud</th>
                             <th>Hora</th>
-                        <th>Nombre y Apellido del Ciudadano Solicitante</th>      
-                        <th>Nombre y Apellido del Ciudadano Beneficiado</th>      
-                        <th>Solicita</th>                    
-                        <th>Nombre del Funcionario Receptor</th>                    
+                        <th>Nombre y Apellido del Ciudadano Solicitante</th>
+                        <th>Nombre y Apellido del Ciudadano Beneficiado</th>
+                        <th>Solicita</th>
+                        <th>Nombre del Funcionario Receptor</th>
                     </tr>
                     <tr>
                         <td>$fecha</td>
@@ -3330,27 +3336,39 @@ class SolicitudController extends Controller
         return redirect()->back();
     }
     public function imprimir2(Request $request) {
+        setlocale(LC_TIME, 'es_ES.UTF-8');
+
         $input = $request->all();
         $fechadesde = $input['fecha_desde'];
         $fechahasta = $input['fecha_hasta'];
+        $tipo_subsolicitud = $input['tipo_subsolicitud'];
+        $comuna= isset($input['comuna']) ? $input['comuna'] : '';
+        $comunidad = isset($input['comunidad']) ? $input['comunidad'] : '';
         $diadesde = date('d', strtotime($fechadesde));
         $mesdesde = date('m', strtotime($fechadesde));
         $anodesde = date('Y', strtotime($fechadesde));
         $diahasta = date('d', strtotime($fechahasta));
         $meshasta = date('m', strtotime($fechahasta));
         $anohasta = date('Y', strtotime($fechahasta));
-
-        $data = (new Seguimiento)->getSolicitudList_Finalizadas($fechadesde, $fechahasta);
+        $data = (new Seguimiento)->getSolicitudList_Finalizadas($fechadesde, $fechahasta, $tipo_subsolicitud,$comuna, $comunidad);
         $solicitudestotales = count($data);
         $participantesTotal = "";
-        
+        $etiquetaComuna = '';
+        $etiquetaComunidad = '';
+        $etiquetaFechas = '';
+        $etiquetatipo_subsolicitud = '';
+        $comuna = Comuna::find($comuna);
+        $comunidad = Comunidad::find($comunidad);
+        $tipo_subsolicitud = subtiposolicitud::find($tipo_subsolicitud);
         foreach ($data as $participante) {
             $participantes =<<<HTML
                     <tr>
                         <td>$participante->saludID</td>
                         <td>$participante->usuario</td>
                         <td>$participante->solicitante</td>
+                        <td>$participante->edad</td>
                         <td>$participante->cedula</td>
+                        <td>$participante->direccion</td>
                         <td>$participante->nombretipo</td>
                         <td>$participante->beneficiarionombre</td>
                         <td>$participante->cedula2</td>
@@ -3358,6 +3376,49 @@ class SolicitudController extends Controller
             HTML;
             $participantesTotal .= $participantes;
         }
+
+        $solicitudesPorMes = [];
+
+        foreach ($data as $participante) {
+            $mes = date('Y-m', strtotime($participante->fecha));
+            if (!isset($solicitudesPorMes[$mes])) {
+                $solicitudesPorMes[$mes] = [];
+            }
+            $solicitudesPorMes[$mes][] = $participante;
+        }
+
+        if (!empty($comuna)) {
+            $etiquetaComuna = "<h5 style='text-align:left;'>COMUNA: $comuna->codigo</h5>";
+            }
+        if (!empty($fechadesde) && !empty($fechahasta)) {
+            $etiquetaFechas = "<h5 style='text-align:left;'>Reporte de solicitudes finalizadas desde el $diadesde-$mesdesde-$anodesde hasta el $diahasta-$meshasta-$anohasta</h5>";
+            }
+        if (!empty($comunidad)) {
+            $etiquetaComunidad = "<h5 style='text-align:left;'>COMUNIDAD: $comunidad->nombre</h5>";
+            }
+        if (!empty($tipo_subsolicitud)) {
+            $etiquetatipo_subsolicitud = "<h5 style='text-align:left;'>TIPO SOLICITUD: $tipo_subsolicitud->nombre</h5>";
+            }
+        // Crea una variable para el nombre del archivo PDF
+        $nombreArchivo = "Reporte de solicitudes finalizadas";
+        $totalfinalizadas = '<h4 style="text-align:left;">Total de solicitudes finalizadas en el periodo seleccionado: '.$solicitudestotales.'</h4>';
+
+        // Agrega información al nombre del archivo según las variables con valor
+        if (!empty($fechadesde) && !empty($fechahasta)) {
+        $nombreArchivo .= " desde el $diadesde-$mesdesde-$anodesde al $diahasta-$meshasta-$anohasta";
+        }
+        if (!empty($comuna)) {
+        $nombreArchivo .= " Comuna $comuna->codigo";
+        }
+        if (!empty($comunidad)) {
+        $nombreArchivo .= " Comunidad $comunidad->nombre";
+        }
+        if (!empty($tipo_subsolicitud)) {
+        $nombreArchivo .= " Tipo $tipo_subsolicitud->nombre";
+        $totalfinalizadas = '<h4 style="text-align:left;">Total de solicitudes de '.$tipo_subsolicitud->nombre.' finalizadas en el periodo seleccionado: ' . $solicitudestotales . '</h4>';
+        }
+        // Agrega la extensión .pdf al nombre del archivo
+        $nombreArchivo .= ".pdf";
 
         $html =
         <<<HTML
@@ -3369,17 +3430,17 @@ class SolicitudController extends Controller
                     body {
                         font-family: sans-serif;
                     }
-    
+
                     table {
                         width: 100%;
                         border-collapse: collapse;
                     }
-    
+
                     th, td {
                         text-align:center;
                         border: 1px solid #ddd;
                     }
-    
+
                     th {
                         font-size: 12px;
                         background-color: #f0f0f0;
@@ -3392,35 +3453,57 @@ class SolicitudController extends Controller
         <body>
         <img src="https://prensa.alcaldiapaez.gob.ve/wp-content/uploads/sites/2/2024/06/CINTILLO-POLITICAS-SOCIALES-Y-COMUNITARIAS-Y-PODER-POPULAR.jpg" alt="" srcset="" width="100%">
 
-        <h3 style="text-align:left;">Direccion Politicas Sociales</h3>
-        <h4 style="text-align:left;">Total de solicitudes finalizadas en el periodo seleccionado: $solicitudestotales</h4>
-        <h5 style="text-align:center;">Reporte de solicitudes finalizadas desde el $diadesde-$mesdesde-$anodesde hasta el $diahasta-$meshasta-$anohasta</h5> 
-        <div>
-
-        <table>
-            <tr>
-                <th>Correlativo</th>
-                <th>Funcionario Receptor</th>
-                <th>Solicitante</th>
-                <th>Cedula Solicitante</th>
-                <th>Tipo Solicitud</th>
-                <th>Nombre Beneficiario</th>
-                <th>Cedula Beneficiario</th>
-            </tr>
-            $participantesTotal
-        </table>
-        </div>
-
-        </body>
-        </html>
+        <h3 style="text-align:left;">Dirección de Politicas Sociales y Poder Popular</h3>
+        $totalfinalizadas
+        $etiquetatipo_subsolicitud
+        $etiquetaFechas
+        $etiquetaComuna
+        $etiquetaComunidad
+                <br>
         HTML;
+
+        foreach ($solicitudesPorMes as $mes => $solicitudes) {
+            $html .= "<h3>Solicitudes del mes: " . strftime('%B %Y', strtotime($mes)) . "</h3>";
+            $solicitudesMes = count($solicitudes);
+            $html .= "<h4 style='text-align:left;'>Total de solicitudes finalizadas en el mes ". strftime('%B %Y', strtotime($mes)) .": $solicitudesMes</h4>";
+            $html .= "<table>";
+            $html .= "<tr>";
+            $html .= "<th>Correlativo</th>";
+            $html .= "<th>Funcionario Receptor</th>";
+            $html .= "<th>Solicitante</th>";
+            $html .= "<th>Edad</th>";
+            $html .= "<th>Cedula Solicitante</th>";
+            $html .= "<th>Direccion</th>";
+            $html .= "<th>Tipo Solicitud</th>";
+            $html .= "<th>Nombre Beneficiario</th>";
+            $html .= "<th>Cedula Beneficiario</th>";
+            $html .= "</tr>";
+
+            foreach ($solicitudes as $participante) {
+                $html .= "<tr>";
+                $html .= "<td>$participante->saludID</td>";
+                $html .= "<td>$participante->usuario</td>";
+                $html .= "<td>$participante->solicitante</td>";
+                $html .= "<td>$participante->edad</td>";
+                $html .= "<td>$participante->cedula</td>";
+                $html .= "<td>$participante->direccion</td>";
+                $html .= "<td>$participante->nombretipo</td>";
+                $html .= "<td>$participante->beneficiarionombre</td>";
+                $html .= "<td>$participante->cedula2</td>";
+                $html .= "</tr>";
+            }
+
+            $html .= "</table>";
+        }
+        $html .= "</div></body></html>";
+
         $options = new Options;
         $options->set('isRemoteEnabled', true);
         $dompdf = new Dompdf($options);
         $dompdf->loadHtml($html);
         $dompdf->setPaper('legal', 'portrait');
         $dompdf->render();
-        $dompdf->stream("Reporte total de solicitudes finalizadas durante el periodo $diadesde-$mesdesde-$anodesde al $diahasta-$meshasta-$anohasta.pdf", array("Attachment"=>1));
+        $dompdf->stream($nombreArchivo, array("Attachment"=>1));
 
         return redirect()->back();
     }
@@ -3428,7 +3511,7 @@ class SolicitudController extends Controller
 public function imprimir3(Request $request) {
     $input = $request->all();
     $fechadesde = $input['fecha_desde'];
-    $fechahasta = $input['fecha_hasta'];    
+    $fechahasta = $input['fecha_hasta'];
     $diadesde = date('d', strtotime($fechadesde));
     $mesdesde = date('m', strtotime($fechadesde));
     $anodesde = date('Y', strtotime($fechadesde));
@@ -3444,10 +3527,10 @@ public function imprimir3(Request $request) {
     $totalfinalizadas = count($solfinalizadas);
 
     $solicitudestotales = count($solregistradas) + count($solfinalizadas);
-    
+
     $printSolicitudRegistradas = "";
     $printSolicitudFinalizadas = "";
-    
+
     foreach ($solregistradas as $participante) {
         $participantes =<<<HTML
                 <tr>
@@ -3518,7 +3601,7 @@ public function imprimir3(Request $request) {
     <h5 style="text-align:left;">Total de solicitudes Registradas y en Analisis en el periodo seleccionado: $totalregistradas</h5>
     <h5 style="text-align:left;">Total de solicitudes Finalizadas durante el periodo seleccionado: $totalfinalizadas</h5>
     <h5 style="text-align:left;">Total de solicitudes Totales en el periodo seleccionado: $solicitudestotales</h5>
-    <h5 style="text-align:center;">Listado de solicitudes Totales desde el $diadesde-$mesdesde-$anodesde hasta el $diahasta-$meshasta-$anohasta</h5> 
+    <h5 style="text-align:center;">Listado de solicitudes Totales desde el $diadesde-$mesdesde-$anodesde hasta el $diahasta-$meshasta-$anohasta</h5>
     <div>
         <h5 style="text-align:center;">Solicitudes Finalizadas</h5>
     <table>
@@ -3561,135 +3644,186 @@ public function imprimir3(Request $request) {
     return redirect()->back();
 }
 
-public function imprimir4() {
+public function imprimir4(Request $request)
+{
+    setlocale(LC_TIME, 'es_ES.UTF-8');
 
-    $solfinalizadas = (new Solicitud)->reportetotalcasosatendidosSALUD();
-    $html =
-    <<<HTML
+    $input = $request->all();
+
+    $fechadesde = $input['fecha_desde'];
+    $fechahasta = $input['fecha_hasta'];
+    $tipo_subsolicitud = $input['tipo_subsolicitud'];
+    $comuna = isset($input['comuna']) ? $input['comuna'] : null;
+    $comunidad = isset($input['comunidad']) ? $input['comunidad'] : null;
+
+    // Formatear fechas
+    $diadesde = date('d', strtotime($fechadesde));
+    $mesdesde = date('m', strtotime($fechadesde));
+    $anodesde = date('Y', strtotime($fechadesde));
+    $diahasta = date('d', strtotime($fechahasta));
+    $meshasta = date('m', strtotime($fechahasta));
+    $anohasta = date('Y', strtotime($fechahasta));
+
+    // Obtener solicitudes finalizadas
+    $data = (new Seguimiento)->getSolicitudList_Finalizadas($fechadesde, $fechahasta, $tipo_subsolicitud, $comuna, $comunidad);
+
+    // Obtener el total de solicitudes finalizadas por tipo de subsolicitud
+    $finalizadas = (new Solicitud)->reportetotalcasosatendidosSALUD($fechadesde, $fechahasta, $tipo_subsolicitud, $comuna, $comunidad);
+    $solicitudestotales =  $finalizadas->TOTAL_SOLICITUD;
+
+    // Inicializar variables para las etiquetas
+    $etiquetaComuna = '';
+    $etiquetaComunidad = '';
+    $etiquetaFechas = '';
+    $etiquetatipo_subsolicitud = '';
+
+    // Obtener información de comuna, comunidad y tipo de subsolicitud (si existen)
+    if ($comuna) {
+        $comuna = Comuna::find($comuna);
+        $etiquetaComuna = "<h5 style='text-align:left;'>COMUNA: $comuna->codigo</h5>";
+    }
+
+    if ($comunidad) {
+        $comunidad = Comunidad::find($comunidad);
+        $etiquetaComunidad = "<h5 style='text-align:left;'>COMUNIDAD: $comunidad->nombre</h5>";
+    }
+
+    if ($tipo_subsolicitud) {
+        $tipo_subsolicitud = subtiposolicitud::find($tipo_subsolicitud);
+        $etiquetatipo_subsolicitud = "<h5 style='text-align:left;'>TIPO SOLICITUD: $tipo_subsolicitud->nombre</h5>";
+    }
+
+    // Generar etiqueta de fechas
+    if (!empty($fechadesde) && !empty($fechahasta)) {
+        $etiquetaFechas = "<h5 style='text-align:left;'>Reporte de solicitudes finalizadas desde el $diadesde-$mesdesde-$anodesde hasta el $diahasta-$meshasta-$anohasta</h5>";
+    }
+
+    // Construir el nombre del archivo
+    $nombreArchivo = "Reporte de solicitudes finalizadas";
+
+    if (!empty($fechadesde) && !empty($fechahasta)) {
+        $nombreArchivo .= " desde el $diadesde-$mesdesde-$anodesde al $diahasta-$meshasta-$anohasta";
+    }
+
+    if (!empty($comuna)) {
+        $nombreArchivo .= " Comuna $comuna->codigo";
+    }
+
+    if (!empty($comunidad)) {
+        $nombreArchivo .= " Comunidad $comunidad->nombre";
+    }
+
+    if (!empty($tipo_subsolicitud)) {
+        $nombreArchivo .= " Tipo $tipo_subsolicitud->nombre";
+    }
+
+    $nombreArchivo .= ".pdf";
+
+    // Generar el HTML del reporte
+    $html = <<<HTML
     <!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
         <style>
-                body {
-                    font-family: sans-serif;
-                }
-
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                }
-
-                th, td {
-                    text-align:left;
-                    border: 0px;
-                }
-
-                th {
-                    font-size: 12px;
-                    background-color: #f0f0f0;
-                }
-                td{
-                    font-size: 12px;
-                }
+            body {
+                font-family: sans-serif;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th, td {
+                text-align:center;
+                border: 1px solid #ddd;
+            }
+            th {
+                font-size: 12px;
+                background-color: #f0f0f0;
+            }
+            td{
+                font-size: 12px;
+            }
         </style>
     </head>
     <body>
     <img src="https://prensa.alcaldiapaez.gob.ve/wp-content/uploads/sites/2/2024/06/CINTILLO-POLITICAS-SOCIALES-Y-COMUNITARIAS-Y-PODER-POPULAR.jpg" alt="" srcset="" width="100%">
-
-    <h3 style="text-align:left;">Direccion Politicas Sociales y Poder Popular</h3>
-    <h5 style="text-align:center;">Listado de solicitudes Totales Terminadas</h5> 
-    <div>
-        <h5 style="text-align:center;">Solicitudes Finalizadas</h5>
-    <table>
-    <tr>
-        <td>Solicitudes Totales</td>
-        <td>$solfinalizadas->TOTAL_SOLICITUD</td>
-    </tr>
-    <tr>
-        <td>Medicina</td>
-        <td>$solfinalizadas->MEDICINA</td>
-    </tr>
-    <tr>
-        <td>Laboratorio</td>
-        <td>$solfinalizadas->LABORATORIO</td>
-    </tr>
-    <tr>
-        <td>Estudio</td>
-        <td>$solfinalizadas->ESTUDIO</td>
-    </tr>
-    <tr>
-        <td>Insumos</td>
-        <td>$solfinalizadas->INSUMOS</td>
-    </tr>
-    <tr>
-        <td>Consultas</td>
-        <td>$solfinalizadas->CONSULTAS</td>
-    </tr>
-    <tr>
-        <td>Donaciones y ayuda economica</td>
-        <td>$solfinalizadas->DONACIONES_Y_AYUDA_ECONOMICA</td>
-    </tr>
-    <tr>
-        <td>Ayudas Tecnicas</td>
-        <td>$solfinalizadas->AYUDAS_TECNICAS</td>
-    </tr>
-    <tr>
-        <td>Cirugías</td>
-        <td>$solfinalizadas->CIRUGIAS</td>
-    </tr>
-    <tr>
-        <td>Oftamologia</td>
-        <td>$solfinalizadas->OFTAMOLOGIA</td>
-    </tr>
-    <tr>
-        <td>Visita social</td>
-        <td>$solfinalizadas->VISITA_SOCIAL</td>
-    </tr>
-    <tr>
-        <td>Materiales</td>
-        <td>$solfinalizadas->MATERIALES</td>
-    </tr>
-    <tr>
-        <td>Jornadas</td>
-        <td>$solfinalizadas->JORNADAS</td>
-    </tr>
-    <tr>
-        <td>Alto Costo</td>
-        <td>$solfinalizadas->ALTO_COSTO</td>
-    </tr>
-    <tr>
-        <td>Hurnas</td>
-        <td>$solfinalizadas->HURNAS</td>
-    </tr>
-    <tr>
-        <td>Fosas</td>
-        <td>$solfinalizadas->FOSAS</td>
-    </tr>
-    <tr>
-        <td>Apoyo Logistico</td>
-        <td>$solfinalizadas->APOYO_LOGISTICO</td>
-    </tr>
-    <tr>
-        <td>Dotacion</td>
-        <td>$solfinalizadas->DOTACION</td>
-    </tr>
-    <tr>
-        <td>Otros</td>
-        <td>$solfinalizadas->OTROS</td>
-    </tr>    
-    </table>
-    </div>
-    </body>
-    </html>
+    <h3 style="text-align:left;">Dirección de Politicas Sociales y Poder Popular</h3>
     HTML;
+
+    // Mostrar el total de solicitudes finalizadas
+    if ($tipo_subsolicitud) {
+        $html .= '<h4 style="text-align:left;">Total de solicitudes de ' . $tipo_subsolicitud->nombre . ' finalizadas en el periodo seleccionado: ' . $solicitudestotales . '</h4>';
+    } else {
+        $html .= '<h4 style="text-align:left;">Total de solicitudes finalizadas en el periodo seleccionado: ' . $solicitudestotales . '</h4>';
+    }
+
+    // Agregar las etiquetas
+    $html .= $etiquetatipo_subsolicitud;
+    $html .= $etiquetaFechas;
+    $html .= $etiquetaComuna;
+    $html .= $etiquetaComunidad;
+    $html .= "<br>";
+
+    // Mostrar la tabla con el total de solicitudes por tipo de subsolicitud si no se especifica un tipo
+  //  if (!$tipo_subsolicitud) {
+        $html .= '<table>';
+        $html .= '<tr><th>Tipo de Solicitud</th><th>Total</th></tr>';
+        foreach ($finalizadas as $key => $value) {
+            if ($value > 0) { // Condición para mostrar solo filas con valor mayor que 0
+                $html .= "<tr><td>" . str_replace('_', ' ', $key) . "</td><td>$value</td></tr>";
+            }
+        }
+        $html .= '</table>';
+    //}
+
+    // Agrupar solicitudes por mes
+    $solicitudesPorMes = [];
+    foreach ($data as $participante) {
+        $mes = date('Y-m', strtotime($participante->fecha));
+        if (!isset($solicitudesPorMes[$mes])) {
+            $solicitudesPorMes[$mes] = [];
+        }
+        $solicitudesPorMes[$mes][] = $participante;
+    }
+
+    foreach ($solicitudesPorMes as $mes => $solicitudes) {
+
+        $html .= "<h3>Solicitudes del mes: " . strftime('%B %Y', strtotime($mes)) . "</h3>";
+     //var_dump($mes . '-01',$mes . '-' . date('t', strtotime($mes)),$tipo_subsolicitud->id,$comuna->id,$comunidad->id);
+     //exit();
+     $finalizadasMes = (new Solicitud)->reportetotalcasosatendidosSALUD($mes . '-01', $mes . '-' . date('t', strtotime($mes)), $tipo_subsolicitud ? $tipo_subsolicitud->id : null, $comuna ? $comuna->id : null, $comunidad ? $comunidad->id : null);
+
+        // Obtener el total de solicitudes del mes actual desde $finalizadasMes
+        $solicitudesMes = $finalizadasMes->TOTAL_SOLICITUD;
+
+        $html .= "<h4 style='text-align:left;'>Total de solicitudes finalizadas en el mes de " . strftime('%B %Y', strtotime($mes)) . ": $solicitudesMes</h4>";
+
+
+        // Filtrar los datos de $finalizadas para el mes actual
+        $finalizadasMes = (new Solicitud)->reportetotalcasosatendidosSALUD($mes . '-01', $mes . '-' . date('t', strtotime($mes)), $tipo_subsolicitud ? $tipo_subsolicitud->id : null, $comuna ? $comuna->id : null, $comunidad ? $comunidad->id : null);
+        // Mostrar la tabla con el total de solicitudes por tipo de subsolicitud
+        $html .= '<table>';
+        $html .= '<tr><th>Tipo de Solicitud</th><th>Total</th></tr>';
+        foreach ($finalizadasMes as $key => $value) {
+            if ($value > 0) { // Condición para mostrar solo filas con valor mayor que 0
+                $html .= "<tr><td>" . str_replace('_', ' ', $key) . "</td><td>$value</td></tr>";
+            }
+        }
+
+        $html .= '</table>';
+    }
+
+
+    $html .= "</body></html>";
+
     $options = new Options;
     $options->set('isRemoteEnabled', true);
     $dompdf = new Dompdf($options);
     $dompdf->loadHtml($html);
-    $dompdf->setPaper('latter', 'portrait');
+    $dompdf->setPaper('legal', 'portrait');
     $dompdf->render();
-    $dompdf->stream("Reporte total de solicitudes finalizadas.pdf", array("Attachment"=>1));
+    $dompdf->stream($nombreArchivo, array("Attachment"=>1));
 
     return redirect()->back();
 }

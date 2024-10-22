@@ -8,24 +8,32 @@ use Illuminate\Support\Facades\DB;
 class Comuna extends Model
 {
     use HasFactory;
-    protected $fillable = [     
+    protected $table = 'comuna';
+    protected $fillable = [
         'nombre',
-        
+
     ];
     public function datos_comuna($parroquia){
-        try {            
+        try {
             $comuna = DB::table('comuna')
             ->leftJoin('parroquia', 'comuna.parroquia_id', '=', 'parroquia.id')
             ->select('comuna.id','comuna.codigo')
             ->where('comuna.parroquia_id', '=',$parroquia)
-            ->get();           
+            ->get();
             return $comuna;
         }catch(Throwable $e){
             $comuna = [];
             return $comuna;
         }
-        
     }
-  
+    public function getComunasFilter(){
+        $comunas = DB::table('comuna')
+        ->select('comuna.id','comuna.codigo')
+        ->orderBy('comuna.id')
+        ->pluck( 'comuna.codigo', 'comuna.id')
+        ->toArray();
+        return $comunas;
+    }
+
 }
 

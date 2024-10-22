@@ -9,10 +9,10 @@
 @endsection
 
 @section('contentheader_title')
-<!-- Componente Button Para todas las Ventanas de los Módulos, no Borrar.--> 
+<!-- Componente Button Para todas las Ventanas de los Módulos, no Borrar.-->
 
-  
-    
+
+
 @endsection
 
 @section('link_css_datatable')
@@ -22,7 +22,7 @@
     <link href="{{ url ('/css_datatable/buttons.dataTables.min.css') }}" rel="stylesheet">
 @endsection
 
-    
+
 @section('main-content')
 @component('components.alert_msg',['tipo_alert'=>$tipo_alert])
  Componentes para los mensajes de Alert, No Eliminar
@@ -42,6 +42,19 @@
                     <input type="date" class="form-control" id="fecha_hasta">
                 </div>
                 <div class="col-md-2">
+                    <label for="tipo_subsolicitud">Tipo Solicitud</label>
+                    {!! Form::select('tipo_subsolicitud', [NULL => 'Seleccionar'] + $tipo_subsolicitud, NULL, ['class' => 'form-control', 'id' => 'tipo_subsolicitud']) !!}
+                </div>
+                <div class="col-md-2">
+                    <label for="comuna">Comuna</label>
+                    {!! Form::select('comuna', [NULL => 'Seleccionar'] + $comuna, NULL, ['class' => 'form-control', 'id' => 'comuna']) !!}
+                </div>
+                <div class="col-md-2">
+                    {!! Form::label('comunidad', 'Comunidad', ['class' => 'control-label', 'id' => 'comunidad_label']) !!}<span
+                        class="required" style="color:red;" id="comunidad_id_span">*</span>
+                    {!! Form::select('comunidad', $comunidad, old('comunidad'), ['placeholder' => trans('message.solicitud_action.comunidad'), 'class' => 'form-control', 'id' => 'comunidad']) !!}
+                </div>
+                <div class="col-md-2">
                     <button class="btn btn-primary" id="btn_filtrar" style="margin-top: 25px;">Filtrar</button>
                 </div>
             </div>
@@ -50,10 +63,12 @@
                 <thead>
                     <tr>
                     <th>Nro Solicitud</th>
-                    <th>Fecha</th>
                     <th>Funcionario Receptor</th>
+                    <th>Fecha Recibido</th>
                     <th>Nombre de Solicitante</th>
+                    <th>Edad</th>
                     <th>Cedula de Solicitante</th>
+                    <th>Direccion</th>
                     <th>Tipo de Solicitud</th>
                     <th>Nombre del Beneficiario</th>
                     <th>Cedula Beneficiario</th>
@@ -85,19 +100,53 @@
             // Obtén los valores de los campos de fecha
             var fechaDesde = $('#fecha_desde').val();
             var fechaHasta = $('#fecha_hasta').val();
+            var tipo_subsolicitud = $('#tipo_subsolicitud').val();
+            var comuna = $('#comuna').val();
+            var comunidad = $('#comunidad').val();
 
             // Construye la URL con los parámetros
-            var url = "{{ route('imprimir2') }}" + "?fecha_desde=" + fechaDesde + "&fecha_hasta=" + fechaHasta;
+            var url = "{{ route('imprimir2') }}" + "?fecha_desde=" + fechaDesde + "&fecha_hasta=" + fechaHasta + "&tipo_subsolicitud=" + tipo_subsolicitud + "&comuna=" + comuna + "&comunidad=" + comunidad;
 
             // Redirige a la URL construida
             window.location.href = url;
         });
 
         $('#btn_totales').click(function() {
-            var url = "{{ route('solicitud.solicitudTotalFinalizadas') }}";
+            var fechaDesde = $('#fecha_desde').val();
+            var fechaHasta = $('#fecha_hasta').val();
+            var tipo_subsolicitud = $('#tipo_subsolicitud').val();
+            var comuna = $('#comuna').val();
+            var comunidad = $('#comunidad').val();
+
+            var url = "{{ route('solicitud.solicitudTotalFinalizadas') }}" + "?fecha_desde=" + fechaDesde + "&fecha_hasta=" + fechaHasta + "&tipo_subsolicitud=" + tipo_subsolicitud + "&comuna=" + comuna + "&comunidad=" + comunidad;
+
             window.location.href = url;
         });
-        
+
+        $('#comuna').change(function () {
+            var comunaId = $(this).val();
+            var comuna = $('#comuna').val();
+            $("#comunidad").prop('disabled', false);
+
+            $.ajax({
+                url: "{{ route('getComunidad2') }}", // Ruta a tu controlador
+                type: "GET",
+                data: { comuna: comuna },
+                success: function (data) {
+                    $("#comunidad").empty(); // Limpia opciones anteriores
+                    $("#comunidad").append('<option value="">Seleccione Comunidad</option>'); // Opción inicial
+
+                    $.each(data, function (key, value) {
+                        $("#comunidad").append('<option value="' + value.id + '">' + value.nombre + '</option>');
+                    });
+                },
+                error: function () {
+                    // Manejo de errores (opcional)
+                    alert("Error al cargar la comunidad.");
+                }
+            });
+        });
+
         var table = $('.solicitud_all').DataTable({
             processing: true,
             serverSide: true,
@@ -108,16 +157,19 @@
                 data: function (d) {
                     d.fecha_desde = $('#fecha_desde').val();
                     d.fecha_hasta = $('#fecha_hasta').val();
+                    d.tipo_subsolicitud = $('#tipo_subsolicitud').val();
+                    d.comuna = $('#comuna').val();
+                    d.comunidad = $('#comunidad').val();
                 }
             },
             columns: [
                 {
                     data: 'saludID', name: 'saludID',
-                    "render": function ( data, type, row ) { 
+                    "render": function ( data, type, row ) {
                         return '<div style="text-align:center;"><b>'+data+'</b></div>';
                     }
                 },
-                {data: 'usuario', name: 'usuario'}, 
+                {data: 'usuario', name: 'usuario'},
                 {
                     data: 'fecha', name: 'fecha',
                     "render": function ( data, type, row ) {
@@ -127,11 +179,13 @@
                     }
                 },
                 {data: 'solicitante', name: 'solicitante'},
-                {data: 'cedula', name: 'cedula'}, 
-                {data: 'nombretipo', name: 'nombretipo'}, 
-                {data: 'beneficiarionombre', name: 'nombrebeneficiario'}, 
-                {data: 'cedula2', name: 'cedula2'}, 
-                {data: 'solicita', name: 'solicita'}, 
+                {data: 'edad', name: 'edad'},
+                {data: 'cedula', name: 'cedula'},
+                {data: 'direccion', name: 'direccion'},
+                {data: 'nombretipo', name: 'nombretipo'},
+                {data: 'beneficiarionombre', name: 'nombrebeneficiario'},
+                {data: 'cedula2', name: 'cedula2'},
+                {data: 'solicita', name: 'solicita'},
             ],
             "language": {
                 "lengthMenu": "Mostrar _MENU_ registros por página",
@@ -143,14 +197,14 @@
                 "paginate": {
                     "next": "Siguiente",
                     "previous": "Anterior",
-                }            
+                }
             }
         });
 
         $('#btn_filtrar').click(function() {
-            table.ajax.reload(); 
+            table.ajax.reload();
         });
-    }); 
+    });
 </script>
 <script src="{{ url ('/js_delete/delete_confirm.min.js') }}"></script>
 <style>
@@ -160,5 +214,9 @@
     td {
         text-align: center;
     }
+    section.content{
+        background-image: url("{{ url('/images/siabuscar.png') }}");
+        background-size: 100%;
+    }
 </style>
-@endsection  
+@endsection

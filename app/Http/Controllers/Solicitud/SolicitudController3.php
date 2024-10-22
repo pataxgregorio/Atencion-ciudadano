@@ -152,7 +152,7 @@ class SolicitudController extends Controller
         $jefecomunidad = [];
 
         $consulta = (new Solicitud)->ObtenerNumeroSolicitud();
-        $correlativoSALUD = $consulta ? $consulta + 1 : 4024; 
+        $correlativoSALUD = $consulta ? $consulta + 1 : 4024;
 
 
         return view('Solicitud.solicitud_create', compact('count_notification', 'titulo_modulo', 'roles','correlativoSALUD', 'municipio', 'comuna', 'comunidad','jefecomunidad', 'direcciones', 'parroquia', 'estado', 'coordinacion', 'enter', 'tipo_solicitud','subtiposolicitud', 'array_color'));
@@ -171,7 +171,7 @@ class SolicitudController extends Controller
          * php artisan queue:work database --tries=3 --backoff=10
          * o instalar en su servidor linux (Debian ó Ubuntu) el supervisor de la siguiente manera
          * sudo apt-get install supervisor
-         * Si no realiza ninguna configuración todos los trabajos se iran guardando en la 
+         * Si no realiza ninguna configuración todos los trabajos se iran guardando en la
          * tabla jobs, y una vez configure, los trabajos en cola se iran ejecutando
          * Si se ejecuta algún error estos se guardan en la tabla failed_jobs.
          * Para ejcutar los trabajos en failed_jobs ejecute:
@@ -183,7 +183,7 @@ class SolicitudController extends Controller
         // Target URL
         DB::beginTransaction();
         try {
-            $input = $request->all();            
+            $input = $request->all();
             $input['users_id'] = Auth::user()->id;
             //  $data['is_deleted'] = false;
             $recaudos = NULL;
@@ -337,7 +337,7 @@ class SolicitudController extends Controller
                 $input['coordinacion_id'] =  NULL;
                 $input['enter_descentralizados_id'] =  NULL;
                 $input['enter_id'] =  NULL;
-                $input['asignacion'] =  NULL; 
+                $input['asignacion'] =  NULL;
                 if($input['municipio_id'] == 2){
                     $input['parroquia_id'] = NULL;
                     $input['comuna_id'] = NULL;
@@ -345,9 +345,9 @@ class SolicitudController extends Controller
                     $input['jefecomunidad_id'] = NULL;
                 }
                 // if($input['jefecomunidad_id'] == NULL){
-                    
+
                 // }
-                
+
                 $beneficiario = [
                     [
                         "cedula" => isset($input['cedulabeneficiario']) ? $input['cedulabeneficiario'] : NULL,
@@ -357,7 +357,7 @@ class SolicitudController extends Controller
                         "solicita" => isset($input['solicita']) ? $input['solicita'] : NULL,
                         "venApp" => isset($input['venApp']) ? $input['venApp'] : NULL,
                     ]
-                ];            
+                ];
                 $recaudos = [
                     [
                         "cedula" => isset($input['checkcedula2']) ? $input['checkcedula2'] : NULL,
@@ -367,7 +367,7 @@ class SolicitudController extends Controller
                         "beneficiario" => isset($input['checkcedulabeneficiario']) ? $input['checkcedulabeneficiario'] : NULL,
                         "checkpresupuesto" => isset($input['checkpresupuesto']) ? $input['checkpresupuesto'] : NULL,
                         "evifotobeneficiario" => isset($input['evifotobeneficiario']) ? $input['evifotobeneficiario'] : NULL,
-                        "certificadodefuncion" => isset($input['certificadodefuncion']) ? $input['certificadodefuncion'] : NULL,                        
+                        "certificadodefuncion" => isset($input['certificadodefuncion']) ? $input['certificadodefuncion'] : NULL,
                         "permisoinhumacion" => isset($input['permisoinhumacion']) ? $input['permisoinhumacion'] : NULL,
                         "ordenexamen" => isset($input['ordenexamen']) ? $input['ordenexamen'] : NULL,
                         "ordenestudio" =>  isset($input['ordenestudio']) ? $input['ordenestudio']:NULL,
@@ -383,9 +383,9 @@ class SolicitudController extends Controller
             }else{
                 $nuevoNumero = NULL;
             }
-            
+
             $solicitud = new Solicitud([
-                'solicitud_salud_id' => $nuevoNumero, 
+                'solicitud_salud_id' => $nuevoNumero,
                 'users_id' => $input['users_id'],
                 'trabajador' => $input['trabajador'],
                 'direccion_id' => $input['direcciones_id'],
@@ -427,7 +427,7 @@ class SolicitudController extends Controller
                 'created_at' => \Carbon\Carbon::now('America/Caracas'),
                 'updated_at' => \Carbon\Carbon::now('America/Caracas'),
             ]);
-        
+
             $solicitud->save();
             DB::commit();
         } catch (\Exception $e) {
@@ -440,8 +440,8 @@ class SolicitudController extends Controller
 
         $conseguirID = Solicitud::latest()->value('id');
         $seguimiento_edit = DB::table("seguimiento")->where("solicitud_id", $conseguirID)->get();
-        $solicitud_edit = Solicitud::find($conseguirID);      
-        
+        $solicitud_edit = Solicitud::find($conseguirID);
+
         $seguimiento = new Seguimiento([
             'solicitud_id' => $conseguirID,
             'seguimiento' => NULL
@@ -533,7 +533,7 @@ class SolicitudController extends Controller
 
         $comunidad = (new Comunidad)->datos_comunidad($solicitud_edit->comuna_id);
         $coordinacion = (new Coordinacion)->datos_coordinacion($solicitud_edit->direccion_id);
-        $jefecomunidad = (new JefeComunidad)->getJefe($solicitud_edit->comuna_id);   
+        $jefecomunidad = (new JefeComunidad)->getJefe($solicitud_edit->comuna_id);
         $subtiposolicitud = (new subtiposolicitud)->getSubtiposolicitudbyID($solicitud_edit->tipo_subsolicitud_id);
         $correlativoSALUD = (new Solicitud)->BuscarNumeroSolicitud($id);
 
@@ -620,7 +620,7 @@ class SolicitudController extends Controller
         $comunidad = (new Comunidad)->datos_comunidad($solicitud_edit->comuna_id);
         $coordinacion = (new Coordinacion)->datos_coordinacion($solicitud_edit->direccion_id);
         $jefecomunidad2 = (new JefeComunidad)->getJefe($solicitud_edit->comuna_id);
-        $jefecomunidad = (new JefeComunidad)->getJefe2($solicitud_edit->jefecomunidad_id);   
+        $jefecomunidad = (new JefeComunidad)->getJefe2($solicitud_edit->jefecomunidad_id);
         $subtiposolicitud = (new Subtiposolicitud)->getSubtiposolicitud();
         $correlativoSALUD = (new Solicitud)->BuscarNumeroSolicitud($id);
 
@@ -630,7 +630,7 @@ class SolicitudController extends Controller
     {
 
         $comuna = (new Comuna)->datos_comuna($request['parroquia']);
-        
+
         return $comuna;
 
     }
@@ -874,7 +874,7 @@ class SolicitudController extends Controller
 
     private function update_image($request, $avatar_viejo, &$user_Update)
     {
-        /** Se actualizan todos los datos solicitados por el Cliente 
+        /** Se actualizan todos los datos solicitados por el Cliente
          *  y eliminamos del Storage/avatars, el archivo indicado.
          */
         if ($request->hasFile('avatar')) {
@@ -933,11 +933,11 @@ class SolicitudController extends Controller
     }
     public function solicitudTipo2(Request $request)
     {
-      
+
             $countSolicitud = (new Solicitud)->count_solictud2();
 
             return response()->json($countSolicitud);
-       
+
     }
     public function solicitudTipo2PorFecha(Request $request)
         {
@@ -948,25 +948,25 @@ class SolicitudController extends Controller
             $countSolicitud = (new Solicitud)->count_solictud2PorFecha($fechaDesde, $fechaHasta);
 
             return response()->json($countSolicitud);
-       
+
     }
 
     public function solicitudTipo3(Request $request)
     {
-      
+
             $countSolicitud = (new Solicitud)->count_solictud3();
 
             return response()->json($countSolicitud);
-       
+
     }
 
     public function solicitudTipo4(Request $request)
     {
-      
+
             $countSolicitud = (new Solicitud)->count_solictud4();
 
             return response()->json($countSolicitud);
-       
+
     }
 
     public function solicitudTipo4PorFecha(Request $request)
@@ -977,15 +977,15 @@ class SolicitudController extends Controller
             $countSolicitud = (new Solicitud)->count_solictud4PorFecha($fechaDesde, $fechaHasta);
 
             return response()->json($countSolicitud);
-       
+
     }
     public function solicitudTipo5(Request $request)
     {
-      
+
             $countSolicitud = (new Solicitud)->count_solictud5();
             $array = [$countSolicitud];
             return $array;
-       
+
     }
         public function solicitudTotalTipo(Request $request)
     {
@@ -1092,7 +1092,7 @@ class SolicitudController extends Controller
         $solicitudes = (new Solicitud)->solicitudesWAN($fechaDesde, $fechaHasta, $status, $comuna);
         return $solicitudes;
         }
-    
+
     public function imprimirWAN(Request $request){
         $input = $request->all();
         $fechaDesde = isset($input['fechaDesde']) ? $input['fechaDesde'] : NULL;
@@ -1111,17 +1111,17 @@ class SolicitudController extends Controller
                     body {
                         font-family: sans-serif;
                     }
-    
+
                     table {
                         width: 100%;
                         border-collapse: collapse;
                     }
-    
+
                     th, td {
                         text-align:center;
                         border: 1px solid #ddd;
                     }
-    
+
                     th {
                         font-size: 12px;
                         background-color: #f0f0f0;
@@ -1166,11 +1166,11 @@ class SolicitudController extends Controller
         // Obtener la ruta completa del archivo
         $fullPath = storage_path('app/' . $path);
 
-        return $fullPath; 
+        return $fullPath;
 
     }
     public function imprimir(Request $request)
-    {        
+    {
         $activardenuncia = "";
         $activarqueja = "";
         $activarsugerencia = "";
@@ -1185,7 +1185,7 @@ class SolicitudController extends Controller
         $activarrecaudoCedulaTestigo = "";
         $activarrecaudoCartaResidencia = "";
         $activarrecaudoInforme = "";
-        
+
         $activarrecaudoRecipe = "";
         $activarrecaudoInforme = "";
         $activarrecaudoBeneficiario = "";
@@ -1205,10 +1205,10 @@ class SolicitudController extends Controller
         $request = $request->all();
         $idsolicitud = $request["idsolicitud"];
         $solicitud = Solicitud::find($idsolicitud);
-        
+
         $user = User::find($solicitud->users_id);
         $nombreUsuario = $user->name;
-        
+
         $direccionAsignada = (new Direccion)->datos_direccion()[$solicitud->direccion_id];
         $idestado = isset($solicitud["estado_id"]) ? $solicitud["estado_id"] : NULL;
         $idmunicipio = isset($solicitud["municipio_id"]) ? $solicitud["municipio_id"] : NULL;
@@ -1279,17 +1279,17 @@ class SolicitudController extends Controller
                     body {
                         font-family: sans-serif;
                     }
-    
+
                     table {
                         width: 100%;
                         border-collapse: collapse;
                     }
-    
+
                     th, td {
                         text-align:center;
                         border: 1px solid #ddd;
                     }
-    
+
                     th {
                         font-size: 12px;
                         background-color: #f0f0f0;
@@ -1311,7 +1311,7 @@ class SolicitudController extends Controller
                         <th>Año: $anno</th>
                     </tr>
                 </table>
-                
+
                 <table>
                     <tr>
                         <th>Denuncia</th>
@@ -1357,11 +1357,11 @@ class SolicitudController extends Controller
                         <td>$solicitud->sexo</td>
                         <td>$solicitud->edocivil</td>
                         <td>$solicitud->fechaNacimiento</td>
-                        <td>$solicitud->nivelestudio</td> 
-                        <td>$solicitud->profesion</td> 
+                        <td>$solicitud->nivelestudio</td>
+                        <td>$solicitud->profesion</td>
                     </tr>
             </table>
-    
+
             <table>
             <tr >
                         <th class="text-primary" >Estado</th>
@@ -1475,7 +1475,7 @@ class SolicitudController extends Controller
                 </table>
                 <table>
                     <tr>
-                        <th style="padding:1rem;">Declaro que los datos suministrados son fidedignos y estoy en conocimiento que cualquier falta o falsedad, en los mismos involucra sanciones o a la no aceptacion de la solicitud.</th>                            
+                        <th style="padding:1rem;">Declaro que los datos suministrados son fidedignos y estoy en conocimiento que cualquier falta o falsedad, en los mismos involucra sanciones o a la no aceptacion de la solicitud.</th>
                     </tr>
                 </table>
                 <table>
@@ -1566,8 +1566,8 @@ class SolicitudController extends Controller
                         <tr>
                             <th>Fecha de Solicitud</th>
                             <th>Hora</th>
-                        <th>Nombre y Apellido del Ciudadano Solicitante</th>                    
-                        <th>Nombre del Funcionario Receptor</th>                    
+                        <th>Nombre y Apellido del Ciudadano Solicitante</th>
+                        <th>Nombre del Funcionario Receptor</th>
                     </tr>
                     <tr>
                         <td>$fecha</td>
@@ -1650,17 +1650,17 @@ class SolicitudController extends Controller
                     body {
                         font-family: sans-serif;
                     }
-    
+
                     table {
                         width: 100%;
                         border-collapse: collapse;
                     }
-    
+
                     th, td {
                         text-align:center;
                         border: 1px solid #ddd;
                     }
-    
+
                     th {
                         font-size: 12px;
                         background-color: #f0f0f0;
@@ -1682,7 +1682,7 @@ class SolicitudController extends Controller
                         <th>Año: $anno</th>
                     </tr>
                 </table>
-                
+
                 <table>
                     <tr>
                         <th>Denuncia</th>
@@ -1728,11 +1728,11 @@ class SolicitudController extends Controller
                         <td>$solicitud->sexo</td>
                         <td>$solicitud->edocivil</td>
                         <td>$solicitud->fechaNacimiento</td>
-                        <td>$solicitud->nivelestudio</td> 
-                        <td>$solicitud->profesion</td> 
+                        <td>$solicitud->nivelestudio</td>
+                        <td>$solicitud->profesion</td>
                     </tr>
             </table>
-    
+
             <table>
             <tr >
                         <th class="text-primary" >Estado</th>
@@ -1846,7 +1846,7 @@ class SolicitudController extends Controller
                 </table>
                 <table>
                     <tr>
-                        <th style="padding:1rem;">Declaro que los datos suministrados son fidedignos y estoy en conocimiento que cualquier falta o falsedad, en los mismos involucra sanciones o a la no aceptacion de la solicitud.</th>                            
+                        <th style="padding:1rem;">Declaro que los datos suministrados son fidedignos y estoy en conocimiento que cualquier falta o falsedad, en los mismos involucra sanciones o a la no aceptacion de la solicitud.</th>
                     </tr>
                 </table>
                 <table>
@@ -1937,8 +1937,8 @@ class SolicitudController extends Controller
                         <tr>
                             <th>Fecha de Solicitud</th>
                             <th>Hora</th>
-                        <th>Nombre y Apellido del Ciudadano Solicitante</th>                    
-                        <th>Nombre del Funcionario Receptor</th>                    
+                        <th>Nombre y Apellido del Ciudadano Solicitante</th>
+                        <th>Nombre del Funcionario Receptor</th>
                     </tr>
                     <tr>
                         <td>$fecha</td>
@@ -1972,11 +1972,11 @@ class SolicitudController extends Controller
             $recaudos = json_decode($recaudos, true);
             $denunciado = $solicitud->denunciado;
             $denunciado = json_decode($denunciado, true);
-            
+
             $cedulaDenunciado = $denunciado[0]["cedula"];
             $nombreDenunciado = $denunciado[0]["nombre"];
             $testigoDenunciado = $denunciado[0]["testigo"];
-            
+
             $quejas = $solicitud->reclamo;
             $quejas = json_decode($quejas, true);
             $quejasRelato = $quejas[0]["relato"];
@@ -2022,17 +2022,17 @@ class SolicitudController extends Controller
                     body {
                         font-family: sans-serif;
                     }
-    
+
                     table {
                         width: 100%;
                         border-collapse: collapse;
                     }
-    
+
                     th, td {
                         text-align:center;
                         border: 1px solid #ddd;
                     }
-    
+
                     th {
                         font-size: 12px;
                         background-color: #f0f0f0;
@@ -2054,7 +2054,7 @@ class SolicitudController extends Controller
                         <th>Año: $anno</th>
                     </tr>
                 </table>
-                
+
                 <table>
                     <tr>
                         <th>Denuncia</th>
@@ -2100,11 +2100,11 @@ class SolicitudController extends Controller
                         <td>$solicitud->sexo</td>
                         <td>$solicitud->edocivil</td>
                         <td>$solicitud->fechaNacimiento</td>
-                        <td>$solicitud->nivelestudio</td> 
-                        <td>$solicitud->profesion</td> 
+                        <td>$solicitud->nivelestudio</td>
+                        <td>$solicitud->profesion</td>
                     </tr>
             </table>
-    
+
             <table>
             <tr >
                         <th class="text-primary" >Estado</th>
@@ -2218,7 +2218,7 @@ class SolicitudController extends Controller
                 </table>
                 <table>
                     <tr>
-                        <th style="padding:1rem;">Declaro que los datos suministrados son fidedignos y estoy en conocimiento que cualquier falta o falsedad, en los mismos involucra sanciones o a la no aceptacion de la solicitud.</th>                            
+                        <th style="padding:1rem;">Declaro que los datos suministrados son fidedignos y estoy en conocimiento que cualquier falta o falsedad, en los mismos involucra sanciones o a la no aceptacion de la solicitud.</th>
                     </tr>
                 </table>
                 <table>
@@ -2309,8 +2309,8 @@ class SolicitudController extends Controller
                         <tr>
                             <th>Fecha de Solicitud</th>
                             <th>Hora</th>
-                        <th>Nombre y Apellido del Ciudadano Solicitante</th>                    
-                        <th>Nombre del Funcionario Receptor</th>                    
+                        <th>Nombre y Apellido del Ciudadano Solicitante</th>
+                        <th>Nombre del Funcionario Receptor</th>
                     </tr>
                     <tr>
                         <td>$fecha</td>
@@ -2352,17 +2352,17 @@ class SolicitudController extends Controller
                     body {
                         font-family: sans-serif;
                     }
-    
+
                     table {
                         width: 100%;
                         border-collapse: collapse;
                     }
-    
+
                     th, td {
                         text-align:center;
                         border: 1px solid #ddd;
                     }
-    
+
                     th {
                         font-size: 12px;
                         background-color: #f0f0f0;
@@ -2384,7 +2384,7 @@ class SolicitudController extends Controller
                         <th>Año: $anno</th>
                     </tr>
                 </table>
-                
+
                 <table>
                     <tr>
                         <th>Denuncia</th>
@@ -2430,11 +2430,11 @@ class SolicitudController extends Controller
                         <td>$solicitud->sexo</td>
                         <td>$solicitud->edocivil</td>
                         <td>$solicitud->fechaNacimiento</td>
-                        <td>$solicitud->nivelestudio</td> 
-                        <td>$solicitud->profesion</td> 
+                        <td>$solicitud->nivelestudio</td>
+                        <td>$solicitud->profesion</td>
                     </tr>
             </table>
-    
+
             <table>
             <tr >
                         <th class="text-primary" >Estado</th>
@@ -2488,7 +2488,7 @@ class SolicitudController extends Controller
                         <td>$observacionAsesoria</td>
                     </tr>
                 </table>
-                
+
                     <table>
                         <tr>
                             <th>Documentos que anexa</th>
@@ -2504,7 +2504,7 @@ class SolicitudController extends Controller
                     </table>
                 <table>
                     <tr>
-                        <th style="padding:1rem;">Declaro que los datos suministrados son fidedignos y estoy en conocimiento que cualquier falta o falsedad, en los mismos involucra sanciones o a la no aceptacion de la solicitud.</th>                            
+                        <th style="padding:1rem;">Declaro que los datos suministrados son fidedignos y estoy en conocimiento que cualquier falta o falsedad, en los mismos involucra sanciones o a la no aceptacion de la solicitud.</th>
                     </tr>
                 </table>
                 <table>
@@ -2595,8 +2595,8 @@ class SolicitudController extends Controller
                         <tr>
                         <th>Fecha de Solicitud</th>
                         <th>Hora</th>
-                        <th>Nombre y Apellido del Ciudadano Solicitante</th>                    
-                        <th>Nombre del Funcionario Receptor</th>                    
+                        <th>Nombre y Apellido del Ciudadano Solicitante</th>
+                        <th>Nombre del Funcionario Receptor</th>
                     </tr>
                     <tr>
                         <td>$fecha</td>
@@ -2639,17 +2639,17 @@ class SolicitudController extends Controller
                     body {
                         font-family: sans-serif;
                     }
-    
+
                     table {
                         width: 100%;
                         border-collapse: collapse;
                     }
-    
+
                     th, td {
                         text-align:center;
                         border: 1px solid #ddd;
                     }
-    
+
                     th {
                         font-size: 12px;
                         background-color: #f0f0f0;
@@ -2671,7 +2671,7 @@ class SolicitudController extends Controller
                         <th>Año: $anno</th>
                     </tr>
                 </table>
-                
+
                 <table>
                     <tr>
                         <th>Denuncia</th>
@@ -2717,11 +2717,11 @@ class SolicitudController extends Controller
                         <td>$solicitud->sexo</td>
                         <td>$solicitud->edocivil</td>
                         <td>$solicitud->fechaNacimiento</td>
-                        <td>$solicitud->nivelestudio</td> 
-                        <td>$solicitud->profesion</td> 
+                        <td>$solicitud->nivelestudio</td>
+                        <td>$solicitud->profesion</td>
                     </tr>
             </table>
-    
+
             <table>
             <tr >
                         <th class="text-primary" >Estado</th>
@@ -2775,15 +2775,15 @@ class SolicitudController extends Controller
                         <td>$observacionAsesoria</td>
                     </tr>
                 </table>
-                
+
                     <table>
                         <tr>
-                            <th>Documentos que anexa</th>                            
+                            <th>Documentos que anexa</th>
                         </tr>
                         <tr>
                             <td>
-                                <div style="display:flex; justify-content: space-between;">                                    
-                                    Carta Exposicion de Motivo 
+                                <div style="display:flex; justify-content: space-between;">
+                                    Carta Exposicion de Motivo
                                     <input type='checkbox' $activarrecaudoMotivo>
                                 </div>
                             </td>
@@ -2791,7 +2791,7 @@ class SolicitudController extends Controller
                     </table>
                 <table>
                     <tr>
-                        <th style="padding:1rem;">Declaro que los datos suministrados son fidedignos y estoy en conocimiento que cualquier falta o falsedad, en los mismos involucra sanciones o a la no aceptacion de la solicitud.</th>                            
+                        <th style="padding:1rem;">Declaro que los datos suministrados son fidedignos y estoy en conocimiento que cualquier falta o falsedad, en los mismos involucra sanciones o a la no aceptacion de la solicitud.</th>
                     </tr>
                 </table>
                 <table>
@@ -2845,7 +2845,7 @@ class SolicitudController extends Controller
                     </tr>
                 </table>
                 <p>----------------------------------------------------------------------------------------------------------------------------------------</p>
-                
+
                 <table style="margin-top: 20px">
                     <tr>
                         <th>Oficina de Atencion Ciudadana <span style="text-align: right">Numero de Registro $idsolicitud</span></th>
@@ -2883,8 +2883,8 @@ class SolicitudController extends Controller
                         <tr>
                             <th>Fecha de Solicitud</th>
                             <th>Hora</th>
-                        <th>Nombre y Apellido del Ciudadano Solicitante</th>                    
-                        <th>Nombre del Funcionario Receptor</th>                    
+                        <th>Nombre y Apellido del Ciudadano Solicitante</th>
+                        <th>Nombre del Funcionario Receptor</th>
                     </tr>
                     <tr>
                         <td>$fecha</td>
@@ -2911,15 +2911,15 @@ class SolicitudController extends Controller
         }
 
         if ($solicitud["tipo_solicitud_id"] === 6) {
-            $urlActual = $_SERVER['HTTP_HOST'];          
-            $beneficiario = $solicitud->beneficiario;      
+            $urlActual = $_SERVER['HTTP_HOST'];
+            $beneficiario = $solicitud->beneficiario;
             $beneficiario = json_decode($beneficiario, true);
             $cedulabeneficiario = $beneficiario[0]["cedula"];
             $edadbeneficiario = isset($beneficiario[0]["edad"]) ? $beneficiario[0]["edad"]: 'N/A';
             $nombrebeneficiario = $beneficiario[0]["nombre"];
             $direccionbeneficiario = $beneficiario[0]["direccion"];
             $codigovenapp = isset($beneficiario[0]["venApp"]) ? $beneficiario[0]["venApp"]: 'N/A';
-            
+
             $solicita = isset($beneficiario[0]["solicita"]) ? $beneficiario[0]["solicita"]: 'N/A';
             $recaudos = $solicitud->recaudos;
             $recaudos = json_decode($recaudos, true);
@@ -2939,22 +2939,22 @@ class SolicitudController extends Controller
 
             $trabajadorAlcaldia = $solicitud->trabajador;
             $verificaTrabajador = isset($trabajadorAlcaldia) ? $trabajadorAlcaldia : 'NO';
-            
+
             $jefecomunidadID = $solicitud->jefecomunidad_id;
             $jefecomunidad = (new JefeComunidad)->getJefe2($jefecomunidadID);
-            $jefe = $jefecomunidad->first();            
+            $jefe = $jefecomunidad->first();
             $solicitud_salud_id = $solicitud->solicitud_salud_id;
             $subtiposolicitud = (new subtiposolicitud)->getSubtiposolicitudbyID($solicitud->tipo_subsolicitud_id);
             $tiposolicitud = $subtiposolicitud->nombre;
 
             $estado = (new Solicitud)->nombreestado($idestado, $idmunicipio, $idparroquia, $idcomuna, $idcomunidad);
             foreach($estado as $estado2);
-            
-            /* A ESTA SOLICITUD NO SE LE AGREGO ESTADO POR ENDE DA ERROR SI NO SE LE ADJUNTA ESE VALOR */ 
+
+            /* A ESTA SOLICITUD NO SE LE AGREGO ESTADO POR ENDE DA ERROR SI NO SE LE ADJUNTA ESE VALOR */
             if($solicitud_salud_id == 3928){
                 $estadoSolicitud = 'N/A';
             }
-            
+
             if($idmunicipio == 2){
                 $estadoSolicitud = NULL;
                 $municipio = NULL;
@@ -2969,7 +2969,7 @@ class SolicitudController extends Controller
                 $comunidad = $estado2->comunidad;
                 }
 
-            if($jefe == NULL){                
+            if($jefe == NULL){
                 $nombreJefeCom = 'N/A';
                 $telJefeCom = 'N/A';
                 $nombreUbch = 'N/A';
@@ -3047,17 +3047,17 @@ class SolicitudController extends Controller
                     body {
                         font-family: sans-serif;
                     }
-    
+
                     table {
                         width: 100%;
                         border-collapse: collapse;
                     }
-    
+
                     th, td {
                         text-align:center;
                         border: 1px solid #ddd;
                     }
-    
+
                     th {
                         font-size: 12px;
                         background-color: #f0f0f0;
@@ -3078,8 +3078,8 @@ class SolicitudController extends Controller
                         <th>Mes: $mes</th>
                         <th>Año: $anno</th>
                     </tr>
-                </table>               
-                
+                </table>
+
                 <table>
                     <tr>
                         <th>Datos del ciudadano(a) Solicitante</th>
@@ -3103,7 +3103,7 @@ class SolicitudController extends Controller
                         <!-- <td>$solicitud->profesion</td>  -->
                     </tr>
             </table>
-    
+
             <table>
             <tr >
                         <th class="text-primary" >Estado</th>
@@ -3196,7 +3196,7 @@ class SolicitudController extends Controller
                         <td></td> -->
                     </tr>
                 </table>
-                
+
                     <table>
                         <tr><th>
                             Documentos que anexa
@@ -3233,7 +3233,7 @@ class SolicitudController extends Controller
                 </table>
                 <table>
                     <tr>
-                        <th style="padding:1rem;">Declaro que los datos suministrados son fidedignos y estoy en conocimiento que cualquier falta o falsedad, en los mismos involucra sanciones o a la no aceptacion de la solicitud.</th>                            
+                        <th style="padding:1rem;">Declaro que los datos suministrados son fidedignos y estoy en conocimiento que cualquier falta o falsedad, en los mismos involucra sanciones o a la no aceptacion de la solicitud.</th>
                     </tr>
                 </table>
                 <table>
@@ -3279,18 +3279,18 @@ class SolicitudController extends Controller
                     </tr>
                 </table>
 
-                
 
-                    
+
+
                 </table>
                 <table>
                         <tr>
                             <th>Fecha de Solicitud</th>
                             <th>Hora</th>
-                        <th>Nombre y Apellido del Ciudadano Solicitante</th>      
-                        <th>Nombre y Apellido del Ciudadano Beneficiado</th>      
-                        <th>Solicita</th>                    
-                        <th>Nombre del Funcionario Receptor</th>                    
+                        <th>Nombre y Apellido del Ciudadano Solicitante</th>
+                        <th>Nombre y Apellido del Ciudadano Beneficiado</th>
+                        <th>Solicita</th>
+                        <th>Nombre del Funcionario Receptor</th>
                     </tr>
                     <tr>
                         <td>$fecha</td>
@@ -3343,7 +3343,7 @@ class SolicitudController extends Controller
         $data = (new Seguimiento)->getSolicitudList_Finalizadas($fechadesde, $fechahasta);
         $solicitudestotales = count($data);
         $participantesTotal = "";
-        
+
         foreach ($data as $participante) {
             $participantes =<<<HTML
                     <tr>
@@ -3369,17 +3369,17 @@ class SolicitudController extends Controller
                     body {
                         font-family: sans-serif;
                     }
-    
+
                     table {
                         width: 100%;
                         border-collapse: collapse;
                     }
-    
+
                     th, td {
                         text-align:center;
                         border: 1px solid #ddd;
                     }
-    
+
                     th {
                         font-size: 12px;
                         background-color: #f0f0f0;
@@ -3394,7 +3394,7 @@ class SolicitudController extends Controller
 
         <h3 style="text-align:left;">Direccion Politicas Sociales</h3>
         <h4 style="text-align:left;">Total de solicitudes finalizadas en el periodo seleccionado: $solicitudestotales</h4>
-        <h5 style="text-align:center;">Reporte de solicitudes finalizadas desde el $diadesde-$mesdesde-$anodesde hasta el $diahasta-$meshasta-$anohasta</h5> 
+        <h5 style="text-align:center;">Reporte de solicitudes finalizadas desde el $diadesde-$mesdesde-$anodesde hasta el $diahasta-$meshasta-$anohasta</h5>
         <div>
 
         <table>
@@ -3428,7 +3428,7 @@ class SolicitudController extends Controller
 public function imprimir3(Request $request) {
     $input = $request->all();
     $fechadesde = $input['fecha_desde'];
-    $fechahasta = $input['fecha_hasta'];    
+    $fechahasta = $input['fecha_hasta'];
     $diadesde = date('d', strtotime($fechadesde));
     $mesdesde = date('m', strtotime($fechadesde));
     $anodesde = date('Y', strtotime($fechadesde));
@@ -3444,10 +3444,10 @@ public function imprimir3(Request $request) {
     $totalfinalizadas = count($solfinalizadas);
 
     $solicitudestotales = count($solregistradas) + count($solfinalizadas);
-    
+
     $printSolicitudRegistradas = "";
     $printSolicitudFinalizadas = "";
-    
+
     foreach ($solregistradas as $participante) {
         $participantes =<<<HTML
                 <tr>
@@ -3515,7 +3515,7 @@ public function imprimir3(Request $request) {
     <h5 style="text-align:left;">Total de solicitudes Registradas y en Analisis en el periodo seleccionado: $totalregistradas</h5>
     <h5 style="text-align:left;">Total de solicitudes Finalizadas durante el periodo seleccionado: $totalfinalizadas</h5>
     <h5 style="text-align:left;">Total de solicitudes Totales en el periodo seleccionado: $solicitudestotales</h5>
-    <h5 style="text-align:center;">Listado de solicitudes Totales desde el $diadesde-$mesdesde-$anodesde hasta el $diahasta-$meshasta-$anohasta</h5> 
+    <h5 style="text-align:center;">Listado de solicitudes Totales desde el $diadesde-$mesdesde-$anodesde hasta el $diahasta-$meshasta-$anohasta</h5>
     <div>
         <h5 style="text-align:center;">Solicitudes Finalizadas</h5>
     <table>
@@ -3595,7 +3595,7 @@ public function imprimir4() {
     <img src="https://prensa.alcaldiapaez.gob.ve/wp-content/uploads/sites/2/2024/06/CINTILLO-POLITICAS-SOCIALES-Y-COMUNITARIAS-Y-PODER-POPULAR.jpg" alt="" srcset="" width="100%">
 
     <h3 style="text-align:left;">Direccion Politicas Sociales y Poder Popular</h3>
-    <h5 style="text-align:center;">Listado de solicitudes Totales Terminadas</h5> 
+    <h5 style="text-align:center;">Listado de solicitudes Totales Terminadas</h5>
     <div>
         <h5 style="text-align:center;">Solicitudes Finalizadas</h5>
     <table>
@@ -3657,7 +3657,7 @@ public function imprimir4() {
     </tr>
     <tr>
         <td>Hurnas</td>
-        <td>$solfinalizadas->HURNAS</td>
+        <td>$solfinalizadas->URNAS</td>
     </tr>
     <tr>
         <td>Fosas</td>
@@ -3674,7 +3674,7 @@ public function imprimir4() {
     <tr>
         <td>Otros</td>
         <td>$solfinalizadas->OTROS</td>
-    </tr>    
+    </tr>
     </table>
     </div>
     </body>

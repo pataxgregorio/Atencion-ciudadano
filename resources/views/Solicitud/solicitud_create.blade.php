@@ -35,7 +35,7 @@
                         </ul>
                     </div>
                 @endif
-                <?php 
+                <?php
                     $rols_id = auth()->user()->rols_id;
                     $phpValue = $rols_id;
                     echo "<script> var rolsJS = '" . $phpValue . "'; </script>";
@@ -54,7 +54,7 @@
                     <div style="text-align:left;">
                         @if($rols_id == 10)
                         <input type="text" name="tipo_solicitud_id" id="tipo_solicitud_id" value=6 hidden>
-                        @endif                        
+                        @endif
                     </div>
                     <h3>DATOS DEL BENEFICIARIO </h3>
                     <br>
@@ -91,7 +91,7 @@
                             {!! Form::label('edadbeneficiario', 'EDAD BENEFICIARIO', ['class' => 'control-label']) !!}<span
                                 class="required" style="color:red;">*</span>
                             {!! Form::text('edadbeneficiario', old('edadbeneficiario'), ['placeholder' => 'EDAD BENEFICIARIO', 'class' => 'form-control', 'id' => 'edadbeneficiario_user', 'required' => true]) !!}
-                        </div>                    
+                        </div>
                     @if($rols_id != 10)
                     <div style="text-align:left;">
                         {!! Form::label('telefono2', 'TELEFONO DE CASA', ['class' => 'control-label']) !!}
@@ -201,7 +201,7 @@
                         </select>
                     </div>
                     @endif
-                    
+
                     <div style="text-align:left;">
                         {!! Form::label('estado_id', 'ESTADO', ['class' => 'control-label']) !!}<span
                             class="required" style="color:red;">*</span>
@@ -233,7 +233,7 @@
                             class="required" style="color:red;" id="comunidad_id_span">*</span>
                         {!! Form::select('comunidad_id', $comunidad, old('comunidad_id'), ['placeholder' => trans('message.solicitud_action.comunidad'), 'class' => 'form-control', 'id' => 'comunidad_id']) !!}
                     </div>
-                    <div style="text-align:left;">
+                    <!-- <div style="text-align:left;">
                         {!! Form::label('jefecomunidad_id', 'JEFE DE COMUNIDAD', ['class' => 'control-label', 'id' => 'jefecomunidad_Label']) !!}
                         <select name="jefecomunidad_id" id="jefecomunidad_id" class="form-control">
                             @foreach($jefecomunidad as $key => $value)
@@ -287,12 +287,12 @@
                                 </option>
                             @endforeach
                         </p>
-                    </div>
+                    </div> -->
                     @if($rols_id == 10)
                     <div style="text-align:left;">
                     {!! Form::label('tipo_subsolicitud_id', 'TIPO SOLICITUD', ['class' => 'control-label']) !!}<span
                             class="required" style="color:red;">*</span>
-                        <select required name="tipo_subsolicitud_id" id="tipo_subsolicitud_id" class="form-control">                           
+                        <select required name="tipo_subsolicitud_id" id="tipo_subsolicitud_id" class="form-control">
                             @foreach($subtiposolicitud as $subtipo)
                                 <option value="{{ $subtipo->id }}" {{ old('tipo_subsolicitud_id') == $subtipo->id ? 'selected' : '' }}>{{ $subtipo->nombre }}</option>
                             @endforeach
@@ -312,12 +312,12 @@
                         {!! Form::label('direccionbeneficiario', trans('message.solicitud_action.direccionbeneficiario'), ['class' => 'control-label']) !!}<span
                             class="required" style="color:red;">*</span>
                         {!! Form::text('direccionbeneficiario', old('direccionbeneficiario'), ['placeholder' => trans('message.solicitud_action.direccionbeneficiario'), 'class' => 'form-control', 'id' => 'direccionbeneficiario_user', 'required' => true]) !!}
-                    </div>   
+                    </div>
                     <div style="text-align:left;">
                         {!! Form::label('observacionbeneficiario', "OBSERVACION", ['class' => 'control-label']) !!}<span
                             class="required" style="color:red;">*</span>
                         {!! Form::textarea('observacionbeneficiario', old('observacionbeneficiario'), ['placeholder' => "OBSERVACION", 'class' => 'form-control', 'id' => 'observacionbeneficiario_user', 'required' => true]) !!}
-                    </div>   
+                    </div>
                     <div id="denunciado">
                         <h3>DATOS DEL DENUNCIADO </h3>
                         <br>
@@ -453,7 +453,7 @@
                             {!! Form::label('direccion','DIRECCION', ['class' => 'control-label']) !!}<span
                                 class="required" style="color:red;">*</span>
                             {!! Form::text('direccion', old('direccion'), ['placeholder' => trans('message.solicitud_action.direccion'), 'class' => 'form-control', 'id' => 'direccion_user', 'required' => true]) !!}
-                        </div>                        
+                        </div>
                         <h3>RECAUDOS DE LA SOLICITUD</h3>
                         <br>
                         <div style="text-align:left;">
@@ -536,7 +536,7 @@
                                 </div>
 
                             </div>
-                        @endif 
+                        @endif
                     </div>
 
                 </div>
@@ -557,7 +557,7 @@
 
     $(document).ready(function () {
         var rolID = rolsJS;
-        
+
         // $("#comuna_id").empty()
         $("#comuna_id").html('<option value="">COMUNA<option/>')
 

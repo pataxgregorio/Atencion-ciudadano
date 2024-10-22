@@ -8,9 +8,11 @@ use Illuminate\Support\Facades\DB;
 class Comunidad extends Model
 {
     use HasFactory;
-    protected $fillable = [     
+
+    protected $table = 'comunidad';
+    protected $fillable = [
         'nombre',
-        
+
     ];
     public function datos_comunidad($comuna){
         try {
@@ -19,12 +21,12 @@ class Comunidad extends Model
             ->select('comunidad.id','comunidad.nombre')
             ->where('comuna_id',$comuna)
             ->leftjoin('comuna', 'comunidad.comuna_id', '=', 'comuna.id')
-            ->get();            
+            ->get();
             return $comunidad;
         }catch(Throwable $e){
             $comuna = [];
             return $comunidad;
         }
-        
+
     }
 }

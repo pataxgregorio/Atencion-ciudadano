@@ -14,7 +14,7 @@ class Solicitud extends Model
         'users_id',
         'trabajador',
         'solicitud_salud_id',
-        'direccion_id',        
+        'direccion_id',
         'coordinacion_id',
         'tipo_solicitud_id',
         'tipo_subsolicitud_id',
@@ -49,7 +49,7 @@ class Solicitud extends Model
         'asesoria',
         'denuncia',
         'denunciado',
-        
+
     ];
 
     public function encasodeemergencia()
@@ -107,7 +107,7 @@ class Solicitud extends Model
                         'direccion.nombre AS direccionnombre',
                         'status.nombre AS nombrestatus',
                         'solicitud.beneficiario'
-                    )           
+                    )
                     ->get();
                 return $solicitud;
     }
@@ -132,14 +132,14 @@ class Solicitud extends Model
                         'direccion.nombre AS direccionnombre',
                         'status.nombre AS nombrestatus',
                         'solicitud.denunciado'
-                    ) // Extraer cedula     
+                    ) // Extraer cedula
                     ->get(); // Manejar otros roles
                     foreach ($solicitud as $item) {
-                        $denunciado = json_decode($item->denunciado, true);                    
+                        $denunciado = json_decode($item->denunciado, true);
                         $item->cedula2 = $denunciado[0]['cedula'] ?? null; // Asignar cédula o null
-                        
+
                         // Opcional: Eliminar el campo denunciado original si no lo necesitas
-                        unset($item->denunciado); 
+                        unset($item->denunciado);
                     }
 
                     return $solicitud;
@@ -168,21 +168,21 @@ class Solicitud extends Model
                         'direccion.nombre AS direccionnombre',
                         'status.nombre AS nombrestatus',
                         'solicitud.beneficiario'
-                    )           
+                    )
                     ->get();
 
-                
+
                 // Parsear el JSON y agregar cedulabeneficiario
                 foreach ($solicitud as $item) {
-                    $beneficiario = json_decode($item->beneficiario, true);                    
+                    $beneficiario = json_decode($item->beneficiario, true);
                     $item->cedula2 = $beneficiario[0]['cedula'] ?? null; // Asignar cédula o null
                     $item->beneficiarionombre = $beneficiario[0]['nombre'] ?? null; // Asignar cédula o null
                     $item->solicita = $beneficiario[0]['solicita'] ?? null; // Asignar cédula o null
-                    
+
                     // Opcional: Eliminar el campo beneficiario original si no lo necesitas
-                    unset($item->beneficiario); 
+                    unset($item->beneficiario);
                 }
-    
+
                 return $solicitud;
         }else{
             return $solicitud = DB::table('solicitud')
@@ -191,16 +191,16 @@ class Solicitud extends Model
             ->join('status', 'solicitud.status_id', '=', 'status.id')
             ->select('solicitud.id','solicitud.nombre AS solicitante','tipo_solicitud.nombre AS nombretipo','direccion.nombre AS direccionnombre','status.nombre AS nombrestatus')
             ->where ('status_id',1)->get();
-        }    
+        }
         }catch(Throwable $e){
             $solicitud = [];
             return $solicitud;
         }
-        
+
     }
     public function getSolicitudList_DataTable2() {
-        try {            
-            $rols_id = auth()->user()->rols_id;            
+        try {
+            $rols_id = auth()->user()->rols_id;
             if($rols_id === 1) {
                 $solicitud = DB::table('solicitud')
                     ->join('tipo_solicitud', 'solicitud.tipo_solicitud_id', '=', 'tipo_solicitud.id')
@@ -218,19 +218,19 @@ class Solicitud extends Model
                         'direccion.nombre AS direccionnombre',
                         'status.nombre AS nombrestatus',
                         'solicitud.denunciado'
-                    ) // Extraer cedula     
+                    ) // Extraer cedula
                     ->get(); // Manejar otros roles
                     foreach ($solicitud as $item) {
-                        $denunciado = json_decode($item->denunciado, true);                    
+                        $denunciado = json_decode($item->denunciado, true);
                         $item->cedula2 = $denunciado[0]['cedula'] ?? null; // Asignar cédula o null
-                        
+
                         // Opcional: Eliminar el campo denunciado original si no lo necesitas
-                        unset($item->denunciado); 
+                        unset($item->denunciado);
                     }
 
                     return $solicitud;
             }
-            elseif($rols_id === 10) {         
+            elseif($rols_id === 10) {
                 $solicitud = DB::table('solicitud')
                     ->join('tipo_solicitud', 'solicitud.tipo_solicitud_id', '=', 'tipo_solicitud.id')
                     ->join('direccion', 'solicitud.direccion_id', '=', 'direccion.id')
@@ -251,19 +251,19 @@ class Solicitud extends Model
                         'direccion.nombre AS direccionnombre',
                         'status.nombre AS nombrestatus',
                         'solicitud.beneficiario'
-                    )                
+                    )
                     ->get();
-                
+
                 foreach ($solicitud as $item) {
-                    $beneficiario = json_decode($item->beneficiario, true);                    
+                    $beneficiario = json_decode($item->beneficiario, true);
                     $item->cedula2 = $beneficiario[0]['cedula'] ?? null;
                     $item->beneficiarionombre = $beneficiario[0]['nombre'] ?? null;
                     $item->solicita = $beneficiario[0]['solicita'] ?? null;
-                    
+
                     // Opcional: Eliminar el campo beneficiario original si no lo necesitas
-                    unset($item->beneficiario); 
+                    unset($item->beneficiario);
                 }
-    
+
                 return $solicitud;
             } else {
                     $solicitud = DB::table('solicitud')
@@ -285,27 +285,27 @@ class Solicitud extends Model
                         'direccion.nombre AS direccionnombre',
                         'status.nombre AS nombrestatus',
                         'solicitud.denunciado'
-                    ) // Extraer cedula     
+                    ) // Extraer cedula
                     ->get(); // Manejar otros roles
                     foreach ($solicitud as $item) {
-                        $denunciado = json_decode($item->denunciado, true);                    
+                        $denunciado = json_decode($item->denunciado, true);
                         $item->cedula2 = $denunciado[0]['cedula'] ?? null; // Asignar cédula o null
-                        
+
                         // Opcional: Eliminar el campo denunciado original si no lo necesitas
-                        unset($item->denunciado); 
+                        unset($item->denunciado);
                     }
 
                     return $solicitud;
             }
         } catch (Throwable $e) {
-            Log::error("Error en getSolicitudList_DataTable2: " . $e->getMessage()); 
+            Log::error("Error en getSolicitudList_DataTable2: " . $e->getMessage());
             return [];
         }
     }
-    
+
     public function getSolicitudList_DataTable3($params){
         try {
-            
+
             return $solicitud = DB::table('solicitud')
             ->join('tipo_solicitud', 'solicitud.tipo_solicitud_id', '=', 'tipo_solicitud.id')
             ->join('direccion', 'solicitud.direccion_id', '=', 'direccion.id')
@@ -361,7 +361,7 @@ class Solicitud extends Model
                 DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "MATERIALES" THEN 1 END) AS MATERIALES'),
                 DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "JORNADAS" THEN 1 END) AS JORNADAS'),
                 DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "ALTO COSTO" THEN 1 END) AS ALTO_COSTO'),
-                DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "HURNAS" THEN 1 END) AS HURNAS'),
+                DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "URNAS" THEN 1 END) AS URNAS'),
                 DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "FOSAS" THEN 1 END) AS FOSAS'),
                 DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "APOYO LOGISTICO" THEN 1 END) AS APOYO_LOGISTICO'),
                 DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "DOTACION" THEN 1 END) AS DOTACION'),
@@ -393,7 +393,7 @@ class Solicitud extends Model
                 DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "MATERIALES" THEN 1 END) AS MATERIALES'),
                 DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "JORNADAS" THEN 1 END) AS JORNADAS'),
                 DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "ALTO COSTO" THEN 1 END) AS ALTO_COSTO'),
-                DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "HURNAS" THEN 1 END) AS HURNAS'),
+                DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "URNAS" THEN 1 END) AS URNAS'),
                 DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "FOSAS" THEN 1 END) AS FOSAS'),
                 DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "APOYO LOGISTICO" THEN 1 END) AS APOYO_LOGISTICO'),
                 DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "DOTACION" THEN 1 END) AS DOTACION'),
@@ -405,7 +405,7 @@ class Solicitud extends Model
 
         return $resultados;
     }
-    
+
     public function count_solictud(){
         $rols_id = auth()->user()->rols_id;
         return DB::table('solicitud')
@@ -428,7 +428,7 @@ class Solicitud extends Model
     }
     public function count_solictud2PorFecha($fechaDesde, $fechaHasta)
     {
-            
+
         return DB::table('solicitud')
             ->join('tipo_solicitud', 'solicitud.tipo_solicitud_id', '=', 'tipo_solicitud.id')
             ->join('users', 'solicitud.users_id', '=', 'users.id')
@@ -439,7 +439,7 @@ class Solicitud extends Model
     }
     public function count_solictud3()
     {
-      
+
         return DB::table('solicitud')
             ->join('tipo_solicitud', 'solicitud.tipo_solicitud_id', '=', 'tipo_solicitud.id')
             ->join('users', 'solicitud.users_id', '=', 'users.id')
@@ -452,7 +452,7 @@ class Solicitud extends Model
 
     public function count_solictud4()
     {
-      
+
         return DB::table('solicitud')
             ->join('tipo_solicitud', 'solicitud.tipo_solicitud_id', '=', 'tipo_solicitud.id')
             ->join('users', 'solicitud.users_id', '=', 'users.id')
@@ -464,7 +464,7 @@ class Solicitud extends Model
     }
     public function count_solictud4PorFecha($fechaDesde, $fechaHasta)
     {
-      
+
         return DB::table('solicitud')
             ->join('tipo_solicitud', 'solicitud.tipo_solicitud_id', '=', 'tipo_solicitud.id')
             ->join('users', 'solicitud.users_id', '=', 'users.id')
@@ -490,7 +490,7 @@ class Solicitud extends Model
     return $resultados;
     }
 
-    public function count_total_solictud(){      
+    public function count_total_solictud(){
         $rols_id = auth()->user()->rols_id;
         if($rols_id === 1){
             $resultado = DB::table('solicitud')
@@ -513,7 +513,7 @@ class Solicitud extends Model
             ->groupBy('tipo_solicitud.id')
             ->orderByDesc('TOTAL_SOLICITUD')->get();
             return $resultado;}
-        
+
     }
     public function nombreestado($idestado, $idmunicipio, $idparroquia, $idcomuna, $idcomunidad){
         $resultado = DB::table('solicitud')->join('estado', 'solicitud.estado_id', '=', 'estado.id')
@@ -529,7 +529,7 @@ class Solicitud extends Model
         ->where('comunidad.id', $idcomunidad)
         ->get();
         return $resultado;
-    }    
+    }
 /* Obtiene el ultimo numero de correlativo en salud*/
     public function ObtenerNumeroSolicitud(){
         $ultimoResultado = DB::table('solicitud')

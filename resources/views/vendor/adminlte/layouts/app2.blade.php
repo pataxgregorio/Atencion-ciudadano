@@ -34,7 +34,6 @@ desired effect
     
 <div id="app" v-cloak>
     <div class="wrapper">
-    @include('adminlte::layouts.partials.contentheader')
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">

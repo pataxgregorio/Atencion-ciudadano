@@ -9,17 +9,17 @@ class Producto extends Model
 {
     use HasFactory;
     protected $table = 'producto';
-    protected $fillable = [     
+    protected $fillable = [
         'nombre',
         'ubicacion',
-        'descripcion',  
+        'descripcion',
         'precio',
         'cantidad',
         'categoria_id',
     ];
 
-  public function getProducto(){
-    return DB::table('producto')->get();
-  }
+    public function getProducto(){
+        return DB::table('producto')->get();
+    }
 }
 

@@ -402,6 +402,8 @@ Route::get('/solicitud/totales', 'Solicitud\SolicitudController@getSolicitudTota
 Route::get('/solicitud/totalFinalizadas3', 'Solicitud\SolicitudController@getFinalizadas')->name('solicitud.solicitudTotalFinalizadas3');
 
 Route::get('/solicitud/totalFinalizadas4', 'Solicitud\SolicitudController@getFinalizadascomunas')->name('solicitud.solicitudTotalFinalizadas4');
+Route::get('/solicitud/totalFinalizadas6', 'Solicitud\SolicitudController@getFinalizadascomunas2')->name('solicitud.solicitudTotalFinalizadas6');
+
 
 Route::get('/solicitud/totalFinalizadas5', 'Solicitud\SolicitudController@ultimasEntradas')->name('solicitud.solicitudTotalFinalizadas5');
 
