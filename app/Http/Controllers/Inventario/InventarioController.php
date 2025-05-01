@@ -17,33 +17,33 @@ use App\Http\Controllers\User\Colores;
 
 class InventarioController extends Controller
 {
-    public function index(){        
+    public function index(){
         $count_notification = (new User)->count_noficaciones_user();
-       
+
         $tipo_alert = "";
         if(session('delete') == true){
             $tipo_alert = "Delete";
             session(['delete' => false]);
-        }        
+        }
         if(session('update') == true ){
             $tipo_alert = "Update";
             session(['update' => false]);
-        }        
+        }
         $array_color = (new Colores)->getColores();
         return view('Inventario.inventario',compact('count_notification','tipo_alert','array_color'));
     }
-    public function index2(){        
+    public function index2(){
         $count_notification = (new User)->count_noficaciones_user();
-       
+
         $tipo_alert = "";
         if(session('delete') == true){
             $tipo_alert = "Delete";
             session(['delete' => false]);
-        }        
+        }
         if(session('update') == true ){
             $tipo_alert = "Update";
             session(['update' => false]);
-        }        
+        }
         $array_color = (new Colores)->getColores();
         return view('Inventario.inventario2',compact('count_notification','tipo_alert','array_color'));
     }
@@ -84,12 +84,12 @@ class InventarioController extends Controller
             echo "Captured Throwable: " . $e->getMessage(), "\n";
         }
     }
-   
+
 public function store(Request $request){
-    
+
     $count_notification = (new User)->count_noficaciones_user();
-   
-    $invetario = new Inventario([                            
+
+    $invetario = new Inventario([
                     'producto_id' =>$request->producto_id,
                     'almacen_id'=> $request->almacen_id,
                     'cantidad'=> $request->cantidad,
@@ -98,11 +98,14 @@ public function store(Request $request){
                     'tipoentrada'=> $request->tipoentrada,
                     'numerofactura'=> $request->numerofactura,
                     'numerodonacion'=> $request->numerodonacion,
+                    'responsable'=> '',
+                    'autorizado'=> '',
+                    'motivo'=> '',
                     'created_at' => \Carbon\Carbon::now(),
                     'updated_at' => \Carbon\Carbon::now(),
                     'fechavencimiento' => $request->fechavencimiento,
                 ]);
-    $invetario->save();        
+    $invetario->save();
     $tipo_alert = "Create";
     $array_color = (new Colores)->getColores();
     return view('Inventario.inventario',compact('count_notification','tipo_alert','array_color'));
@@ -119,26 +122,33 @@ public function edit($id){
     return view('Inventario.inventario_edit',compact('count_notification','titulo_modulo','categoria','producto','inventario','almacen','tipoentrada','array_color'));
 }
 public function update(Request $request, $id){
- //var_dump($request->all());
-   //exit();
+
    $user_id = auth()->user()->id;
     $inventario_Update = Inventario::find($id);
+
     $viejaexistencia = $inventario_Update->cantidad;
     $inventario_Update->fechavencimiento = $request->fechavencimiento;
     $inventario_Update->cantidad = $request->cantidad;
+    $inventario_Update->responsable = $request->responsable;
+    $inventario_Update->autorizado = $request->autorizado;
+    $inventario_Update->motivo = $request->motivo;
+
     $inventario_Update->fecha = \Carbon\Carbon::now();
     $inventario_Update->updated_at = \Carbon\Carbon::now();
     $inventario_Update->save();
-    $ajuste = new Ajuste([                            
+    $ajuste = new Ajuste([
         'inventario_id' =>$id,
         'user_id'=> $user_id,
         'fecha'=> \Carbon\Carbon::now(),
         'viejaexistecia'=>$viejaexistencia,
         'nuevaexistencia'=> $request->cantidad,
+        'responsable'=> $request->responsable,
+        'autorizado'=> $request->autorizado,
+        'motivo'=> $request->motivo,
         'created_at' => \Carbon\Carbon::now(),
         'updated_at' => \Carbon\Carbon::now(),
     ]);
-$ajuste->save(); 
+$ajuste->save();
     session(['update' => true]);
     //alert()->success(trans('message.mensajes_alert.modulo_update'),trans('message.mensajes_alert.msg_modulo_01').$modulo_Update->name. trans('message.mensajes_alert.msg_02'));
     return redirect('/inventario');

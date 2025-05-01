@@ -340,6 +340,7 @@ Route::get('register/confirm/{confirmation_code}', 'Auth\RegisterController@conf
 
 Route::get('/solicitud', 'Solicitud\SolicitudController@index')->name('solicitud.index')->middleware('permiso:solicitud,view');
 Route::get('/solicitudfinalizadas', 'Solicitud\SolicitudController@indexfinalizadas')->name('solicitud.indexfinalizadas')->middleware('permiso:solicitud,view');
+Route::get('/solicitudfinalizadastotales', 'Solicitud\SolicitudController@indexfinalizadasTotales')->name('solicitud.indexfinalizadastotales')->middleware('permiso:solicitud,view');
 Route::get('/solicitud/create', 'Solicitud\SolicitudController@create')->name('solicitud.create')->middleware('permiso:solicitud,add');
 
 Route::post('/solicitud', 'Solicitud\SolicitudController@store')->name('solicitud.store')->middleware('permiso:solicitud,add');
@@ -369,6 +370,7 @@ Route::get('/solicitud/listfin', 'Solicitud\SolicitudController@getSolicitudfin'
 Route::get('/solicitud/print', 'Solicitud\SolicitudController@solicitudPrint')->name('solicitud.solicitudPrint')->middleware('permiso:solicitud,print');
 
 Route::get('/solicitud/solicitudTipo', 'Solicitud\SolicitudController@solicitudTipo')->name('solicitud.solicitudTipo');
+Route::get('/solicitud/getSolicitudesWAN', 'Solicitud\SolicitudController@getSolicitudesWAN')->name('solicitud.getSolicitudesWAN');
 
 
 /* REPORTES FINALIZADAS */
@@ -378,8 +380,18 @@ Route::get('/solicitud/totalFinalizadas', 'Solicitud\SolicitudController@imprimi
 Route::get('/solicitud/totalFinalizadas2', 'Solicitud\SolicitudController@getTotalSolicitudesFinalizadas2')->name('solicitud.solicitudTotalFinalizadas2');
 
 
+/* Telegram Bot */
+
+Route::get('/telegram/getSubtipo', 'Solicitud\SolicitudController@getSubTipoSolicitud')->name('telegram.getSubtipo');
+Route::get('/telegram/getSolicitudes/{params}', 'Solicitud\SolicitudController@getSolicitudTelegram')->name('telegram.totales');
 
 /* SACWAN */
+
+
+Route::get('/getComunas', 'Solicitud\SolicitudController@getComunasWAN')->name('getComunasWAN');
+Route::get('/getComunidades', 'Solicitud\SolicitudController@getComunidadesWAN')->name('getComunidadesWAN');
+
+Route::get('/getSolicitudporComunasWAN', 'Solicitud\SolicitudController@getSolicitudporComunasWAN')->name('getSolicitudporComunasWAN');
 
 Route::get('/solicitud/solicitudTipo2', 'Solicitud\SolicitudController@solicitudTipo2')->name('solicitud.solicitudTipo2');
 
@@ -398,16 +410,20 @@ Route::get('/solicitud/solicitudTotalTipo', 'Solicitud\SolicitudController@solic
 Route::get('/solicitud/list2', 'Solicitud\SolicitudController@getSolicitud2')->name('solicitud.list2');
 
 Route::get('/solicitud/list3', 'Solicitud\SolicitudController@getSolicitud3')->name('solicitud.list3');
+Route::get('/solicitudComuna', 'Solicitud\SolicitudController@getSolicitudComuna')->name('solicitud.listComuna');
+Route::get('/solicitudComunaTotalResumen', 'Solicitud\SolicitudController@getSolicitudComunaTotalResumen')->name('solicitud.listComunaTotalResumen');
 Route::get('/solicitud/totales', 'Solicitud\SolicitudController@getSolicitudTotales')->name('solicitud.totales');
 Route::get('/solicitud/totalFinalizadas3', 'Solicitud\SolicitudController@getFinalizadas')->name('solicitud.solicitudTotalFinalizadas3');
 
 Route::get('/solicitud/totalFinalizadas4', 'Solicitud\SolicitudController@getFinalizadascomunas')->name('solicitud.solicitudTotalFinalizadas4');
 Route::get('/solicitud/totalFinalizadas6', 'Solicitud\SolicitudController@getFinalizadascomunas2')->name('solicitud.solicitudTotalFinalizadas6');
+Route::get('/solicitud/totalFinalizadas6Fecha', 'Solicitud\SolicitudController@getFinalizadascomunas2Fecha')->name('solicitud.solicitudTotalFinalizadas6Fecha');
 
 
 Route::get('/solicitud/totalFinalizadas5', 'Solicitud\SolicitudController@ultimasEntradas')->name('solicitud.solicitudTotalFinalizadas5');
 
 Route::get('/solicitud/medicinacomunas', 'Solicitud\SolicitudController@medicinacomunas')->name('solicitud.medicinacomunas');
+Route::get('/solicitud/medicinacomunasFecha', 'Solicitud\SolicitudController@medicinacomunasFecha')->name('solicitud.medicinacomunasFecha');
 
 
 Route::get('/solicitud/totalFinalizadasConFecha', 'Solicitud\SolicitudController@getFinalizadasConFecha')->name('solicitud.solicitudTotalFinalizadasConFecha');
@@ -423,6 +439,8 @@ Route::get('/imprimir2', 'Solicitud\SolicitudController@imprimir2')->name('impri
 /* REPORTE TOTALES EN ANALISIS Y REGISTRADAS POR FECHA  */
 
 Route::get('/imprimir3', 'Solicitud\SolicitudController@imprimir3')->name('imprimir3');
+
+Route::get('/solicitud/imprimirWAN', 'Solicitud\SolicitudController@imprimirWAN')->name('solicitud.imprimirWAN');
 
 
 // ##############################rutas del seguimiento de la solicitud
@@ -463,6 +481,7 @@ Route::post('/seguimiento/addSeguimiento', 'Seguimiento\SeguimientoController@ad
 Route::get('/seguimientoapi', 'Seguimiento\SeguimientoController@segumientoJson')->name('seguimiento.segumientoapi');
 
 Route::get('/seguimiento/getproductos', 'Seguimiento\SeguimientoController@getproductos')->name('getproductos');
+Route::get('/seguimiento/getproductos2', 'Seguimiento\SeguimientoController@getproductos2')->name('getproductos2');
 
 
 /* REPORTES FINALIZADAS */
@@ -484,7 +503,8 @@ Route::get('/seguimiento/list2', 'Seguimiento\SeguimientoController@getSeguimien
 
 // *********************************************************************************************************
 Route::get('/solicitud/buscarsolicitud', 'Solicitud\SolicitudController@BuscarIndex')->name('solicitud.buscarindex')->middleware('permiso:solicitud,view');
-Route::get('/solicitud/buscargeneral', 'Solicitud\SolicitudController@getSolicitudGeneral')->name('solicitud.buscargeneral')->middleware('permiso:solicitud,view');
+Route::get('/iframe/buscarsolicitud', 'Solicitud\SolicitudController@BuscarIndexIframe')->name('solicitud.buscarindexiframe')->middleware('permiso:solicitud,view');
+Route::get('/solicitud/buscargeneral', 'Solicitud\SolicitudController@getSolicitudGeneral')->name('solicitud.buscargeneral');
 
 
 // *********************************************************************************************************

@@ -152,11 +152,12 @@ class SeguimientoController extends Controller
     public function store2(Request $request){
         $input=$request->all();
         $cantidad = $input['cantidad'];
-        $invetario = (new Inventario)->getInventario($input['producto_id']);
-        $existencia = (new Inventario)->getExistencia($input['producto_id']);
+        $inventario_ids ='';
+        $invetario = (new Inventario)->getInventario3($input['producto_id'],$input['tipoentrada']);
+        $existencia = (new Inventario)->getExistencia($input['producto_id'], $input['tipoentrada']);
             foreach($invetario as $item){
                 $invetario_update =Inventario::find($item->id);
-
+                $inventario_ids .= $item->id . ",";
                 $existencia = $cantidad - $item->cantidad;
 
                 if ($existencia < 0) {
@@ -179,6 +180,7 @@ class SeguimientoController extends Controller
                     }
 
         }
+
         $movimiento = new SolicitudMovimiento([
             'solicitud_id' => $input['solicitud_id'],
             'producto_id' => $input['producto_id'],
@@ -187,6 +189,7 @@ class SeguimientoController extends Controller
             'servicio_id' => NULL,
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now(),
+            'tipoentrada' => $input['tipoentrada'],
         ]);
         $movimiento->save();
       return back();
@@ -255,7 +258,7 @@ class SeguimientoController extends Controller
     }
 public function existencia(Request $request){
 
-    $data = (new Inventario())->getExistencia($request['id']);
+    $data = (new Inventario())->getExistencia($request['id'],$request['tipoentrada']);
     return $data;
 }
     public function usersPrint()
@@ -614,6 +617,10 @@ public function segumientoJson (){
         $comunidad = (new Seguimiento)->getproductos();
         return $comunidad;
     }
+    public function getproductos2 (Request $request) {
+        $comunidad = (new Seguimiento)->getproductos2($request['fecha_desde'], $request['fecha_hasta']);
+        return $comunidad;
+    }
     /**
      * Show the form for editing the specified resource.
      *
@@ -688,7 +695,6 @@ public function segumientoJson (){
         if (!(is_null($solicitud_edit->beneficiario))) {
             $beneficiario = $solicitud_edit->beneficiario;
             $beneficiario = json_decode($beneficiario, true);
-
         }
         $denunciado = $solicitud_edit->denunciado;
         $denunciado = json_decode($denunciado, true);
@@ -787,7 +793,7 @@ public function segumientoJson (){
                 [
                     "item" => 1,
                     "fecha" => \Carbon\Carbon::now(),
-                    "asunto" => $input['asunto'],
+                    "asunto" => NULL,
                     "imagen" => $fullPath,
                 ]
             ];
@@ -808,7 +814,7 @@ public function segumientoJson (){
             $newObject = [
                 "item" => $count + 1,
                 "fecha" => \Carbon\Carbon::now(),
-                "asunto" => $input['asunto'],
+                "asunto" => NULL,
                 "imagen" => $fullPath,
             ];
             $dataArray[] = $newObject;

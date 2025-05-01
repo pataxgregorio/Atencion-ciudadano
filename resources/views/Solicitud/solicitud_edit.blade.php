@@ -34,7 +34,7 @@
                         </ul>
                     </div>
                 @endif
-                <?php 
+                <?php
                     $rols_id = auth()->user()->rols_id;
                     $phpValue = $rols_id;
                     $idmunicipio = $solicitud_edit->municipio_id;
@@ -42,7 +42,7 @@
                     echo "<script> var rolsJS = '" . $phpValue . "'; </script>";
                     echo "<script> var idmunicipioJS = '" . $idmunicipio . "'; </script>";
                     echo "<script> var jefecomunidadID = '" . $idjefecomunidad. "'; </script>";
-                ?>                    
+                ?>
                 {!! Form::open(array(
                     'route' => array('solicitud.update', $solicitud_edit->id),
                     'method' => 'POST',
@@ -58,11 +58,11 @@
                         {!! Form::text('solicitud_salud_id_show', old('solicitud_salud_id'), ['placeholder' => $correlativoSALUD, 'class' => 'form-control', 'id' => 'solicitud_salud_id', 'DISABLED' => TRUE]) !!}
                         <input type="text" name="solicitud_salud_id" id="solicitud_salud_id" value="{{ $correlativoSALUD }}" hidden>
                     </div>
-                    <div style="text-align:left;">
+                    <!-- <div style="text-align:left;">
                         {!! Form::label('trabajador', 'Trabajador', ['class' => 'control-label']) !!}<span
                             class="required" style="color:red;">*</span>
                         {!! Form::select('trabajador', $trabajador, $solicitud_edit->trabajador, ['class' => 'form-control', 'id' => 'trabajador']) !!}
-                    </div>
+                    </div> -->
                     <div style="text-align:left;">
                         {!! Form::label('nombre', trans('message.users_action.nombre'), ['class' => 'control-label']) !!}<span
                             class="required" style="color:red;">*</span>
@@ -73,11 +73,11 @@
                             class="required" style="color:red;">*</span>
                         {!! Form::text('cedula', $solicitud_edit->cedula, ['placeholder' => trans('message.solicitud_action.cedula'), 'class' => 'form-control', 'id' => 'cedula_user']) !!}
                     </div>
-                    <div style="text-align:left;">
+                    <!-- <div style="text-align:left;">
                         {!! Form::label('telefono', trans('message.solicitud_action.telefono'), ['class' => 'control-label']) !!}<span
                             class="required" style="color:red;">*</span>
                         {!! Form::text('telefono', $solicitud_edit->telefono, ['placeholder' => trans('message.solicitud_action.telefono'), 'class' => 'form-control', 'id' => 'telefono_user']) !!}
-                    </div>
+                    </div> -->
                     @if($rols_id != 10)
                     <div style="text-align:left;">
                         {!! Form::label('telefono2', trans('message.solicitud_action.telefono2'), ['class' => 'control-label']) !!}
@@ -91,7 +91,7 @@
                     <div style="text-align:left;">
                         {!! Form::label('estado_id', 'SEXO', ['class' => 'control-label']) !!}<span
                             class="required" style="color:red;">*</span>
-                        {!! Form::select('sexo', $sexo, $solicitud_edit->sexo, ['placeholder' => trans('message.solicitud_action.sexo'), 'class' => 'form-control', 'id' => 'sexo']) !!}    
+                        {!! Form::select('sexo', $sexo, $solicitud_edit->sexo, ['placeholder' => trans('message.solicitud_action.sexo'), 'class' => 'form-control', 'id' => 'sexo']) !!}
                     </div>
                     @if($rols_id != 10)
                     <div style="text-align:left;">
@@ -101,11 +101,11 @@
 
                     </div>
                     @endif
-                    <div style="text-align:left;">
+                    <!-- <div style="text-align:left;">
                         {!! Form::label('fechaNacimiento', 'EDAD', ['class' => 'control-label']) !!}<span
                             class="required" style="color:red;">*</span>
-                        {!! Form::text('fechaNacimiento', $solicitud_edit->fechaNacimiento, ['placeholder' => 'EDAD', 'class' => 'form-control', 'id' => 'fechaNacimiento_user']) !!}
-                    </div>
+                        {!! Form::date('fechaNacimiento', \Carbon\Carbon::parse($solicitud_edit->fecha)->format('Y/m/d'), ['placeholder' => 'EDAD', 'class' => 'form-control', 'id' => 'fechaNacimiento_user']) !!}
+                    </div> -->
                     @if($rols_id != 10)
                     <div style="text-align:left;">
                         {!! Form::label('nivelestudio', 'NIVEL EDUCATIVO', ['class' => 'control-label']) !!}<span
@@ -133,7 +133,7 @@
                             class="required" style="color:red;" id="parroquia_id_span">*</span>
                         {!! Form::select('parroquia_id', $parroquia, $solicitud_edit->parroquia_id, ['placeholder' => trans('message.solicitud_action.parroquia'), 'class' => 'form-control', 'id' => 'parroquia_id']) !!}
                     </div>
-                    
+
                     <div style="text-align:left;">
                         {!! Form::label('comuna_id_label', trans('message.solicitud_action.comuna'), ['class' => 'control-label', 'id' => 'comuna_id_label']) !!}<span
                             class="required" style="color:red;" id="comuna_id_span">*</span>
@@ -155,15 +155,15 @@
                         </select>
                     </div>
 
-                    <div style="text-align:left;">
+                    <!-- <div style="text-align:left;">
                         {!! Form::label('jefecomunidad', 'Jefe de Comunidad', ['class' => 'control-label', 'id' => 'jefecomunidad_label']) !!}<span
                             class="required" style="color:red;" id="jefecomunidad_Span">*</span>
                             <select name="jefecomunidad_id" id="jefecomunidad_id" class="form-control">
                                 <option value="">Seleccionar jefe de Comunidad</option> @foreach($jefecomunidad2 as $key => $value)
-                                    <option value="{{ $value->id }}" 
-                                        @if(old('jefecomunidad_id', $solicitud_edit->jefecomunidad_id) == $value->id || 
-                                            (is_null(old('jefecomunidad_id', $solicitud_edit->jefecomunidad_id)) && $loop->first)) 
-                                            selected 
+                                    <option value="{{ $value->id }}"
+                                        @if(old('jefecomunidad_id', $solicitud_edit->jefecomunidad_id) == $value->id ||
+                                            (is_null(old('jefecomunidad_id', $solicitud_edit->jefecomunidad_id)) && $loop->first))
+                                            selected
                                         @endif>
                                         {{ $value->Nombre_Jefe_Comunidad }}
                                     </option>
@@ -211,7 +211,7 @@
                                     {{ $value->Telefono_Jefe_Ubch }}</option>
                             @endforeach
                         </select>
-                    </div>
+                    </div> -->
 
 
 
@@ -223,15 +223,15 @@
                     </div>
 
                     <div style="text-align:left;">
-                        {!! Form::label('tipo_solicitud_id', trans('message.solicitud_action.tipo_solicitud'), ['class' => 'control-label']) !!}<span
+                        <!-- {!! Form::label('tipo_solicitud_id', trans('message.solicitud_action.tipo_solicitud'), ['class' => 'control-label']) !!}<span
                             class="required" style="color:red;">*</span>
-                        {!! Form::select('tipo_solicitud_id', $tipo_solicitud, $rols_id == 10 ? 6 : old('tipo_solicitud_id'), ['placeholder' => trans('message.solicitud_action.tipo_solicitud'), 'class' => 'form-control', 'id' => 'tipo_solicitud_id', $rols_id == 10 ? 'disabled' : '']) !!}
+                        {!! Form::select('tipo_solicitud_id', $tipo_solicitud, $rols_id == 10 ? 6 : old('tipo_solicitud_id'), ['placeholder' => trans('message.solicitud_action.tipo_solicitud'), 'class' => 'form-control', 'id' => 'tipo_solicitud_id', $rols_id == 10 ? 'disabled' : '']) !!} -->
                         @if($rols_id == 10)
                             <input type="hidden" name="tipo_solicitud_id" id="tipo_solicitud_id" value="6">
                         @endif
                     </div>
-                    
-                    @if($rols_id == 10)                    
+
+                    @if($rols_id == 10)
                     <div style="text-align:left;">
                         {!! Form::label('tipo_subsolicitud_id', 'TIPO SOLICITUD', ['class' => 'control-label']) !!}<span
                             class="required" style="color:red;">*</span>
@@ -243,23 +243,41 @@
                         </select>
                     </div>
                     @endif
-
+                    <!-- <div style="text-align:left;">
+                        {!! Form::label('venApp', 'CODIGO VENAPP', ['class' => 'control-label']) !!}
+                        {!! Form::text('venApp', isset($valores[0]["venApp"]) ? $valores[0]["venApp"] : '', ['placeholder' => 'Codigo', 'class' => 'form-control', 'id' => 'venApp_user']) !!}
+                    </div> -->
+                    <div style="text-align:left;">
+                        {!! Form::label('fechaentrega', 'FECHA ACTA DE ENTREGA', ['class' => 'control-label']) !!}<span
+                            class="required" style="color:red;">*</span>
+                            <input type="date" id="fechaentrega" name="fechaentrega" class="form-control" value="{{ \Carbon\Carbon::parse($solicitud_edit->fecha)->format('Y-m-d') }}">
+                    </div>
+                    <div style="text-align:left;">
+                        {!! Form::label('solicita', 'BENEFICIO', ['class' => 'control-label']) !!}<span
+                            class="required" style="color:red;">*</span>
+                        {!! Form::textarea('solicita', isset($beneficiario[0]["solicita"]) ? $beneficiario[0]["solicita"] : '', ['placeholder' => 'Solicita', 'class' => 'form-control', 'id' => 'solicita_user', 'required' => true]) !!}
+                    </div>
+                    <div style="text-align:left;">
+                        {!! Form::label('observacionbeneficiario', "OBSERVACION", ['class' => 'control-label']) !!}<span
+                            class="required" style="color:red;">*</span>
+                        {!! Form::textarea('observacionbeneficiario', isset($beneficiario[0]["observacion"]) ? $beneficiario[0]["observacion"] : '', ['placeholder' => "OBSERVACION", 'class' => 'form-control', 'id' => 'observacionbeneficiario_user', 'required' => true]) !!}
+                    </div>
                     <div id="denunciado">
-                        <?php  
-                    
+                        <?php
+
                          $variable = $solicitud_edit->tipo_solicitud_id;
 
-if ($solicitud_edit->tipo_solicitud_id == 1) {
-    $valores = $denuncia;
-}
-if ($solicitud_edit->tipo_solicitud_id == 2) {
+                        if ($solicitud_edit->tipo_solicitud_id == 1) {
+                            $valores = $denuncia;
+                        }
+                        if ($solicitud_edit->tipo_solicitud_id == 2) {
 
-    $valores = $quejas;
-}
-if ($solicitud_edit->tipo_solicitud_id == 3) {
-    $valores = $reclamo;
-}
-                            
+                            $valores = $quejas;
+                        }
+                        if ($solicitud_edit->tipo_solicitud_id == 3) {
+                            $valores = $reclamo;
+                        }
+
                          ?>
 
                         <h3>Datos de Denuncia, Reclamo o Queja </h3>
@@ -324,14 +342,14 @@ if ($solicitud_edit->tipo_solicitud_id == 3) {
                         <br>
                         <div class="col">
                             <div style="text-align:left;">
-                                <?php 
+                                <?php
                                  $valor2 = isset($recaudos[0]["cedula"]) ? $recaudos[0]["cedula"] : '';
 //  $valor2 = '';
 $valor = false;
 if ($valor2 == "on") {
     $valor = true;
 
-}   
+}
                                   ?>
 
                                 {!! Form::checkbox('checkcedula', 'on', $valor) !!}
@@ -339,7 +357,7 @@ if ($valor2 == "on") {
 
                             </div>
                             <div style="text-align:left;">
-                                <?php 
+                                <?php
                                  //$valor3 = isset($recaudos[0]["motivo"]) ?$recaudos[0]["motivo"]: '';
 $valor2 = isset($recaudos[0]["motivo"]) ? $recaudos[0]["motivo"] : '';
 // $valor2 = '';
@@ -347,7 +365,7 @@ $valor = false;
 if ($valor2 == "on") {
     $valor = true;
 
-}   
+}
                                   ?>
 
                                 {!! Form::checkbox('checkmotivo', 'on', $valor) !!}
@@ -355,14 +373,14 @@ if ($valor2 == "on") {
 
                             </div>
                             <div style="text-align:left;">
-                                <?php 
+                                <?php
                                  $valor2 = isset($recaudos[0]["video"]) ? $recaudos[0]["video"] : '';
 //$valor2 = '';
 $valor = false;
 if ($valor2 == "on") {
     $valor = true;
 
-}   
+}
                                   ?>
 
                                 {!! Form::checkbox('checkvideo', 'on', $valor) !!}
@@ -370,14 +388,14 @@ if ($valor2 == "on") {
 
                             </div>
                             <div style="text-align:left;">
-                                <?php 
+                                <?php
                                  $valor2 = isset($recaudos[0]["foto"]) ? $recaudos[0]["foto"] : '';
 //$valor2 = '';
 $valor = false;
 if ($valor2 == "on") {
     $valor = true;
 
-}   
+}
                                   ?>
 
                                 {!! Form::checkbox('checkfoto', 'on', $valor) !!}
@@ -385,28 +403,28 @@ if ($valor2 == "on") {
 
                             </div>
                             <div style="text-align:left;">
-                                <?php 
+                                <?php
                                  $valor = false;
 //$valor2 = '';
 $valor2 = isset($recaudos[0]["grabacion"]) ? $recaudos[0]["grabacion"] : '';
 if ($valor2 == "on") {
     $valor = true;
 
-}   
+}
                                   ?>
 
                                 {!! Form::checkbox('checkgrabacion', 'on', $valor) !!}
                                 {!! Form::label('checkgrabacion', 'Grabacion') !!}
                             </div>
                             <div style="text-align:left;">
-                                <?php 
+                                <?php
                                  $valor = false;
 //$valor2 = '';
 $valor2 = isset($recaudos[0]["testigo"]) ? $recaudos[0]["testigo"] : '';
 if ($valor2 == "on") {
     $valor = true;
 
-}   
+}
                                   ?>
 
                                 {!! Form::checkbox('checktestigo', 'on', $valor) !!}
@@ -414,14 +432,14 @@ if ($valor2 == "on") {
 
                             </div>
                             <div style="text-align:left;">
-                                <?php 
+                                <?php
                                  $valor = false;
 //$valor2 = '';
 $valor2 = isset($recaudos[0]["residencia"]) ? $recaudos[0]["residencia"] : '';
 if ($valor2 == "on") {
     $valor = true;
 
-}   
+}
                                   ?>
 
                                 {!! Form::checkbox('checkresidencia', $valor) !!}
@@ -430,224 +448,158 @@ if ($valor2 == "on") {
                             </div>
                         </div>
                     </div>
-                    <div id="sugerencia">
-                        <?php  
-                    
-                    $variable = $solicitud_edit->tipo_solicitud_id;
 
-if ($solicitud_edit->tipo_solicitud_id == 4) {
-    $valores = $sugerecia;
-}
-if ($solicitud_edit->tipo_solicitud_id == 5) {
-
-    $valores = $asesoria;
-}
-                   
-                       
-                    ?>
-                        <h3>Sugerencia o Asesoria</h3>
-                        <div style="text-align:left;">
-                            {!! Form::label('observacion2', trans('message.solicitud_action.observacion'), ['class' => 'control-label']) !!}<span
-                                class="required" style="color:red;">*</span>
-                            {!! Form::text('observacion2', isset($valores[0]["observacion"]) ? $valores[0]["observacion"] : '', ['placeholder' => trans('message.solicitud_action.observacion'), 'class' => 'form-control', 'id' => 'observacion_user']) !!}
-                        </div>
-                        <h3>Recuados de la Solicitud</h3>
-                        <br>
-                        <div style="text-align:left;">
-                            <?php 
-                                 $valor = false;
-$valor2 = isset($recaudos[0]["motivo"]) ? $recaudos[0]["motivo"] : '';
-if ($valor2 == "on") {
-    $valor = true;
-
-}   
-                                  ?>
-
-                            {!! Form::checkbox('checkmotivo2', $valor) !!}
-                            {!! Form::label('checkmotivo2', 'Exposicion de Motivo') !!}
-                        </div>
-                    </div>
                     <div id="beneficiario">
-                        <?php  
-                    
+                        <?php
+
                         $variable = $solicitud_edit->tipo_solicitud_id;
 
 if ($solicitud_edit->tipo_solicitud_id == 6) {
     $valores = $beneficiario;
 }
-                        
-                   
-                       
+
+
+
                     ?>
 
-                        <h3>Solicitud</h3>
-                        <div style="text-align:left;">
-                            {!! Form::label('nombrebeneficiario', trans('message.solicitud_action.nombrebeneficiario'), ['class' => 'control-label']) !!}<span
-                                class="required" style="color:red;">*</span>
-                            {!! Form::text('nombrebeneficiario', isset($valores[0]["nombre"]) ? $valores[0]["nombre"] : '', ['placeholder' => trans('message.solicitud_action.nombrebeneficiario'), 'class' => 'form-control', 'id' => 'nombrebeneficiario_user']) !!}
-                        </div>
-                        <div style="text-align:left;">
-                            {!! Form::label('cedulabeneficiario', trans('message.solicitud_action.cedulabeneficiario'), ['class' => 'control-label']) !!}<span
-                                class="required" style="color:red;">*</span>
-                            {!! Form::text('cedulabeneficiario', isset($valores[0]["cedula"]) ? $valores[0]["cedula"] : '', ['placeholder' => trans('message.solicitud_action.cedulabeneficiario'), 'class' => 'form-control', 'id' => 'cedulabeneficiario_user']) !!}
-                        </div>
-                        <div style="text-align:left;">
-                            {!! Form::label('edadbeneficiario', 'EDAD BENEFICIARIO', ['class' => 'control-label']) !!}<span
-                                class="required" style="color:red;">*</span>
-                            {!! Form::text('edadbeneficiario', isset($valores[0]["edadbeneficiario"]) ? $valores[0]["edadbeneficiario"] : '', ['placeholder' => 'EDAD BENEFICIARIO', 'class' => 'form-control', 'id' => 'edadbeneficiario_user']) !!}
-                        </div>
-                        <div style="text-align:left;">
-                            {!! Form::label('direccionbeneficiario', trans('message.solicitud_action.direccionbeneficiario'), ['class' => 'control-label']) !!}<span
-                                class="required" style="color:red;">*</span>
-                            {!! Form::text('direccionbeneficiario', isset($valores[0]["direccion"]) ? $valores[0]["direccion"] : '', ['placeholder' => trans('message.solicitud_action.direccionbeneficiario'), 'class' => 'form-control', 'id' => 'direccionbeneficiario_user']) !!}
-                        </div>
-                        <div style="text-align:left;">
-                            {!! Form::label('solicita', 'Solicita', ['class' => 'control-label']) !!}<span
-                                class="required" style="color:red;">*</span>
-                            {!! Form::text('solicita', isset($valores[0]["solicita"]) ? $valores[0]["solicita"] : '', ['placeholder' => 'Solicita', 'class' => 'form-control', 'id' => 'solicita_user']) !!}
-                        </div>
-                        <div style="text-align:left;">
-                            {!! Form::label('venApp', 'Codigo venApp', ['class' => 'control-label']) !!}<span
-                                class="required" style="color:red;">*</span>
-                            {!! Form::text('venApp', isset($valores[0]["venApp"]) ? $valores[0]["venApp"] : '', ['placeholder' => 'Codigo', 'class' => 'form-control', 'id' => 'venApp_user']) !!}
-                        </div>
+
                         <h3>Recuados de la Solicitud</h3>
                         <br>
                         <div style="text-align:left;">
-                                    <?php 
+                                    <?php
                                              $valor = false;
 $valor2 = isset($recaudos[0]["cedula"]) ? $recaudos[0]["cedula"] : '';
 if ($valor2 == "on") {
     $valor = true;
 
-}   
+}
                                                ?>
-                                    
+
                                     {!! Form::checkbox('checkcedula2', 'on', $valor) !!}
                                     {!! Form::label('checkcedula2', 'Copia Cedula Solicitante') !!}
-                                    
+
                                     </div>
                                     <div style="text-align:left;">
-                                        <?php 
+                                        <?php
                                              $valor = false;
 $valor2 = isset($recaudos[0]["motivo"]) ? $recaudos[0]["motivo"] : '';
 if ($valor2 == "on") {
     $valor = true;
 
-}   
+}
                                                ?>
-                                    
+
                                         {!! Form::checkbox('checkmotivo3', 'on', $valor) !!}
                                         {!! Form::label('checkmotivo3', 'Exposicion de Motivo') !!}
-                                    
+
                                     </div>
                                     <div style="text-align:left;">
-                                        <?php 
+                                        <?php
                                              $valor = false;
 $valor2 = isset($recaudos[0]["recipe"]) ? $recaudos[0]["recipe"] : '';
 if ($valor2 == "on") {
     $valor = true;
 
-}   
+}
                                                ?>
-                                    
+
                                         {!! Form::checkbox('recipe', 'on', $valor) !!}
                                         {!! Form::label('recipe', 'Recipe Medico') !!}
-                                    
+
                                     </div>
                                     <div style="text-align:left;">
-                                        <?php 
+                                        <?php
                                              $valor = false;
 $valor2 = isset($recaudos[0]["informe"]) ? $recaudos[0]["informe"] : '';
 if ($valor2 == "on") {
     $valor = true;
 
-}   
+}
                                                ?>
-                                    
+
                                         {!! Form::checkbox('checkinforme', 'on', $valor) !!}
                                         {!! Form::label('checkinforme', 'Informe Medico') !!}
-                                    
-                                    
+
+
                                     </div>
                                     <div style="text-align:left;">
-                                        <?php 
+                                        <?php
                                              $valor = false;
 $valor2 = isset($recaudos[0]["beneficiario"]) ? $recaudos[0]["beneficiario"] : '';
 if ($valor2 == "on") {
     $valor = true;
 
-}   
+}
                                                ?>
-                                    
+
                                         {!! Form::checkbox('checkcedulabeneficiario', 'on', $valor) !!}
                                         {!! Form::label('checkcedulabeneficiario', 'Copia Cedula Beneficiario') !!}
-                                    
+
                                     </div>
-                                    <?php 
+                                    <?php
                                              $valor = false;
 $valor2 = isset($recaudos[0]["checkpresupuesto"]) ? $recaudos[0]["checkpresupuesto"] : '';
 if ($valor2 == "on") {
     $valor = true;
 
-}   
+}
                                                ?>
-                                    
+
                                     {!! Form::checkbox('checkpresupuesto', 'on', $valor) !!}
                                     {!! Form::label('checkpresupuesto', 'Presupuesto (BS)') !!}
-                                    
+
                                     </div>
                                     <div style="text-align:left;">
-                                        <?php 
+                                        <?php
                             $valor = false;
 $valor2 = isset($recaudos[0]["evifotobeneficiario"]) ? $recaudos[0]["evifotobeneficiario"] : '';
 if ($valor2 == "on") {
     $valor = true;
-}   
+}
                                 ?>
                                         {!! Form::checkbox('evifotobeneficiario', 'on', $valor) !!}
                                         {!! Form::label('evifotobeneficiario', 'Evidencia Fotografica') !!}
                                     </div>
                                     <div style="text-align:left;">
-                                        <?php 
+                                        <?php
                             $valor = false;
 $valor2 = isset($recaudos[0]["permisoinhumacion"]) ? $recaudos[0]["permisoinhumacion"] : '';
 if ($valor2 == "on") {
     $valor = true;
-}   
+}
                                 ?>
                                         {!! Form::checkbox('permisoinhumacion', 'on', $valor) !!}
                                         {!! Form::label('permisoinhumacion', 'Permiso de Inhumacion') !!}
                                     </div>
                                     <div style="text-align:left;">
-                                        <?php 
+                                        <?php
                             $valor = false;
-$valor2 = isset($recaudos[0]["certificadodefuncion"]) ? $recaudos[0]["certificadodefuncion"] : '';
-if ($valor2 == "on") {
-    $valor = true;
-}   
+                            $valor2 = isset($recaudos[0]["certificadodefuncion"]) ? $recaudos[0]["certificadodefuncion"] : '';
+                            if ($valor2 == "on") {
+                                $valor = true;
+                            }
                                 ?>
                                         {!! Form::checkbox('certificadodefuncion', 'on', $valor) !!}
                                         {!! Form::label('certificadodefuncion', 'Certificado de Defuncion') !!}
                                     </div>
                                     <div style="text-align:left;">
-                                        <?php 
+                                        <?php
                             $valor = false;
                             $valor2 = isset($recaudos[0]["ordenexamen"]) ? $recaudos[0]["ordenexamen"] : '';
                             if ($valor2 == "on") {
                                 $valor = true;
-                            }   
+                            }
                                 ?>
                                         {!! Form::checkbox('ordenexamen', 'on', $valor) !!}
                                         {!! Form::label('ordenexamen', 'Orden de Examen') !!}
                                     </div>
                                     <div style="text-align:left;">
-                                        <?php 
+                                        <?php
                             $valor = false;
                             $valor2 = isset($recaudos[0]["ordenestudio"]) ? $recaudos[0]["ordenestudio"] : '';
                             if ($valor2 == "on") {
                                 $valor = true;
-                            }   
+                            }
                                 ?>
                                         {!! Form::checkbox('ordenestudio', 'on', $valor) !!}
                                         {!! Form::label('ordenestudio', 'Orden de Estudio') !!}
@@ -673,8 +625,8 @@ if ($valor2 == "on") {
                                 {!! Form::select('coordinacion_id', $coordinacion, $solicitud_edit->coordinacion_id, ['placeholder' => trans('message.solicitud_action.coordinacion'), 'class' => 'form-control', 'id' => 'coordinacion_id']) !!}
                             </div>
                         </div>
-                    @endif                      
-                    <?php  
+                    @endif
+                    <?php
 
                     $variable = $solicitud_edit->tipo_solicitud_id;
                     $variable2 = $solicitud_edit->asignacion;
@@ -728,7 +680,7 @@ if ($valor2 == "on") {
     $(document).ready(function () {
         // $("#comuna_id").empty()
         //  $("#comuna_id").html('<option value="">COMUNA<option/>')
-        
+
         if(jefecomunidadID == ''){
             $("#jefecomunidad_id").html('<option value="">Seleccione Jefe de Comunidad</option>'); // Opción inicial
         }
@@ -739,7 +691,7 @@ if ($valor2 == "on") {
         //$("#beneficiario").hide();
         //   $("#enter").hide();
         // $("#direccion").hide();
-        
+
         if(idmunicipioJS == 2){
             $("#parroquia_id").hide();
                 $("#parroquia_id_label").hide();
@@ -880,14 +832,14 @@ if ($valor2 == "on") {
                     $.each(data, function (key, value) {
                         $("#jefecomunidad_id").append('<option value="' + value.id + '">' + value.Nombre_Jefe_Comunidad + '</option>');
                     });
-                    
+
                 },
                 error: function () {
                     // Manejo de errores (opcional)
                     alert("Error al cargar los jefes de comunidad.");
                 }
             })
-            
+
             $.ajax({
                 url: "{{ route('getComunidad2') }}", // Ruta a tu controlador
                 type: "GET",
@@ -929,7 +881,7 @@ if ($valor2 == "on") {
                         //  $("#telefonoJEFE").val(value.Telefono_Jefe_Comunidad);
                         //  $("#nombreUBCH").val(value.Nombre_Ubch);
                         //   $("#nomjefeUBCH").val(value.Nombre_Jefe_Ubch);
-                        //  $("#teljefeUBCH").val(value.Telefono_Jefe_Ubch); 
+                        //  $("#teljefeUBCH").val(value.Telefono_Jefe_Ubch);
                     } else {
                         // Maneja el caso donde no se encontraron datos
                         $("#telefonoJEFE").text('');
@@ -942,7 +894,7 @@ if ($valor2 == "on") {
                     alert("Error al cargar los datos.");
                 }
             });
-        });        
+        });
 
 
         $('#direcciones_id').change(function () {

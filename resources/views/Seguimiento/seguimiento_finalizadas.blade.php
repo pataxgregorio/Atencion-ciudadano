@@ -64,15 +64,13 @@
                     <tr>
                     <th>Nro Solicitud</th>
                     <th>Funcionario Receptor</th>
-                    <th>Fecha Recibido</th>
+                    <th>Fecha Entrega</th>
                     <th>Nombre de Solicitante</th>
                     <th>Edad</th>
                     <th>Cedula de Solicitante</th>
                     <th>Direccion</th>
                     <th>Tipo de Solicitud</th>
-                    <th>Nombre del Beneficiario</th>
-                    <th>Cedula Beneficiario</th>
-                    <th>Solicita</th>
+                    <th>Beneficio</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -183,8 +181,6 @@
                 {data: 'cedula', name: 'cedula'},
                 {data: 'direccion', name: 'direccion'},
                 {data: 'nombretipo', name: 'nombretipo'},
-                {data: 'beneficiarionombre', name: 'nombrebeneficiario'},
-                {data: 'cedula2', name: 'cedula2'},
                 {data: 'solicita', name: 'solicita'},
             ],
             "language": {

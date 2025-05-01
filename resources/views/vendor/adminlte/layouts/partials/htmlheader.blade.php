@@ -1,14 +1,14 @@
 <head>
     <meta charset="UTF-8">
     <title>SIA</title>
-    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>    
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    
+
     <link href="{{ mix('/css/all.css') }}" rel="stylesheet" type="text/css" />
    <!-- El link.blade.php se utiliza para llevar el control con el DataTable CSS -->
    @include('adminlte::layouts.partials.link')
-   
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -32,6 +32,6 @@
             $trans['adminlte_lang_message'] = trans('adminlte_lang::message');
             echo json_encode($trans);
         @endphp
-    </script> 
-    @laravelPWA   
+    </script>
+    @laravelPWA
 </head>

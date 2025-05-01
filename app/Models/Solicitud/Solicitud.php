@@ -49,7 +49,6 @@ class Solicitud extends Model
         'asesoria',
         'denuncia',
         'denunciado',
-
     ];
 
     public function encasodeemergencia()
@@ -99,6 +98,7 @@ class Solicitud extends Model
                 'solicitud.nombre AS solicitante',
                 'comuna.codigo AS comuna',
                 'solicitud.fecha AS fecha',
+                'solicitud.cedula AS cedula',
                 'comunidad.nombre AS comunidad',
                 DB::raw('COALESCE(tipo_subsolicitud.nombre, tipo_solicitud.nombre) AS nombretipo'), // Cambio aquí
                 'users.name AS analista',
@@ -128,7 +128,7 @@ class Solicitud extends Model
                 ->join('comuna', 'solicitud.comuna_id', '=', 'comuna.id')
                 ->join('comunidad', 'solicitud.comunidad_id', '=', 'comunidad.id')
                 ->join('tipo_subsolicitud', 'solicitud.tipo_subsolicitud_id', '=', 'tipo_subsolicitud.id')
-                ->select('solicitud.solicitud_salud_id as id','solicitud.nombre AS solicitante','comuna.codigo AS comuna','solicitud.fecha AS fecha','comunidad.nombre AS comunidad','tipo_subsolicitud.nombre AS nombretipo','users.name AS analista','solicitud.beneficiario as beneficiario','solicitud.quejas AS quejas','solicitud.reclamo AS reclamo','solicitud.denuncia as denuncia','solicitud.denunciado as denunciado','direccion.nombre AS direccionnombre','status.nombre AS nombrestatus')
+                ->select('solicitud.solicitud_salud_id as id','solicitud.cedula as cedula','solicitud.nombre AS solicitante','comuna.codigo AS comuna','solicitud.fecha AS fecha','comunidad.nombre AS comunidad','tipo_subsolicitud.nombre AS nombretipo','users.name AS analista','solicitud.beneficiario as beneficiario','solicitud.quejas AS quejas','solicitud.reclamo AS reclamo','solicitud.denuncia as denuncia','solicitud.denunciado as denunciado','direccion.nombre AS direccionnombre','status.nombre AS nombrestatus')
                 ->Where('solicitud.cedula', $params)
                 ->orderBy('solicitud.solicitud_salud_id', 'desc')
                 ->get();
@@ -144,7 +144,7 @@ class Solicitud extends Model
                     ->join('comuna', 'solicitud.comuna_id', '=', 'comuna.id')
                     ->join('comunidad', 'solicitud.comunidad_id', '=', 'comunidad.id')
                     ->join('tipo_subsolicitud', 'solicitud.tipo_subsolicitud_id', '=', 'tipo_subsolicitud.id')
-                    ->select('solicitud.solicitud_salud_id as id','solicitud.nombre AS solicitante','comuna.codigo AS comuna','solicitud.fecha AS fecha','comunidad.nombre AS comunidad','tipo_subsolicitud.nombre AS nombretipo','users.name AS analista','solicitud.beneficiario as beneficiario','solicitud.quejas AS quejas','solicitud.reclamo AS reclamo','solicitud.denuncia as denuncia','solicitud.denunciado as denunciado','direccion.nombre AS direccionnombre','status.nombre AS nombrestatus')
+                    ->select('solicitud.solicitud_salud_id as id','solicitud.nombre AS solicitante','comuna.codigo AS comuna','solicitud.cedula as cedula','solicitud.fecha AS fecha','comunidad.nombre AS comunidad','tipo_subsolicitud.nombre AS nombretipo','users.name AS analista','solicitud.beneficiario as beneficiario','solicitud.quejas AS quejas','solicitud.reclamo AS reclamo','solicitud.denuncia as denuncia','solicitud.denunciado as denunciado','direccion.nombre AS direccionnombre','status.nombre AS nombrestatus')
                     ->get();
                     $solicitudbeneficiario =[];
                     // se iteran las solicitudes para obterner la cedula del beneficiario
@@ -162,7 +162,7 @@ class Solicitud extends Model
                             ->join('comuna', 'solicitud.comuna_id', '=', 'comuna.id')
                             ->join('comunidad', 'solicitud.comunidad_id', '=', 'comunidad.id')
                             ->join('tipo_subsolicitud', 'solicitud.tipo_subsolicitud_id', '=', 'tipo_subsolicitud.id')
-                            ->select('solicitud.solicitud_salud_id as id','solicitud.nombre AS solicitante','comuna.codigo AS comuna','solicitud.fecha AS fecha','comunidad.nombre AS comunidad','tipo_subsolicitud.nombre AS nombretipo','users.name AS analista','solicitud.beneficiario as beneficiario','solicitud.quejas AS quejas','solicitud.reclamo AS reclamo','solicitud.denuncia as denuncia','solicitud.denunciado as denunciado','direccion.nombre AS direccionnombre','status.nombre AS nombrestatus')
+                            ->select('solicitud.solicitud_salud_id as id','solicitud.nombre AS solicitante','solicitud.cedula as cedula','comuna.codigo AS comuna','solicitud.fecha AS fecha','comunidad.nombre AS comunidad','tipo_subsolicitud.nombre AS nombretipo','users.name AS analista','solicitud.beneficiario as beneficiario','solicitud.quejas AS quejas','solicitud.reclamo AS reclamo','solicitud.denuncia as denuncia','solicitud.denunciado as denunciado','direccion.nombre AS direccionnombre','status.nombre AS nombrestatus')
                             ->where('solicitud.solicitud_salud_id', $idsolicitud)
                             ->get();
                             //agregar cedula2 =$cedulaBeneficiario en solicitud3
@@ -173,6 +173,7 @@ class Solicitud extends Model
 
                     }
                 // return $solicitudbeneficiario;
+
                 return $solicitudbeneficiario;
 
                 }else{
@@ -187,7 +188,7 @@ class Solicitud extends Model
                     ->join('comuna', 'solicitud.comuna_id', '=', 'comuna.id')
                     ->join('comunidad', 'solicitud.comunidad_id', '=', 'comunidad.id')
                     ->join('tipo_subsolicitud', 'solicitud.tipo_subsolicitud_id', '=', 'tipo_subsolicitud.id')
-                    ->select('solicitud.solicitud_salud_id as id','solicitud.nombre AS solicitante','comuna.codigo AS comuna','solicitud.fecha AS fecha','comunidad.nombre AS comunidad','tipo_subsolicitud.nombre AS nombretipo','users.name AS analista','solicitud.beneficiario as beneficiario','solicitud.quejas AS quejas','solicitud.reclamo AS reclamo','solicitud.denuncia as denuncia','solicitud.denunciado as denunciado','direccion.nombre AS direccionnombre','status.nombre AS nombrestatus')
+                    ->select('solicitud.solicitud_salud_id as id','solicitud.nombre AS solicitante','solicitud.cedula as cedula','comuna.codigo AS comuna','solicitud.fecha AS fecha','comunidad.nombre AS comunidad','tipo_subsolicitud.nombre AS nombretipo','users.name AS analista','solicitud.beneficiario as beneficiario','solicitud.quejas AS quejas','solicitud.reclamo AS reclamo','solicitud.denuncia as denuncia','solicitud.denunciado as denunciado','direccion.nombre AS direccionnombre','status.nombre AS nombrestatus')
                     ->get();
                     $solicitudbeneficiario =[];
                     // se iteran las solicitudes para obterner la cedula del beneficiario
@@ -205,7 +206,7 @@ class Solicitud extends Model
                             ->join('comuna', 'solicitud.comuna_id', '=', 'comuna.id')
                             ->join('comunidad', 'solicitud.comunidad_id', '=', 'comunidad.id')
                             ->join('tipo_subsolicitud', 'solicitud.tipo_subsolicitud_id', '=', 'tipo_subsolicitud.id')
-                            ->select('solicitud.solicitud_salud_id as id','solicitud.nombre AS solicitante','comuna.codigo AS comuna','solicitud.fecha AS fecha','comunidad.nombre AS comunidad','tipo_subsolicitud.nombre AS nombretipo','users.name AS analista','solicitud.beneficiario as beneficiario','solicitud.quejas AS quejas','solicitud.reclamo AS reclamo','solicitud.denuncia as denuncia','solicitud.denunciado as denunciado','direccion.nombre AS direccionnombre','status.nombre AS nombrestatus')
+                            ->select('solicitud.solicitud_salud_id as id','solicitud.nombre AS solicitante','solicitud.cedula as cedula','comuna.codigo AS comuna','solicitud.fecha AS fecha','comunidad.nombre AS comunidad','tipo_subsolicitud.nombre AS nombretipo','users.name AS analista','solicitud.beneficiario as beneficiario','solicitud.quejas AS quejas','solicitud.reclamo AS reclamo','solicitud.denuncia as denuncia','solicitud.denunciado as denunciado','direccion.nombre AS direccionnombre','status.nombre AS nombrestatus')
                             ->orWhere('solicitud.solicitud_salud_id', $idsolicitud)
                             ->orWhere('solicitud.solicitud_atc_id', $idsolicitud)
                             ->orWhere('solicitud.solicitud_dpa_id', $idsolicitud)
@@ -226,6 +227,7 @@ class Solicitud extends Model
                     }
                     // Convertimos el array asociativo nuevamente en un array indexado numéricamente
                     $solicitud_no_repetida = array_values($solicitud_no_repetida);
+
                     return $solicitud_no_repetida;
                 }
 
@@ -277,7 +279,6 @@ class Solicitud extends Model
                     ->join('status', 'solicitud.status_id', '=','status.id')
                     ->join('users', 'solicitud.users_id', '=', 'users.id')
                     ->join('rols', 'users.rols_id', '=', 'rols.id')
-                    ->where('status_id', '!=', 5)
                     ->select(
                         'solicitud.id',
                         'solicitud.solicitud_salud_id as saludID',
@@ -311,10 +312,7 @@ class Solicitud extends Model
                     ->join('rols', 'users.rols_id', '=', 'rols.id')
                     ->join('tipo_subsolicitud', 'solicitud.tipo_subsolicitud_id', '=', 'tipo_subsolicitud.id')
                     ->where('tipo_solicitud.id', '!=', 4)
-                    ->where('tipo_solicitud.id', '!=', 5)
                     ->where('rols_id', $rols_id)
-                    ->where('status_id', '!=', 4)
-                    ->where('status_id', '!=', 5)
                     ->select(
                         'solicitud.id',
                         'solicitud.solicitud_salud_id as saludID',
@@ -452,7 +450,6 @@ class Solicitud extends Model
                     ->join('status', 'solicitud.status_id', '=','status.id')
                     ->join('users', 'solicitud.users_id', '=', 'users.id')
                     ->join('rols', 'users.rols_id', '=', 'rols.id')
-                    ->where('status_id', '!=', 5)
                     ->select(
                         'solicitud.id',
                         'solicitud.solicitud_salud_id as saludID',
@@ -482,10 +479,6 @@ class Solicitud extends Model
                     ->join('users', 'solicitud.users_id', '=', 'users.id')
                     ->join('rols', 'users.rols_id', '=', 'rols.id')
                     ->join('tipo_subsolicitud', 'solicitud.tipo_subsolicitud_id', '=', 'tipo_subsolicitud.id')
-                    ->where('tipo_solicitud.id', '!=', 4)
-                    ->where('tipo_solicitud.id', '!=', 5)
-                    ->where('rols_id', $rols_id)
-                    ->where('status_id', '!=', 5)
                     ->select(
                         'solicitud.id',
                         'solicitud.solicitud_salud_id as saludID',
@@ -563,6 +556,7 @@ class Solicitud extends Model
                 ->select(
                     'solicitud.solicitud_salud_id as id',
                     'solicitud.nombre AS solicitante',
+                    'solicitud.cedula AS cedula',
                     DB::raw("CASE WHEN solicitud.municipio_id = 2 THEN NULL ELSE comuna.codigo END AS comuna"),
                     'municipio.nombre AS municipio',
                     'solicitud.fecha AS fecha',
@@ -595,6 +589,7 @@ class Solicitud extends Model
                 ->select(
                     'solicitud.solicitud_salud_id as id',
                     'solicitud.nombre AS solicitante',
+                    'solicitud.cedula AS cedula',
                     DB::raw("CASE WHEN solicitud.municipio_id = 2 THEN NULL ELSE comuna.codigo END AS comuna"),
                     'municipio.nombre AS municipio',
                     'solicitud.fecha AS fecha',
@@ -627,6 +622,7 @@ class Solicitud extends Model
                     ->select(
                         'solicitud.solicitud_salud_id as id',
                         'solicitud.nombre AS solicitante',
+                        'solicitud.cedula AS cedula',
                         DB::raw("CASE WHEN solicitud.municipio_id = 2 THEN NULL ELSE comuna.codigo END AS comuna"),
                         'municipio.nombre AS municipio',
                         'solicitud.fecha AS fecha',
@@ -661,6 +657,7 @@ class Solicitud extends Model
                             ->select(
                                 'solicitud.solicitud_salud_id as id',
                                 'solicitud.nombre AS solicitante',
+                                'solicitud.cedula AS cedula',
                                 DB::raw("CASE WHEN solicitud.municipio_id = 2 THEN NULL ELSE comuna.codigo END AS comuna"),
                                 'municipio.nombre AS municipio',
                                 'solicitud.fecha AS fecha',
@@ -702,6 +699,7 @@ class Solicitud extends Model
                     ->select(
                         'solicitud.solicitud_salud_id as id',
                         'solicitud.nombre AS solicitante',
+                        'solicitud.cedula AS cedula',
                         DB::raw("CASE WHEN solicitud.municipio_id = 2 THEN NULL ELSE comuna.codigo END AS comuna"),
                         'municipio.nombre AS municipio',
                         'solicitud.fecha AS fecha',
@@ -737,6 +735,7 @@ class Solicitud extends Model
                             ->select(
                                 'solicitud.solicitud_salud_id as id',
                                 'solicitud.nombre AS solicitante',
+                                'solicitud.cedula AS cedula',
                                 DB::raw("CASE WHEN solicitud.municipio_id = 2 THEN NULL ELSE comuna.codigo END AS comuna"),
                                 'municipio.nombre AS municipio',
                                 'solicitud.fecha AS fecha',
@@ -811,19 +810,87 @@ class Solicitud extends Model
         )
         ->join('solicitud', 'solicitudmovimiento.solicitud_id', '=', 'solicitud.id')
         ->join('producto', 'producto.id', '=', 'solicitudmovimiento.producto_id')
+        ->orderBy('solicitud.fecha', 'desc')
         ->get();
- 
+
         return $solicitud;
-     }
+    }
+
+    public function reportetotalcomunassalidasFecha($fechaDesde, $fechaHasta){
+    $solicitud = SolicitudMovimiento::select(
+        'solicitud.solicitud_salud_id',
+        'producto.nombre',
+        'solicitudmovimiento.fecha',
+        'solicitudmovimiento.cantidad'
+    )
+    ->join('solicitud', 'solicitudmovimiento.solicitud_id', '=', 'solicitud.id')
+    ->join('producto', 'producto.id', '=', 'solicitudmovimiento.producto_id')
+    ->whereBetween('solicitudmovimiento.fecha', [$fechaDesde, $fechaHasta])
+    ->orderBy('solicitud.fecha', 'desc')
+    ->get();
+
+    return $solicitud;
+    }
+
     public function medicinacomunas (){
         $solicitud = DB::table('solicitud AS s')
-    ->join('comuna AS c', 's.comuna_id', '=', 'c.id')
-    ->join('tipo_subsolicitud AS ts', 's.tipo_solicitud_id', '=', 'ts.id')
-    ->select('c.codigo as comuna', DB::raw('SUM(s.tipo_subsolicitud_id = 1) AS MEDICINA'),
-    DB::raw('SUM(s.tipo_subsolicitud_id = 4) AS INSUMOS'))
-    ->where('s.status_id', '=', 5)
-    ->groupBy('c.id')
-    ->get();
+        ->join('comuna AS c', 's.comuna_id', '=', 'c.id')
+        ->join('tipo_subsolicitud AS ts', 's.tipo_solicitud_id', '=', 'ts.id')
+        ->select('c.codigo as comuna', DB::raw('SUM(s.tipo_subsolicitud_id = 1) AS MEDICINA'),
+        DB::raw('SUM(s.tipo_subsolicitud_id = 4) AS INSUMOS'))
+        ->where('s.status_id', '=', 5)
+        ->groupBy('c.id')
+        ->get();
+        return $solicitud;
+    }
+public function getSolicitudesWAN ($fechaDesde , $fechaHasta , $comuna_id){
+    $fechaDesde = ($fechaDesde === "null") ? null : $fechaDesde;
+    $fechaHasta = ($fechaHasta === "null") ? null : $fechaHasta;
+    $comuna_id = ($comuna_id === "null") ? null : $comuna_id;
+    if (is_null($fechaDesde) && is_null($fechaHasta) && is_null($comuna_id)) {
+        return $solicitud = DB::table('solicitud')
+        ->select('solicitud.solicitud_salud_id','solicitud.nombre','solicitud.cedula','solicitud.direccion')
+        ->where('solicitud.status_id', '=', 5)
+        ->where('solicitud.tipo_solicitud_id', '=', 6)
+        ->get();
+    }else{
+        return $solicitud = DB::table('solicitud')
+        ->select('solicitud.solicitud_salud_id','solicitud.nombre','solicitud.cedula','solicitud.direccion')
+        ->where('solicitud.status_id', '=', 5)
+        ->where('solicitud.tipo_solicitud_id', '=', 6)
+        ->where(function ($query) use ($fechaDesde, $fechaHasta,$comuna_id) {
+            $whereConditions = [];
+
+            if (!empty($fechaDesde)) {
+                $whereConditions[] = ['solicitud.fecha', '>=', $fechaDesde];
+            }
+            if (!empty($fechaHasta)) {
+                $whereConditions[] = ['solicitud.fecha', '<=', $fechaHasta];
+            }
+
+            if (!empty($comuna_id)) {
+                $whereConditions[] = ['solicitud.comuna_id', '=', $comuna_id];
+            }
+
+
+            $query->where($whereConditions);
+        })
+        ->get();
+
+    }
+
+}
+
+    public function medicinacomunasFecha ($fechaDesde, $fechaHasta){
+        $solicitud = DB::table('solicitud AS s')
+        ->join('comuna AS c', 's.comuna_id', '=', 'c.id')
+        ->join('tipo_subsolicitud AS ts', 's.tipo_solicitud_id', '=', 'ts.id')
+        ->select('c.codigo as comuna', DB::raw('SUM(s.tipo_subsolicitud_id = 1) AS MEDICINA'),
+        DB::raw('SUM(s.tipo_subsolicitud_id = 4) AS INSUMOS'))
+        ->where('s.status_id', '=', 5)
+        ->groupBy('c.id')
+        ->whereBetween('s.fecha', [$fechaDesde, $fechaHasta])
+        ->get();
         return $solicitud;
     }
     public function ultimasEntradas (){
@@ -848,6 +915,75 @@ class Solicitud extends Model
         }catch(Throwable $e){
             $solicitud = [];
             return $solicitud;
+        }
+    }
+    public function getSolicitudList_DataTableComuna($params){
+        try {
+            return $solicitud = DB::table('solicitud')
+            ->join('tipo_solicitud', 'solicitud.tipo_solicitud_id', '=', 'tipo_solicitud.id')
+            ->join('direccion', 'solicitud.direccion_id', '=', 'direccion.id')
+            ->join('status', 'solicitud.status_id', '=', 'status.id')
+            ->join('users', 'solicitud.users_id', '=', 'users.id')
+            ->join('comuna', 'solicitud.comuna_id', '=', 'comuna.id')
+            ->select('solicitud.solicitud_salud_id as numerosolicitud','solicitud.nombre as solicitante','solicitud.fecha as fecha','tipo_solicitud.nombre as tiposolicitud','comuna.codigo as comuna')
+            ->where('solicitud.comuna_id', $params)
+            ->get();
+        }catch(Throwable $e){
+            dd($e);
+            return $solicitud;
+        }
+    }
+    public function getSolicitudList_DataTableComunaTotalResumen($fechaDesde, $fechaHasta, $comuna, $comunidad)
+    {
+        try {
+            // 1. Usa Carbon para manejar fechas de forma segura.
+            $fechaDesde = !empty($fechaDesde) ? \Carbon\Carbon::parse($fechaDesde)->startOfDay() : null;
+            $fechaHasta = !empty($fechaHasta) ? \Carbon\Carbon::parse($fechaHasta)->endOfDay() : null;
+
+            // 2. Sanitiza la entrada de la comuna y comunidad.
+            $comuna = !empty($comuna) ? (int)$comuna : null;
+            $comunidad = !empty($comunidad) ? (int)$comunidad : null;
+
+            $query = DB::table('solicitud')
+                ->join('tipo_solicitud', 'solicitud.tipo_solicitud_id', '=', 'tipo_solicitud.id')
+                ->join('direccion', 'solicitud.direccion_id', '=', 'direccion.id')
+                ->join('status', 'solicitud.status_id', '=', 'status.id')
+                ->join('users', 'solicitud.users_id', '=', 'users.id')
+                ->join('comuna', 'solicitud.comuna_id', '=', 'comuna.id')
+                ->join('tipo_subsolicitud', 'solicitud.tipo_subsolicitud_id', '=', 'tipo_subsolicitud.id')
+                ->select('tipo_subsolicitud.nombre as tipo_subsolicitud', DB::raw('count(*) as total'))
+                ->groupBy('tipo_subsolicitud.nombre');
+
+            // 4. Usa where clauses condicionales.
+            if ($fechaDesde) {
+                $query->where('solicitud.fecha', '>=', $fechaDesde);
+            }
+            if ($fechaHasta) {
+                $query->where('solicitud.fecha', '<=', $fechaHasta);
+            }
+            if ($comuna) {
+                $query->where('solicitud.comuna_id', '=', $comuna);
+            }
+            if ($comunidad) {
+                $query->where('solicitud.comunidad_id', '=', $comunidad);
+            }
+
+            // 5. Obtener los resultados agrupados.
+            $results = $query->get();
+
+            // 6. Calcular el total general.
+            $totalGeneral = $results->sum('total');
+
+            // 7. Agregar el total general a la colección.  Usamos un objeto para mantener la estructura.
+            $results->push((object)['tipo_subsolicitud' => 'TOTAL', 'total' => $totalGeneral]);
+
+            // 8. Devolver la colección con el total.
+            return $results;
+
+        } catch (\Throwable $e) {
+            // Manejo de errores.
+            \Log::error("Error en getSolicitudList_DataTableComunaTotalResumen: " . $e->getMessage() . "\n" . $e->getTraceAsString());
+            return collect([]); // Devuelve una colección vacía en caso de error.
         }
     }
     public function getSolicitudListWAN_Totales($fechaDesde, $fechaHasta, $status_id){
@@ -894,65 +1030,118 @@ class Solicitud extends Model
             return []; // Simplificamos el manejo de errores
         }
     }
-   public function reportetotalcasosatendidosSALUD($fechadesde, $fechahasta, $tipo_subsolicitud, $comuna, $comunidad, $mes = null)
-{
-    $resultados = DB::table('solicitud')
-        ->join('tipo_subsolicitud', 'solicitud.tipo_subsolicitud_id', '=', 'tipo_subsolicitud.id')
-        ->select(
-            DB::raw('COUNT(*) AS TOTAL_SOLICITUD'),
-            DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "MEDICINA" THEN 1 END) AS MEDICINA'),
-            DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "LABORATORIO" THEN 1 END) AS LABORATORIO'),
-            DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "ESTUDIO" THEN 1 END) AS ESTUDIO'),
-            DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "INSUMOS" THEN 1 END) AS INSUMOS'),
-            DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "CONSULTAS" THEN 1 END) AS CONSULTAS'),
-            DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "DONACIONES Y AYUDA ECONOMICA" THEN 1 END) AS DONACIONES_Y_AYUDA_ECONOMICA'),
-            DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "AYUDAS TECNICAS" THEN 1 END) AS AYUDAS_TECNICAS'),
-            DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "CIRUGIAS" THEN 1 END) AS CIRUGIAS'),
-            DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "OFTAMOLOGIA" THEN 1 END) AS OFTAMOLOGIA'),
-            DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "VISITA SOCIAL" THEN 1 END) AS VISITA_SOCIAL'),
-            DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "MATERIALES" THEN 1 END) AS MATERIALES'),
-            DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "JORNADAS" THEN 1 END) AS JORNADAS'),
-            DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "ALTO COSTO" THEN 1 END) AS ALTO_COSTO'),
-            DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "URNAS" THEN 1 END) AS URNAS'),
-            DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "FOSAS" THEN 1 END) AS FOSAS'),
-            DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "APOYO LOGISTICO" THEN 1 END) AS APOYO_LOGISTICO'),
-            DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "DOTACION" THEN 1 END) AS DOTACION'),
-            DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "OTROS" THEN 1 END) AS OTROS')
-        )
-        ->where('tipo_subsolicitud.id', '!=', 0)
-        ->where('solicitud.tipo_solicitud_id', '=',6)
-        ->where('solicitud.status_id', 5)
-        ->where(function ($query) use ($fechadesde, $fechahasta, $tipo_subsolicitud, $comuna, $comunidad) {
-            $whereConditions = [];
 
-            if (!empty($fechadesde)) {
-                $whereConditions[] = ['solicitud.fecha', '>=', $fechadesde];
+    public function getSubtipoTelegram($comuna_id = null, $subtipo_id = null){
+        try {
+            // Construir la consulta básica
+            $query = DB::table('solicitud')
+                ->join('tipo_solicitud', 'solicitud.tipo_solicitud_id', '=', 'tipo_solicitud.id')
+                ->join('direccion', 'solicitud.direccion_id', '=', 'direccion.id')
+                ->join('status', 'solicitud.status_id', '=', 'status.id')
+                ->join('users', 'solicitud.users_id', '=', 'users.id')
+                ->join('tipo_subsolicitud', 'solicitud.tipo_subsolicitud_id', '=', 'tipo_subsolicitud.id')
+                ->join('municipio', 'solicitud.municipio_id', '=', 'municipio.id')
+                ->leftJoin('comuna', 'solicitud.comuna_id', '=', 'comuna.id')
+                ->leftJoin('comunidad', 'solicitud.comunidad_id', '=', 'comunidad.id');
+
+            // Aplicar filtros solo si los parámetros no son nulos
+            if ($comuna_id !== null) {
+                $query->where('solicitud.comuna_id', $comuna_id);
             }
-            if (!empty($fechahasta)) {
-                $whereConditions[] = ['solicitud.fecha', '<=', $fechahasta];
-            }
-            if (!empty($tipo_subsolicitud)) {
-                $whereConditions[] = ['solicitud.tipo_subsolicitud_id', '=', $tipo_subsolicitud];
-            }
-            if (!empty($comuna)) {
-                $whereConditions[] = ['solicitud.comuna_id', '=', $comuna];
-            }
-            if (!empty($comunidad)) {
-                $whereConditions[] = ['solicitud.comunidad_id', '=', $comunidad];
+            if ($subtipo_id !== null) {
+                $query->where('solicitud.tipo_subsolicitud_id', $subtipo_id);
             }
 
-            $query->where($whereConditions);
-        });
+            // Si no se especifican comuna_id ni subtipo_id, realizar una consulta general
+            if ($comuna_id !== null && $subtipo_id === null) {
+                $query->select(DB::raw('tipo_subsolicitud.nombre as subtipo_nombre, COUNT(solicitud.id) as total'))
+                      ->where('solicitud.comuna_id', $comuna_id)
+                      ->groupBy('tipo_subsolicitud.nombre');
 
-    // Agregar filtro por mes si se proporciona
-    if ($mes) {
-        $resultados->whereYear('solicitud.fecha', '=', substr($mes, 0, 4))
-                  ->whereMonth('solicitud.fecha', '=', substr($mes, 5, 2));
+                $results = $query->get();
+
+                // Calcular el total general de solicitudes
+                $totalGeneral = $results->sum('total');
+
+                // Agregar el total general a los resultados
+                $results->push((object)['subtipo_nombre' => 'TOTAL', 'total' => $totalGeneral]);
+
+                return $results;
+            } else {
+                // Seleccionar el conteo
+                $query->select(DB::raw('count(*) as total'));
+            }
+
+            $query->orderBy('solicitud.solicitud_salud_id', 'asc');
+
+            // Obtener los resultados
+            $results = $query->first()->total;
+
+            return $results;
+
+        } catch(Throwable $e) {
+            return 0; // Devolvemos 0 en caso de error
+        }
     }
+    public function reportetotalcasosatendidosSALUD($fechadesde, $fechahasta, $tipo_subsolicitud, $comuna, $comunidad, $mes = null)
+    {
+        $resultados = DB::table('solicitud')
+            ->join('tipo_subsolicitud', 'solicitud.tipo_subsolicitud_id', '=', 'tipo_subsolicitud.id')
+            ->select(
+                DB::raw('COUNT(*) AS TOTAL_SOLICITUD'),
+                DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "MEDICINA" THEN 1 END) AS MEDICINA'),
+                DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "LABORATORIO" THEN 1 END) AS LABORATORIO'),
+                DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "ESTUDIO" THEN 1 END) AS ESTUDIO'),
+                DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "INSUMOS" THEN 1 END) AS INSUMOS'),
+                DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "CONSULTAS" THEN 1 END) AS CONSULTAS'),
+                DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "DONACIONES Y AYUDA ECONOMICA" THEN 1 END) AS DONACIONES_Y_AYUDA_ECONOMICA'),
+                DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "AYUDAS TECNICAS" THEN 1 END) AS AYUDAS_TECNICAS'),
+                DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "CIRUGIAS" THEN 1 END) AS CIRUGIAS'),
+                DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "OFTAMOLOGIA" THEN 1 END) AS OFTAMOLOGIA'),
+                DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "VISITA SOCIAL" THEN 1 END) AS VISITA_SOCIAL'),
+                DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "MATERIALES" THEN 1 END) AS MATERIALES'),
+                DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "JORNADAS" THEN 1 END) AS JORNADAS'),
+                DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "ALTO COSTO" THEN 1 END) AS ALTO_COSTO'),
+                DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "URNAS" THEN 1 END) AS URNAS'),
+                DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "FOSAS" THEN 1 END) AS FOSAS'),
+                DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "APOYO LOGISTICO" THEN 1 END) AS APOYO_LOGISTICO'),
+                DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "DOTACION" THEN 1 END) AS DOTACION'),
+                DB::raw('COUNT(CASE WHEN tipo_subsolicitud.nombre = "OTROS" THEN 1 END) AS OTROS')
+            )
+            ->where('tipo_subsolicitud.id', '!=', 0)
+            ->where('solicitud.tipo_solicitud_id', '=',6)
+            ->where('solicitud.status_id', 5)
+            ->where(function ($query) use ($fechadesde, $fechahasta, $tipo_subsolicitud, $comuna, $comunidad) {
+                $whereConditions = [];
 
-    $resultados = $resultados->first();
-    return $resultados;
-}
+                if (!empty($fechadesde)) {
+                    $whereConditions[] = ['solicitud.fecha', '>=', $fechadesde];
+                }
+                if (!empty($fechahasta)) {
+                    $whereConditions[] = ['solicitud.fecha', '<=', $fechahasta];
+                }
+                if (!empty($tipo_subsolicitud)) {
+                    $whereConditions[] = ['solicitud.tipo_subsolicitud_id', '=', $tipo_subsolicitud];
+                }
+                if (!empty($comuna)) {
+                    $whereConditions[] = ['solicitud.comuna_id', '=', $comuna];
+                }
+                if (!empty($comunidad)) {
+                    $whereConditions[] = ['solicitud.comunidad_id', '=', $comunidad];
+                }
+
+                $query->where($whereConditions);
+            });
+
+        // Agregar filtro por mes si se proporciona
+        if ($mes) {
+            $resultados->whereYear('solicitud.fecha', '=', substr($mes, 0, 4))
+                    ->whereMonth('solicitud.fecha', '=', substr($mes, 5, 2));
+        }
+
+        $resultados = $resultados->first();
+        return $resultados;
+    }
 
     public function reportetotalcasosatendidosSALUDConFecha($fechaDesde, $fechaHasta)
     {
@@ -1037,14 +1226,21 @@ class Solicitud extends Model
 
     public function count_solictud4()
     {
-        return DB::table('solicitud')
-            ->join('tipo_solicitud', 'solicitud.tipo_solicitud_id', '=', 'tipo_solicitud.id')
-            ->join('users', 'solicitud.users_id', '=', 'users.id')
-            ->join('status', 'solicitud.status_id', '=', 'status.id')
-            ->select('tipo_solicitud.nombre AS SOLICITUD_NOMBRE', DB::raw('COUNT(solicitud.tipo_solicitud_id) AS TOTAL_SOLICITUD'))
-            ->where('solicitud.status_id', 5)
-            ->groupBy('tipo_solicitud.id')
-            ->orderByDesc('TOTAL_SOLICITUD')->get();
+        try {
+            $resultados = DB::table('solicitud')
+                ->join('comuna', 'solicitud.comuna_id', '=', 'comuna.id') // Une con la tabla 'comuna'
+                ->select('comuna.codigo as SOLICITUD_NOMBRE', DB::raw('COUNT(solicitud.id) as TOTAL_SOLICITUD'))
+                ->groupBy('comuna.codigo')  // Agrupa por el *nombre* de la comuna
+                ->orderByDesc('TOTAL_SOLICITUD') // Ordena de mayor a menor por total
+                ->limit(4)
+                ->get();
+
+            return $resultados;
+        } catch (\Exception $e) {
+            // Mejor manejo de errores: Loggea el error y devuelve una respuesta de error adecuada.
+            \Log::error('Error en solicitudesPorComuna: ' . $e->getMessage() . "\n" . $e->getTraceAsString());
+            return response()->json(['error' => 'Error al obtener los datos.'], 500); // 500 Internal Server Error
+        }
     }
     public function count_solictud4PorFecha($fechaDesde, $fechaHasta)
     {
@@ -1129,6 +1325,20 @@ class Solicitud extends Model
             ->orderByDesc('TOTAL_SOLICITUD')->get();
             return $resultado;
     }
+
+    public function getSolicitudporComunasWAN(){
+
+            $resultado = DB::table('solicitud')
+            ->join('tipo_solicitud', 'solicitud.tipo_solicitud_id', '=', 'tipo_solicitud.id')
+            ->join('users', 'solicitud.users_id', '=', 'users.id')
+            ->join('status', 'solicitud.status_id','=','status.id')
+            ->join('comuna', 'solicitud.comuna_id', '=', 'comuna.id')
+            ->select('comuna.id','comuna.codigo AS comuna', DB::raw('COUNT(comuna.id) AS TOTAL_SOLICITUD'))
+            ->where('tipo_solicitud.id', 6)
+            ->groupBy('comuna.id')
+            ->orderByDesc('TOTAL_SOLICITUD')->get();
+            return $resultado;
+    }
     public function nombreestado($idestado, $idmunicipio, $idparroquia, $idcomuna, $idcomunidad){
         $resultado = DB::table('solicitud')->join('estado', 'solicitud.estado_id', '=', 'estado.id')
         ->join('municipio', 'solicitud.municipio_id', '=', 'municipio.id')
@@ -1167,36 +1377,40 @@ class Solicitud extends Model
 
     public function solicitudesWAN($fechaDesde, $fechaHasta, $status, $comuna)
 {
-    $query = DB::table('solicitud'); // Ajusta el nombre de la tabla
-    // Condición para manejar fechas nulas
-    if ($fechaDesde === null && $fechaHasta === null) {
-        // No se aplican filtros de fecha, se devuelven todas las solicitudes
-    } else if ($fechaDesde === null || $fechaHasta === null) {
-        // Error si solo una fecha es nula
-        return 'Error: Debe seleccionar ambas fechas válidas';
-    } else {
-        // Filtrar por fechas (si ambas son válidas)
-        $query->whereBetween('solicitud.fecha', [$fechaDesde, $fechaHasta]);
-    }
+    if($fechaDesde == null && $fechaHasta == null && $status == null && $comuna == null){
+        $solicitudes = DB::table('solicitud')->get();
+    }else{
+        $query = DB::table('solicitud'); // Ajusta el nombre de la tabla
+        // Condición para manejar fechas nulas
+        if ($fechaDesde === null && $fechaHasta === null) {
+            // No se aplican filtros de fecha, se devuelven todas las solicitudes
+        } else if ($fechaDesde === null || $fechaHasta === null) {
+            // Error si solo una fecha es nula
+            return 'Error: Debe seleccionar ambas fechas válidas';
+        } else {
+            // Filtrar por fechas (si ambas son válidas)
+            $query->whereBetween('solicitud.fecha', [$fechaDesde, $fechaHasta]);
+        }
 
-    // Filtrar por estado (si se proporciona)
-    if ($status !== null) {
-        $query->where('status_id', $status);
-    }
+        // Filtrar por estado (si se proporciona)
+        if ($status !== null) {
+            $query->where('status_id', $status);
+        }
 
-    // Filtrar por comuna (si se proporciona)
-    if($comuna == null){
+        // Filtrar por comuna (si se proporciona)
+        if($comuna == null){
+            $solicitudes = $query->get();
+        }
+        elseif ($comuna !== null) {
+            $query->where('solicitud.comuna_id', $comuna);
+        }
+
         $solicitudes = $query->get();
+
+        // Puedes transformar los resultados aquí si es necesario
+
+        return $solicitudes;
     }
-    elseif ($comuna !== null) {
-        $query->where('solicitud.comuna_id', $comuna);
-    }
-
-    $solicitudes = $query->get();
-
-    // Puedes transformar los resultados aquí si es necesario
-
-    return $solicitudes;
 }
 
 }

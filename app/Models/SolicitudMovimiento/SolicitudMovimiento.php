@@ -9,15 +9,17 @@ class SolicitudMovimiento extends Model
 {
     use HasFactory;
     protected $table = 'solicitudmovimiento';
-    protected $fillable = [     
+    protected $fillable = [
         'solicitud_id',
         'producto_id',
-        'inventario_id',  
+        'inventario_id',
         'cantidad',
         'fecha',
         'servicio_id',
         'created_at',
         'updated_at',
+        'tipoentrada',
+        'inventario_ids',
     ];
 
   public function getSolicitudMovimiento(){

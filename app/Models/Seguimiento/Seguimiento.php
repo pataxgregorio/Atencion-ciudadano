@@ -68,14 +68,14 @@ class Seguimiento extends Model
             ->get();
 
             foreach ($solicitud as $item) {
-                $beneficiario = json_decode($item->beneficiario, true);
-                $item->cedula2 = $beneficiario[0]['cedula'] ?? null;
-                $item->beneficiarionombre = $beneficiario[0]['nombre'] ?? null;
-                $item->solicita = $beneficiario[0]['solicita'] ?? null;
-
-                // Opcional: Eliminar el campo beneficiario original si no lo necesitas
-                unset($item->beneficiario);
-            }
+    if (isset($item->beneficiario)) {  // Verificar si beneficiario existe
+        $beneficiario = json_decode($item->beneficiario, true);
+        $item->solicita = $beneficiario[0]['solicita'] ?? null;
+    } else {
+        $item->solicita = null; // O cualquier valor predeterminado que desees
+    }
+    unset($item->beneficiario);
+}
 
             return $solicitud;
         }else{
@@ -111,12 +111,12 @@ class Seguimiento extends Model
             })
             ->get();
             foreach ($solicitud as $item) {
-                $beneficiario = json_decode($item->beneficiario, true);
-                $item->cedula2 = $beneficiario[0]['cedula'] ?? null;
-                $item->beneficiarionombre = $beneficiario[0]['nombre'] ?? null;
-                $item->solicita = $beneficiario[0]['solicita'] ?? null;
-
-                // Opcional: Eliminar el campo beneficiario original si no lo necesitas
+                if (isset($item->beneficiario)) {  // Verificar si beneficiario existe
+                    $beneficiario = json_decode($item->beneficiario, true);
+                    $item->solicita = $beneficiario[0]['solicita'] ?? null;
+                } else {
+                    $item->solicita = null; // O cualquier valor predeterminado que desees
+                }
                 unset($item->beneficiario);
             }
             return $solicitud;
@@ -220,6 +220,41 @@ class Seguimiento extends Model
 
 
     }
+    public function getproductos2($fecha_inicio, $fecha_final) {
+        $query = DB::table('solicitudmovimiento')->where('solicitudmovimiento.producto_id', '!=', NULL);
+
+        // Agregar filtro por fechas si se proporcionan
+        if ($fecha_inicio && $fecha_final) {
+            $query->whereBetween('fecha', [$fecha_inicio, $fecha_final]);
+        }
+
+        $totalCantidad = $query->sum('cantidad');
+
+
+        $porcentajes = DB::table('solicitudmovimiento')
+            ->join('producto', 'solicitudmovimiento.producto_id', '=', 'producto.id')
+            ->select(
+                'producto.nombre',
+                DB::raw('round((SUM(solicitudmovimiento.cantidad) / ' . $totalCantidad . ') * 100) as porcentaje')
+            )
+            ->where('solicitudmovimiento.producto_id', '!=', NULL);
+
+        // Agregar filtro por fechas si se proporcionan
+        if ($fecha_inicio && $fecha_final) {
+            $porcentajes->whereBetween('fecha', [$fecha_inicio, $fecha_final]);
+        }
+
+        $porcentajes = $porcentajes->groupBy('producto.id', 'producto.nombre')
+            ->get();
+
+        // Formatear el resultado como un arreglo [nombre_producto => porcentaje]
+        $resultado = $porcentajes->pluck('porcentaje', 'nombre')->toArray();
+
+        return $resultado;
+    }
+
+
+
     public function count_solictud(){
         return DB::table('solicitud')
             ->join('tipo_solicitud', 'solicitud.tipo_solicitud_id', '=', 'tipo_solicitud.id')

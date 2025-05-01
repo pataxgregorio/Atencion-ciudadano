@@ -39,7 +39,7 @@
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">{{ trans('message.header') }}</li>
             <!-- Optionally, you can add icons to the links -->
-            <li><a href="{{ url('/dashboard') }}"><i class='fa fa-link'></i> <span>{{ trans('message.dashboard') }}</span></a></li>            
+            <li><a href="{{ url('/dashboard') }}"><i class='fa fa-link'></i> <span>{{ trans('message.dashboard') }}</span></a></li>
             <!-- Optionally, you can add icons to the links -->
             <li><a href="{{ url('/solicitud') }}"><i class='fa fa-link'></i> <span>{{ trans('message.request') }}</span></a></li>
 
@@ -49,14 +49,14 @@
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">{{ trans('message.header') }}</li>
             <!-- Optionally, you can add icons to the links -->
-            <li><a href="{{ url('/dashboard') }}"><i class='fa fa-link'></i> <span>{{ trans('message.dashboard') }}</span></a></li>            
+            <li><a href="{{ url('/dashboard') }}"><i class='fa fa-link'></i> <span>{{ trans('message.dashboard') }}</span></a></li>
             <!-- Optionally, you can add icons to the links -->
-            <li><a href="{{ url('/solicitud/buscarsolicitud') }}"><i class='fa fa-link'></i> <span>{{'Buscar Solicitudes'}}</span></a></li>            
-            
+            <!-- <li><a href="{{ url('/solicitud/buscarsolicitud') }}"><i class='fa fa-link'></i> <span>{{'Buscar Solicitudes'}}</span></a></li>             -->
+
             <li class="treeview">
                 <a href="#"><i class='fa fa-link'></i> <span>Solicitudes</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
-                <li><a href="{{ url('/solicitud/create') }}"><i class='fa fa-link'></i> <span>Crear Solicitudes</span></a></li>
+                <li><a href="{{ url('/solicitud/create') }}"><i class='fa fa-link'></i> <span>Crear Solicitud</span></a></li>
                 <li><a href="{{ url('/solicitud') }}"><i class='fa fa-link'></i> <span>Ver Solicitudes</span></a></li>
                 </ul>
             </li>
@@ -65,7 +65,7 @@
                 <a href="#"><i class='fa fa-link'></i> <span>Reporte</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
                     <li><a href="{{ url('/finalizadas') }}"><i class='fa fa-link'></i> <span>Finalizadas</span></a></li>
-                    <!-- <li><a href="{{ url('/finalizadas2') }}"><i class='fa fa-link'></i> <span>Solicitudes</span></a></li> -->
+                    <li><a href="{{ url('/solicitudfinalizadastotales') }}"><i class='fa fa-link'></i> <span>Totales</span></a></li>
                 </ul>
             </li>
             <li class="treeview">
@@ -85,7 +85,7 @@
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">{{ trans('message.header') }}</li>
             <!-- Optionally, you can add icons to the links -->
-            <li><a href="{{ url('/dashboard') }}"><i class='fa fa-link'></i> <span>{{ trans('message.dashboard') }}</span></a></li>            
+            <li><a href="{{ url('/dashboard') }}"><i class='fa fa-link'></i> <span>{{ trans('message.dashboard') }}</span></a></li>
             <!-- Optionally, you can add icons to the links -->
             <li><a href="{{ url('/users') }}"><i class='fa fa-link'></i> <span>{{ trans('message.users') }}</span></a></li>
             <li><a href="{{ url('/solicitud') }}"><i class='fa fa-link'></i> <span>{{ trans('message.request') }}</span></a></li>

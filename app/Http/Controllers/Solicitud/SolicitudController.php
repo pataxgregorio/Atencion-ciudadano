@@ -31,6 +31,7 @@ use App\Models\Subtiposolicitud\subtiposolicitud;
 
 use DB;
 use App\Models\Seguimiento\Seguimiento;
+use SebastianBergmann\Environment\Console;
 
 
 class SolicitudController extends Controller
@@ -71,6 +72,33 @@ class SolicitudController extends Controller
         $array_color = (new Colores)->getColores();
         $solcomunas = (new Solicitud)->getSolicitudporComunas();
         return view('Solicitud.solicitudfinalizadas', compact('count_notification', 'tipo_alert', 'array_color','solcomunas'));
+    }
+
+    public function indexfinalizadasTotales()
+    {
+        $count_notification = (new User)->count_noficaciones_user();
+        $tipo_alert = "";
+        if (session('delete') == true) {
+            $tipo_alert = "Delete";
+            session(['delete' => false]);
+        }
+        if (session('update') == true) {
+            $tipo_alert = "Update";
+            session(['update' => false]);
+        }
+        $array_color = (new Colores)->getColores();
+        $solcomunas = (new Solicitud)->getSolicitudporComunas();
+        return view('Seguimiento.seguimiento_finalizadasTotales', compact('count_notification', 'tipo_alert', 'array_color','solcomunas'));
+    }
+    public function getSolicitudporComunas(Request $request){
+        $comunaid = $request->comunaid;
+        $solcomunas = (new Solicitud)->getSolicitudporComunas();
+        return response()->json($solcomunas);
+    }
+
+    public function getSolicitudporComunasWAN(){
+        $solcomunas = (new Solicitud)->getSolicitudporComunasWAN();
+        return response()->json($solcomunas);
     }
 
     public function getSolicitud(Request $request)
@@ -133,12 +161,36 @@ class SolicitudController extends Controller
         $data = (new Solicitud)->getSolicitudList_DataTable4($request['params']);
         return response()->json($data);
     }
+    public function getSolicitudComuna(Request $request){
+        $data = (new Solicitud)->getSolicitudList_DataTableComuna($request['id']);
+        return response()->json($data);
+    }
+    public function getSolicitudComunaTotalResumen(Request $request){
+        $fechaDesde = $request->input('fecha_desde');
+        $fechaHasta = $request->input('fecha_hasta');
+        $comuna = $request->input('comuna_id');
+        $comunidad = $request->input('comunidad_id');
+        $data = (new Solicitud)->getSolicitudList_DataTableComunaTotalResumen($fechaDesde, $fechaHasta, $comuna, $comunidad);
+        return response()->json($data);
+    }
     public function getSolicitudTotales(Request $request){
         $fechaDesde = $request->input('fechaDesde');
         $fechaHasta = $request->input('fechaHasta');
         $status_id = $request->input('status_id');
 
         $data = (new Solicitud)->getSolicitudListWAN_Totales($fechaDesde, $fechaHasta, $status_id);
+        return response()->json($data);
+    }
+
+    public function getSolicitudTelegram($params){
+        // Dividir el parámetro 'params' en comuna_id y subtipo_id
+        $paramsArray = explode('_', $params);
+
+        // Convertir "null" a null para que la condición en el modelo funcione correctamente
+        $comuna_id = $paramsArray[0] === "null" ? null : $paramsArray[0];
+        $subtipo_id = $paramsArray[1] === "null" ? null : $paramsArray[1];
+
+        $data = (new Solicitud)->getSubtipoTelegram($comuna_id, $subtipo_id);
         return response()->json($data);
     }
     public function BuscarIndex(Request $request)
@@ -157,6 +209,23 @@ class SolicitudController extends Controller
         }
         $array_color = (new Colores)->getColores();
         return view('Solicitud.buscar', compact('count_notification','tipo', 'tipo_alert', 'array_color'));
+    }
+    public function BuscarIndexIframe(Request $request)
+    {
+        $tipo = $request->tipo;
+        $cedula = $request->param;
+        $count_notification = (new User)->count_noficaciones_user();
+        $tipo_alert = "";
+        if (session('delete') == true) {
+            $tipo_alert = "Delete";
+            session(['delete' => false]);
+        }
+        if (session('update') == true) {
+            $tipo_alert = "Update";
+            session(['update' => false]);
+        }
+        $array_color = (new Colores)->getColores();
+        return view('Solicitud.ibuscar', compact('count_notification','tipo', 'cedula', 'tipo_alert', 'array_color'));
     }
     public function getSolicitudGeneral(Request $request){
         $data = (new Solicitud)->getSolicitudList_DataTableGeneral($request['params']);
@@ -224,7 +293,7 @@ class SolicitudController extends Controller
         $jefecomunidad = [];
 
         $consulta = (new Solicitud)->ObtenerNumeroSolicitud();
-        $correlativoSALUD = $consulta ? $consulta + 1 : 4024;
+        $correlativoSALUD = $consulta ? $consulta + 1 : 116;
 
 
         return view('Solicitud.solicitud_create', compact('count_notification', 'titulo_modulo', 'roles','correlativoSALUD', 'municipio', 'comuna', 'comunidad','jefecomunidad', 'direcciones', 'parroquia', 'estado', 'coordinacion', 'enter', 'tipo_solicitud','subtiposolicitud', 'array_color'));
@@ -428,7 +497,7 @@ class SolicitudController extends Controller
                         "direccion" => isset($input['direccionbeneficiario']) ? $input['direccionbeneficiario'] : NULL,
                         "observacion" => isset($input['observacionbeneficiario']) ? $input['observacionbeneficiario'] : NULL,
                         "solicita" => isset($input['solicita']) ? $input['solicita'] : NULL,
-                        "venApp" => isset($input['venApp']) ? $input['venApp'] : NULL,
+                        "venApp" => NULL,
                     ]
                 ];
                 $recaudos = [
@@ -452,7 +521,7 @@ class SolicitudController extends Controller
             }
             if($input['tipo_solicitud_id'] == 6){
                 $ultimoNumero = (new Solicitud)->ObtenerNumeroSolicitud();
-                $nuevoNumero = $ultimoNumero ? $ultimoNumero + 1 : 4024;
+                $nuevoNumero = $ultimoNumero ? $ultimoNumero + 1 : 1;
             }else{
                 $nuevoNumero = NULL;
             }
@@ -460,7 +529,7 @@ class SolicitudController extends Controller
             $solicitud = new Solicitud([
                 'solicitud_salud_id' => $nuevoNumero,
                 'users_id' => $input['users_id'],
-                'trabajador' => $input['trabajador'],
+                'trabajador' => null,
                 'direccion_id' => $input['direcciones_id'],
                 'coordinacion_id' => $input['coordinacion_id'],
                 'tipo_solicitud_id' => $input['tipo_solicitud_id'],
@@ -473,19 +542,19 @@ class SolicitudController extends Controller
                 'comunidad_id' => $input['comunidad_id'],
                 'jefecomunidad_id' => null,
                 'codigo_control' => $input['codigocontrol'],
-                'status_id' => 1,
+                'status_id' => 5,
                 'nombre' => $input['nombre'],
                 'cedula' => $input['cedula'],
                 'sexo' => $input['sexo'],
                 'email' => $input['email'],
                 'direccion' => $input['direccion'],
-                'fecha' => \Carbon\Carbon::now('America/Caracas'),
-                'telefono' => $input['telefono'],
+                'fecha' => $input['fechaentrega'],
+                'telefono' => null,
                 'telefono2' => $input['telefono2'],
                 'organismo' => NULL,
                 'asignacion' => $input['asignacion'],
                 'edocivil' => $input['edocivil'],
-                'fechaNacimiento' => $input['fechanacimiento'],
+                'fechaNacimiento' => null,
                 'nivelestudio' => $input['niveleducativo'],
                 'profesion' => $input['profesion'],
                 'recaudos' => $input['recaudos'],
@@ -699,8 +768,9 @@ class SolicitudController extends Controller
         $jefecomunidad = (new JefeComunidad)->getJefe2($solicitud_edit->jefecomunidad_id);
         $subtiposolicitud = (new Subtiposolicitud)->getSubtiposolicitud();
         $correlativoSALUD = (new Solicitud)->BuscarNumeroSolicitud($id);
+        $beneficiario = json_decode($solicitud_edit->beneficiario, true);
 
-        return view('Solicitud.solicitud_edit', compact('count_notification', 'titulo_modulo', 'solicitud_edit','correlativoSALUD','trabajador','estado', 'municipio', 'parroquia', 'asignacion', 'comuna', 'comunidad','jefecomunidad','jefecomunidad2', 'tipo_solicitud','subtiposolicitud', 'direcciones', 'enter', 'sexo', 'edocivil', 'nivelestudio', 'coordinacion', 'denuncia', 'beneficiario', 'quejas', 'sugerecia', 'asesoria', 'reclamo', 'profesion', 'recaudos', 'denunciado', 'array_color'));
+        return view('Solicitud.solicitud_edit', compact('count_notification','beneficiario', 'titulo_modulo', 'solicitud_edit','correlativoSALUD','trabajador','estado', 'municipio', 'parroquia', 'asignacion', 'comuna', 'comunidad','jefecomunidad','jefecomunidad2', 'tipo_solicitud','subtiposolicitud', 'direcciones', 'enter', 'sexo', 'edocivil', 'nivelestudio', 'coordinacion', 'denuncia', 'beneficiario', 'quejas', 'sugerecia', 'asesoria', 'reclamo', 'profesion', 'recaudos', 'denunciado', 'array_color'));
     }
     public function getComunas(Request $request)
     {
@@ -711,6 +781,28 @@ class SolicitudController extends Controller
 
     }
 
+    public function getComunasWAN(){
+
+        $comuna = Comuna::all();
+
+        return $comuna;
+    }
+
+    public function getComunidadesWAN(Request $request){
+
+        $comunidad = Comunidad::all();
+
+        return $comunidad;
+    }
+     public function getSolicitudesWAN (Request $request){
+        $fechaDesde = $request['fechaDesde'];
+        $fechaHasta = $request['fechaHasta'];
+        $comuna_id = $request['comuna_id'];
+
+        $comunidad = (new Solicitud)->getSolicitudesWAN($fechaDesde, $fechaHasta, $comuna_id);
+        return $comunidad;
+
+     }
     public function getComunidad(Request $request)
     {
 
@@ -740,6 +832,7 @@ class SolicitudController extends Controller
 
         // $count_notification = (new User)->count_noficaciones_user();
         $input = $request->all();
+
         $recaudos = NULL;
         $input['quejas'] = NULL;
         $input['reclamos'] = NULL;
@@ -943,6 +1036,9 @@ class SolicitudController extends Controller
         unset($input['checkcedulabeneficiario']);
         unset($input['presentada']);
         unset($input['competencia']);
+        $fecha = $input['fechaentrega'];
+        $input['fecha'] = $fecha;
+        unset($input['fechaentrega']);
         $solicitud_Update = Solicitud::find($id);
         $solicitud_Update->update($input);
 
@@ -1159,23 +1255,36 @@ class SolicitudController extends Controller
     }
 
     public function getFinalizadas(Request $request){
-    $solfinalizadas = (new Solicitud)->reportetotalcasosatendidosSALUD();
-    return $solfinalizadas;
+        $fechadesde = null;
+        $fechahasta = null;
+        $tipo_subsolicitud = null;
+        $comuna = null;
+        $comunidad = null;
+        $solfinalizadas = (new Solicitud)->reportetotalcasosatendidosSALUD($fechadesde, $fechahasta, $tipo_subsolicitud, $comuna, $comunidad, $mes = null);
+        return $solfinalizadas;
     }
     public function getFinalizadascomunas(Request $request){
         $solfinalizadas = (new Solicitud)->reportetotalcomunas();
         return $solfinalizadas;
         }
-        public function getFinalizadascomunas2(Request $request){
-            $solfinalizadas = (new Solicitud)->reportetotalcomunassalidas();
-            return $solfinalizadas;
-            }
-        
+    public function getFinalizadascomunas2(Request $request){
+        $solfinalizadas = (new Solicitud)->reportetotalcomunassalidas();
+        return $solfinalizadas;
+        }
 
-        public function ultimasEntradas(Request $request){
-            $solfinalizadas = (new Solicitud)->ultimasEntradas();
-            return $solfinalizadas;
-            }
+    public function getFinalizadascomunas2Fecha(Request $request){
+        $input = $request->all();
+        $fechaDesde = $input['fecha_desde'];
+        $fechaHasta = $input['fecha_hasta'];
+        $solfinalizadas = (new Solicitud)->reportetotalcomunassalidasFecha($fechaDesde, $fechaHasta);
+        return $solfinalizadas;
+    }
+
+
+    public function ultimasEntradas(Request $request){
+        $solfinalizadas = (new Solicitud)->ultimasEntradas();
+        return $solfinalizadas;
+        }
     public function getFinalizadasConFecha(Request $request){
         $input = $request->all();
         $fechaDesde = $input['fecha_desde'];
@@ -1184,9 +1293,138 @@ class SolicitudController extends Controller
         return $solfinalizadas;
         }
 
-        public function medicinacomunas(){
-           return (new Solicitud)->medicinacomunas();
+    public function medicinacomunas(){
+        return (new Solicitud)->medicinacomunas();
+    }
+    public function medicinacomunasFecha(Request $request){
+        $input = $request->all();
+        $fechaDesde = $input['fecha_desde'];
+        $fechaHasta = $input['fecha_hasta'];
+        return (new Solicitud)->medicinacomunasFecha($fechaDesde, $fechaHasta);
+    }
+
+    public function getSubTipoSolicitud(Request $request){
+        $subtipo = (new subtiposolicitud)->getSubtiposolicitud();
+        return $subtipo;
+    }
+    public function imprimirWAN(Request $request){
+        setlocale(LC_TIME, 'es_ES.UTF-8');
+
+        $input = $request->all();
+        $fechaDesde = isset($input['fechaDesde']) ? $input['fechaDesde'] : NULL;
+        $fechaHasta = isset($input['fechaHasta']) ? $input['fechaHasta'] : NULL;
+        $comuna = isset($input['comuna_id']) ? $input['comuna_id'] : NULL;
+
+        // Formatear fechas
+        $diadesde = date('d', strtotime($fechaDesde));
+        $mesdesde = date('m', strtotime($fechaDesde));
+        $anodesde = date('Y', strtotime($fechaDesde));
+        $diahasta = date('d', strtotime($fechaHasta));
+        $meshasta = date('m', strtotime($fechaHasta));
+        $anohasta = date('Y', strtotime($fechaHasta));
+
+        // Obtener solicitudes
+
+        $solicitudes = (new Solicitud)->getSolicitudesWAN($fechaDesde, $fechaHasta,  $comuna);
+
+        // Inicializar variables para las etiquetas
+        $etiquetaComuna = '';
+        $etiquetaFechas = '';
+
+        // Obtener información de comuna (si existe)
+        if ($comuna) {
+            $comuna = Comuna::find($comuna);
+            if($comuna != null){
+                $etiquetaComuna = "<h5 style='text-align:left;'>COMUNA: $comuna->codigo</h5>";
+            }else{
+                $comuna = NULL;
+            }
         }
+
+        // Generar etiqueta de fechas
+        if (!empty($fechaDesde) && !empty($fechaHasta)) {
+            $etiquetaFechas = "<h5 style='text-align:left;'>Reporte de solicitudes desde el $diadesde-$mesdesde-$anodesde hasta el $diahasta-$meshasta-$anohasta</h5>";
+        }
+
+        // Construir el nombre del archivo
+        $nombreArchivo = "Reporte de solicitudes";
+
+        if (!empty($fechaDesde) && !empty($fechaHasta)) {
+            $nombreArchivo .= " desde el $diadesde-$mesdesde-$anodesde al $diahasta-$meshasta-$anohasta";
+        }
+
+        if (!empty($comuna)) {
+            $nombreArchivo .= " Comuna $comuna->codigo";
+        }
+
+        $nombreArchivo .= ".pdf";
+
+        // Generar el HTML del reporte
+        $html = <<<HTML
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <style>
+                    body {
+                        font-family: sans-serif;
+                    }
+
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                    }
+
+                    th, td {
+                        text-align:center;
+                        border: 1px solid #ddd;
+                    }
+
+                    th {
+                        font-size: 12px;
+                        background-color: #f0f0f0;
+                    }
+                    td{
+                        font-size: 12px;
+                    }
+            </style>
+        </head>
+        <body>
+        <img src="https://prensa.alcaldiapaez.gob.ve/wp-content/uploads/sites/2/2024/06/CINTILLO-POLITICAS-SOCIALES-Y-COMUNITARIAS-Y-PODER-POPULAR.jpg" alt="" srcset="" width="100%">
+        <h3 style="text-align:left;">Dirección de Politicas Sociales y Poder Popular</h3>
+        HTML;
+
+        // Agregar las etiquetas
+        $html .= $etiquetaFechas;
+        $html .= $etiquetaComuna;
+        $html .= "<br>";
+
+        // Generar la tabla HTML con los datos de las solicitudes
+        $html .= '<table>';
+        $html .= '<tr><th>Correlativo</th><th>Nombre</th><th>Cedula</th><th>Direccion</th></tr>';
+        foreach ($solicitudes as $participante) {
+            $html .= <<<HTML
+                    <tr>
+                        <td>$participante->solicitud_salud_id</td>
+                        <td>$participante->nombre</td>
+                        <td>$participante->cedula</td>
+                        <td>$participante->direccion</td>
+                    </tr>
+            HTML;
+        }
+        $html .= '</table>';
+
+        $html .= "</body></html>";
+
+        $options = new Options;
+        $options->set('isRemoteEnabled', true);
+        $dompdf = new Dompdf($options);
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('legal', 'portrait');
+        $dompdf->render();
+
+        return $dompdf->stream($nombreArchivo, array("Attachment"=>1));
+    }
     public function imprimir(Request $request)
     {
         $activardenuncia = "";
@@ -3370,8 +3608,7 @@ class SolicitudController extends Controller
                         <td>$participante->cedula</td>
                         <td>$participante->direccion</td>
                         <td>$participante->nombretipo</td>
-                        <td>$participante->beneficiarionombre</td>
-                        <td>$participante->cedula2</td>
+                        <td>$participante->solicita</td>
                     </tr>
             HTML;
             $participantesTotal .= $participantes;
@@ -3475,8 +3712,7 @@ class SolicitudController extends Controller
             $html .= "<th>Cedula Solicitante</th>";
             $html .= "<th>Direccion</th>";
             $html .= "<th>Tipo Solicitud</th>";
-            $html .= "<th>Nombre Beneficiario</th>";
-            $html .= "<th>Cedula Beneficiario</th>";
+            $html .= "<th>Beneficio</th>";
             $html .= "</tr>";
 
             foreach ($solicitudes as $participante) {
@@ -3488,8 +3724,7 @@ class SolicitudController extends Controller
                 $html .= "<td>$participante->cedula</td>";
                 $html .= "<td>$participante->direccion</td>";
                 $html .= "<td>$participante->nombretipo</td>";
-                $html .= "<td>$participante->beneficiarionombre</td>";
-                $html .= "<td>$participante->cedula2</td>";
+                $html .= "<td>$participante->solicita</td>";
                 $html .= "</tr>";
             }
 

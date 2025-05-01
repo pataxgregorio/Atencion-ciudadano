@@ -10,18 +10,22 @@ class Inventario extends Model
 {
     use HasFactory;
     protected $table = 'inventario';
-    protected $fillable = [     
+    protected $fillable = [
         'producto_id',
         'almacen_id',
-        'cantidad',  
+        'cantidad',
         'cantidad_entrada',
         'fecha',
         'tipoentrada',
         'numerofactura',
         'numerodonacion',
+        'responsable',
+        'autorizado',
+        'motivo',
         'created_at',
         'updated_at',
         'fechavencimiento',
+
     ];
 public function getInventario2(){
 return DB::table('inventario')
@@ -39,7 +43,18 @@ return DB::table('inventario')
     ->get();
 
   }
-  public function getExistencia($producto)
+  public function getInventario3($producto,$tipoentrada){
+    return DB::table('inventario')
+    ->where('inventario.almacen_id', Auth::user()->almacen_id)
+    ->where('inventario.producto_id', $producto)
+    ->where('inventario.tipoentrada', $tipoentrada)
+    ->where ('inventario.cantidad', '>', 0)
+    ->orderBy('inventario.almacen_id', 'asc')
+    ->get();
+
+  }
+
+  public function getExistencia($producto,$tipoentrada)
 {
     $usuario_id = Auth::user()->id;
     $almacen_id = DB::table('users')->where('id', $usuario_id)->value('almacen_id');
@@ -47,6 +62,7 @@ return DB::table('inventario')
     $existencia = DB::table('inventario')
         ->where('producto_id', $producto)
         ->where('almacen_id', $almacen_id)
+        ->where('tipoentrada', $tipoentrada)
         ->sum('cantidad');
 
     return $existencia;

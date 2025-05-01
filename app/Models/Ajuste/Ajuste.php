@@ -9,12 +9,15 @@ class Ajuste extends Model
 {
     use HasFactory;
     protected $table = 'Ajuste';
-    protected $fillable = [     
+    protected $fillable = [
         'inventario_id',
         'user_id',
-        'fecha',  
+        'fecha',
         'viejaexistecia',
         'nuevaexistencia',
+        'responsable',
+        'autorizado',
+        'motivo',
         'created_at',
         'updated_at',
     ];

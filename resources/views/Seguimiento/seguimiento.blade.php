@@ -9,12 +9,12 @@
 @endsection
 
 @section('contentheader_title')
-<!-- Componente Button Para todas las Ventanas de los Módulos, no Borrar.--> 
+<!-- Componente Button Para todas las Ventanas de los Módulos, no Borrar.-->
 <h2 style="margin-bottom: -50px"><img src="{{ url('/images/icons/logoSIA.png') }}" alt="logo" height="100px" >Lista Solicitudes</h2>
 
 
-  
-    
+
+
 @endsection
 
 @section('link_css_datatable')
@@ -24,14 +24,14 @@
     <link href="{{ url ('/css_datatable/buttons.dataTables.min.css') }}" rel="stylesheet">
 @endsection
 
-    
+
 @section('main-content')
 @component('components.alert_msg',['tipo_alert'=>$tipo_alert])
  Componentes para los mensajes de Alert, No Eliminar
 @endcomponent
 <div class="container-fluid">
     <div class="card">
-        <div class="card-body">            
+        <div class="card-body">
                 <table class="table table-bordered solicitud_all">
                         <thead>
                         <tr>
@@ -44,10 +44,8 @@
                                 @endif
                                 @if(Auth::user()->rols_id === 10)
                                     <th>Tipo de Solicitud</th>
-                                    <th>Nombre del Beneficiario</th>
-                                    <th>Cedula Beneficiario</th>
                                 @endif
-                                <th>Solicita</th>
+                                <th>Beneficio</th>
                                 <th>Status</th>
                                 <th>{{ trans('message.botones.edit') }}</th>
                             </tr>
@@ -70,18 +68,18 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 <script type="text/javascript">
   $(function () {
-    
+
     var table = $('.solicitud_all').DataTable({
         processing: true,
         serverSide: true,
         responsive: true,
-        autoWidth : false,        
-        ajax: "{{ route('seguimiento.list') }}",    
-        
-        columns: [          
+        autoWidth : false,
+        ajax: "{{ route('seguimiento.list') }}",
+
+        columns: [
             {
                 data: 'saludID', name: 'saludID',
-                "render": function ( data, type, row ) { 
+                "render": function ( data, type, row ) {
 
                     return '<div style="text-align:center;"><b>'+data+'</b></div>';
                 }
@@ -95,19 +93,17 @@
                         return fechaFormateada;
                     }
                 },
-            {data: 'cedula', name: 'cedula'}, 
-            {data: 'nombretipo', name: 'nombretipo'}, 
-            {data: 'beneficiarionombre', name: 'nombrebeneficiario'}, 
-            {data: 'cedula2', name: 'cedula2'}, 
-            {data: 'solicita', name: 'solicita'}, 
-            {data: 'nombrestatus', name: 'nombrestatus'},  
+            {data: 'cedula', name: 'cedula'},
+            {data: 'nombretipo', name: 'nombretipo'},
+            {data: 'solicita', name: 'solicita'},
+            {data: 'nombrestatus', name: 'nombrestatus'},
             {
                 data: 'edit', name: 'edit', orderable: false, searchable: false,
-                "render": function ( data, type, row ) {                    
+                "render": function ( data, type, row ) {
                     return '<div style="text-align:center;">'+data+'</div>';
                 }
             },
-            
+
         ],
         "language": {
             "lengthMenu": "Mostrar _MENU_ registros por página",
@@ -119,9 +115,9 @@
             "paginate": {
                 "next": "Siguiente",
                 "previous": "Anterior",
-            }            
-        }       
-    });    
+            }
+        }
+    });
   });
 </script>
 <script src="{{ url ('/js_delete/delete_confirm.min.js') }}"></script>
@@ -132,5 +128,25 @@
     td {
         text-align: center;
     }
+    .content-wrapper {
+        background-image: url("{{ url('/images/icons/fondo5.jpeg') }}");
+        background-size: cover; /* Ajusta la imagen al tamaño de la sección */
+        animation: cambiarFondo 15s linear infinite; /* Animación para cambiar el fondo */
+    }
+
+    @keyframes cambiarFondo {
+        0% {
+            background-image: url("{{ url('/images/icons/fondo1.jpeg') }}");
+        }
+        33.33% {
+            background-image: url("{{ url('/images/icons/fondo2.jpeg') }}"); /* Reemplaza con la ruta de tu segunda imagen */
+        }
+        66.66% {
+            background-image: url("{{ url('/images/icons/fondo3.jpeg') }}"); /* Reemplaza con la ruta de tu tercera imagen */
+        }
+        100% {
+            background-image: url("{{ url('/images/icons/fondo4-2.jpeg') }}");
+        }
+    }
 </style>
-@endsection  
+@endsection

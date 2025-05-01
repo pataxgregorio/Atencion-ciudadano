@@ -27,44 +27,16 @@
 @component('components.alert_msg',['tipo_alert'=>$tipo_alert])
  Componentes para los mensajes de Alert, No Eliminar
 @endcomponent
-<h2 style="margin: -25px 0px -25px 0px; text-align: center"><img src="{{ url('/images/icons/logoSIA.png') }}" alt="logo" height="100px" >Reporte Solicitudes</h2>
+<h2 style="margin: -25px 0px -25px 0px; text-align: center"><img src="{{ url('/images/icons/logoSIA.png') }}" alt="logo" height="100px" >Ayudas Entregadas por Comunas</h2>
 
 <div class="container-fluid">
-    <div class="card">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-3">
-                    <label for="fecha_desde">Fecha Desde:</label>
-                    <input type="date" class="form-control" id="fecha_desde">
-                </div>
-                <div class="col-md-3">
-                    <label for="fecha_hasta">Fecha Hasta:</label>
-                    <input type="date" class="form-control" id="fecha_hasta">
-                </div>
-                <div class="col-md-2">
-                    <button class="btn btn-primary" id="btn_filtrar" style="margin-top: 25px;">Filtrar</button>
-                </div>
-            </div>
-            <br>
-            <table class="table table-bordered solicitud_all">
-                <thead>
-                    <tr>
-                        <th>Nro Solicitud</th>
-                        <th>Funcionario Receptor</th>
-                        <th>Fecha</th>
-                        <th>Nombre de Solicitante</th>
-                        <th>Cedula de Solicitante</th>
-                        <th>Tipo de Solicitud</th>
-                        <th>Beneficio</th>
-                        <th>Estatus</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+<div class="container table-borderless" >
+    <div class="col-md-6 col-sm-6 table-borderless" >
+        <div class="row table-borderless">
+        <iframe class="" style="width: 100%; height: 795px; width: 1200px; overflow: hidden;" src="http://156.235.91.67:9000/#/buscarcomunasnoauth" allowfullscreen seamless frameborder="0"></iframe>
         </div>
     </div>
-    <a href="#" id="btn_listado"> <button class="btn btn-primary" style="padding:5px;">Imprimir Listado</button></a>
+</div>
 </div>
 
 
@@ -83,28 +55,50 @@
             // Obtén los valores de los campos de fecha
             var fechaDesde = $('#fecha_desde').val();
             var fechaHasta = $('#fecha_hasta').val();
+            var tipo_subsolicitud = $('#tipo_subsolicitud').val();
+            var comuna = $('#comuna').val();
+            var comunidad = $('#comunidad').val();
 
             // Construye la URL con los parámetros
-            var url = "{{ route('imprimir3') }}" + "?fecha_desde=" + fechaDesde + "&fecha_hasta=" + fechaHasta;
+            var url = "{{ route('imprimir2') }}" + "?fecha_desde=" + fechaDesde + "&fecha_hasta=" + fechaHasta + "&tipo_subsolicitud=" + tipo_subsolicitud + "&comuna=" + comuna + "&comunidad=" + comunidad;
 
             // Redirige a la URL construida
             window.location.href = url;
         });
 
         $('#btn_totales').click(function() {
-        $.ajax({
-            url: "{{ route('solicitud.solicitudTotalFinalizadas2') }}",
-            method: 'GET',
-            dataType: 'json', // Indicamos que esperamos una respuesta JSON
-            success: function(response) {
-                console.log(response);
-                // Aquí puedes mostrar los resultados en tu interfaz de usuario
-                // Por ejemplo:
-                // alert("Total de solicitudes: " + response.TOTAL_SOLICITUD);
-            },
-            error: function() {
-                console.error("Error al obtener los totales.");
-            }
+            var fechaDesde = $('#fecha_desde').val();
+            var fechaHasta = $('#fecha_hasta').val();
+            var tipo_subsolicitud = $('#tipo_subsolicitud').val();
+            var comuna = $('#comuna').val();
+            var comunidad = $('#comunidad').val();
+
+            var url = "{{ route('solicitud.solicitudTotalFinalizadas') }}" + "?fecha_desde=" + fechaDesde + "&fecha_hasta=" + fechaHasta + "&tipo_subsolicitud=" + tipo_subsolicitud + "&comuna=" + comuna + "&comunidad=" + comunidad;
+
+            window.location.href = url;
+        });
+
+        $('#comuna').change(function () {
+            var comunaId = $(this).val();
+            var comuna = $('#comuna').val();
+            $("#comunidad").prop('disabled', false);
+
+            $.ajax({
+                url: "{{ route('getComunidad2') }}", // Ruta a tu controlador
+                type: "GET",
+                data: { comuna: comuna },
+                success: function (data) {
+                    $("#comunidad").empty(); // Limpia opciones anteriores
+                    $("#comunidad").append('<option value="">Seleccione Comunidad</option>'); // Opción inicial
+
+                    $.each(data, function (key, value) {
+                        $("#comunidad").append('<option value="' + value.id + '">' + value.nombre + '</option>');
+                    });
+                },
+                error: function () {
+                    // Manejo de errores (opcional)
+                    alert("Error al cargar la comunidad.");
+                }
             });
         });
 
@@ -114,10 +108,13 @@
             responsive: true,
             autoWidth : false,
             ajax: {
-                url: "{{ route('seguimiento.finalizadas2') }}",
+                url: "{{ route('seguimiento.finalizadas') }}",
                 data: function (d) {
                     d.fecha_desde = $('#fecha_desde').val();
                     d.fecha_hasta = $('#fecha_hasta').val();
+                    d.tipo_subsolicitud = $('#tipo_subsolicitud').val();
+                    d.comuna = $('#comuna').val();
+                    d.comunidad = $('#comunidad').val();
                 }
             },
             columns: [
@@ -137,10 +134,11 @@
                     }
                 },
                 {data: 'solicitante', name: 'solicitante'},
+                {data: 'edad', name: 'edad'},
                 {data: 'cedula', name: 'cedula'},
+                {data: 'direccion', name: 'direccion'},
                 {data: 'nombretipo', name: 'nombretipo'},
                 {data: 'solicita', name: 'solicita'},
-                {data: 'nombrestatus', name: 'nombrestatus'},
             ],
             "language": {
                 "lengthMenu": "Mostrar _MENU_ registros por página",
@@ -161,7 +159,6 @@
         });
     });
 </script>
-
 <script src="{{ url ('/js_delete/delete_confirm.min.js') }}"></script>
 <style>
     th{
@@ -169,6 +166,10 @@
     }
     td {
         text-align: center;
+    }
+    section.content{
+        background-image: url("{{ url('/images/siabuscar.png') }}");
+        background-size: 100%;
     }
 </style>
 @endsection

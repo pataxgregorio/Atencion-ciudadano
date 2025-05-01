@@ -22,7 +22,7 @@
 
 @section('main-content')
 
-<div class="container-fluid w-50" style="max-width:640px">
+<div class="container-fluid w-50" style="max-width:640px" >
     <div class="card">
         <div class="card-body">
             <div class="col-lg-12 col-xs-12">
@@ -56,9 +56,10 @@
                         <input type="text" name="tipo_solicitud_id" id="tipo_solicitud_id" value=6 hidden>
                         @endif
                     </div>
-                    <h3>DATOS DEL BENEFICIARIO </h3>
+                    <h3>DATOS DEL SOLICITANTE</h3>
+
                     <br>
-                    <div style="text-align:left;">
+                    <!-- <div style="text-align:left;">
                         <label>TRABAJADOR DE LA ALCALDIA <span
                         class="required" style="color:red;" id="teljefeUBCH_span">*</span></label>
                         <select required name="trabajador" id="trabajador" class="selectpicker form-control" data-live-search="true"
@@ -70,28 +71,37 @@
                             <option value="PENSIONADO">PENSIONADO</option>
                             <option value="PENSIONADO SOBREVIVIETE ALPAEZ">PENSIONADO SOBREVIVIETE ALPAEZ</option>
                         </select>
-                    </div>
+                    </div> -->
                     <div style="text-align:left;">
                         {!! Form::label('solicitud_salud_id_label', 'ID DE LA SOLICITUD', ['class' => 'control-label']) !!}<span
                             class="required" style="color:red;">*</span>
                         {!! Form::text('solicitud_salud_id_show', old('solicitud_salud_id'), ['placeholder' => $correlativoSALUD, 'class' => 'form-control', 'id' => 'solicitud_salud_id', 'DISABLED' => TRUE]) !!}
                         <input type="text" name="solicitud_salud_id" id="solicitud_salud_id" value="{{ $correlativoSALUD }}" hidden>
                     </div>
-                    <div style="text-align:left;">
-                            {!! Form::label('nombrebeneficiario', trans('message.solicitud_action.nombrebeneficiario'), ['class' => 'control-label']) !!}<span
-                                class="required" style="color:red;">*</span>
-                            {!! Form::text('nombrebeneficiario', old('nombrebeneficiario'), ['placeholder' => trans('message.solicitud_action.nombrebeneficiario'), 'class' => 'form-control', 'id' => 'nombrebeneficiario_user', 'required' => true]) !!}
+                        <div style="text-align:left;">
+                        {!! Form::label('nombre', 'NOMBRES', ['class' => 'control-label']) !!}<span
+                            class="required" style="color:red;">*</span>
+                        {!! Form::text('nombre', old('nombre'), ['placeholder' => trans('message.users_action.nombre'), 'class' => 'form-control', 'id' => 'nombre_user', 'required' => true]) !!}
                         </div>
                         <div style="text-align:left;">
-                            {!! Form::label('cedulabeneficiario', trans('message.solicitud_action.cedulabeneficiario'), ['class' => 'control-label']) !!}<span
+                            {!! Form::label('cedula', 'CEDULA', ['class' => 'control-label']) !!}<span
                                 class="required" style="color:red;">*</span>
-                            {!! Form::text('cedulabeneficiario', old('cedulabeneficiario'), ['placeholder' => trans('message.solicitud_action.cedulabeneficiario'), 'class' => 'form-control', 'id' => 'cedulabeneficiario_user', 'required' => true]) !!}
+                            {!! Form::text('cedula', old('cedula'), ['placeholder' => trans('message.solicitud_action.cedula'), 'class' => 'form-control', 'id' => 'cedula_user', 'required' => true]) !!}
                         </div>
                         <div style="text-align:left;">
-                            {!! Form::label('edadbeneficiario', 'EDAD BENEFICIARIO', ['class' => 'control-label']) !!}<span
+                            {!! Form::label('telefono', 'TELEFONO', ['class' => 'control-label']) !!}<span
                                 class="required" style="color:red;">*</span>
-                            {!! Form::text('edadbeneficiario', old('edadbeneficiario'), ['placeholder' => 'EDAD BENEFICIARIO', 'class' => 'form-control', 'id' => 'edadbeneficiario_user', 'required' => true]) !!}
+                            {!! Form::text('telefono', old('telefono'), ['placeholder' => trans('message.solicitud_action.telefono'), 'class' => 'form-control', 'id' => 'telefono_user', 'required' => true]) !!}
                         </div>
+                        @if($rols_id = 10)
+                        <!-- <div style="text-align:left;">
+                            <label>EDAD</label><span
+                            class="required" style="color:red;">*</span>
+                            <input type="date" id="fechanacimiento" name="fechanacimiento" class="form-control" required>
+                        </div> -->
+                        @endif
+
+
                     @if($rols_id != 10)
                     <div style="text-align:left;">
                         {!! Form::label('telefono2', 'TELEFONO DE CASA', ['class' => 'control-label']) !!}
@@ -123,84 +133,7 @@
                         </select>
                     </div>
                     @endif
-                    @if($rols_id != 10)
-                    <div style="text-align:left;">
-                        <label>FECHA NACIMIENTO</label>
-                        <input type="date" id="fechanacimiento" name="fechanacimiento" class="form-control">
-                    </div>
-                    <div style="text-align:left;">
-                        <label>NIVEL EDUCATIVO*</label>
-                        <select required name="niveleducativo" id="niveleducativo" class="selectpicker form-control"
-                            data-live-search="true" data-live-search-style="begins">
-                            <option value="SELECCIONE UNA OPCION">SELECCIONE UNA OPCION</option>
-                            <option value="PRIMARIA">PRIMARIA</option>
-                            <option value="SECUNDARIA">SECUNDARIA</option>
-                            <option value="BACHILLERATO">BACHILLERATO</option>
-                            <option value="UNIVERSITARIO">UNIVERSITARIO</option>
-                            <option value="ESPECIALIZACION">ESPECIALIZACION</option>
-                        </select>
-                    </div>
 
-                    <div style="text-align:left;">
-                        <label>OCUPACION O/U OFICIO*</label>
-                        <select required name="profesion" id="profesion" class="selectpicker form-control"
-                            data-live-search="true" data-live-search-style="begins">
-                            <option value="SELECCIONE UNA OPCION">SELECCIONE UNA OPCION</option>
-                            <option value="OBRERO">OBRERO</option>
-                            <option value="JUBILADO">JUBILADO</option>
-                            <option value="PENSIONADO">PENSIONADO</option>
-                            <option value="OFICIOS DEL HOGAR">OFICIOS DEL HOGAR</option>
-                            <option value="OTRO">OTRO</option>
-                            <option value="TECNICO MEDIO">TECNICO MEDIO</option>
-                            <option value="TECNICO SUPERIOR">TECNICO SUPERIOR</option>
-                            <option value="INGENIERO CIVIL">INGENIERO</option>
-                            <option value="ABOGADO">ABOGADO</option>
-                            <option value="MEDICO CIRUJANO">MEDICO CIRUJANO</option>
-                            <option value="HISTORIADOR">HISTORIADOR</option>
-                            <option value="PALEONTOLOGO">PALEONTOLOGO</option>
-                            <option value="GEOGRAFO">GEOGRAFO</option>
-                            <option value="BIOLOGO">BIOLOGO</option>
-                            <option value="PSICOLOGO">PSICOLOGO</option>
-                            <option value="MATEMATICO">MATEMATICO</option>
-                            <option value="ARQUITECTO">ARQUITECTO</option>
-                            <option value="COMPUTISTA">COMPUTISTA</option>
-                            <option value="PROFESOR">PROFESOR</option>
-                            <option value="PERIODISTA">PERIODISTA</option>
-                            <option value="BOTANICO">BOTANICO</option>
-                            <option value="FISICO">FISICO</option>
-                            <option value="SOCIOLOGO">SOCIOLOGO</option>
-                            <option value="FARMACOLOGO">FARMACOLOGO</option>
-                            <option value="QUIMICO">QUIMICO</option>
-                            <option value="POLITOLOGO">POLITOLOGO</option>
-                            <option value="ENFERMERO">ENFERMERO</option>
-                            <option value="ELECTRICISTA">ELECTRICISTA</option>
-                            <option value="BIBLIOTECOLOGO">BIBLIOTECOLOGO</option>
-                            <option value="PARAMEDICO">PARAMEDICO</option>
-                            <option value="TECNICO DE SONIDO">TECNICO DE SONIDO</option>
-                            <option value="ARCHIVOLOGO">ARCHIVOLOGO</option>
-                            <option value="MUSICO">MUSICO</option>
-                            <option value="FILOSOFO">FILOSOFO</option>
-                            <option value="SECRETARIA">SECRETARIA</option>
-                            <option value="TRADUCTOR">TRADUCTOR</option>
-                            <option value="ANTROPOLOGO">ANTROPOLOGO</option>
-                            <option value="TECNICO TURISMO">TECNICO TURISMO</option>
-                            <option value="ECONOMISTA">ECONOMISTA</option>
-                            <option value="ADMINISTRADOR">ADMINISTRADOR</option>
-                            <option value="CARPITERO">CARPITERO</option>
-                            <option value="RADIOLOGO">RADIOLOGO</option>
-                            <option value="COMERCIANTE">COMERCIANTE</option>
-                            <option value="CERRAJERO">CERRAJERO</option>
-                            <option value="COCINERO">COCINERO</option>
-                            <option value="ALBAÑIL">ALBAÑIL</option>
-                            <option value="PLOMERO">PLOMERO</option>
-                            <option value="TORNERO">TORNERO</option>
-                            <option value="EDITOR">EDITOR</option>
-                            <option value="ESCULTOR">ESCULTOR</option>
-                            <option value="ESCRITOR">ESCRITOR</option>
-                            <option value="BARBERO">BARBERO</option>
-                        </select>
-                    </div>
-                    @endif
 
                     <div style="text-align:left;">
                         {!! Form::label('estado_id', 'ESTADO', ['class' => 'control-label']) !!}<span
@@ -232,6 +165,11 @@
                         {!! Form::label('comunidad_id', 'COMUNIDAD', ['class' => 'control-label', 'id' => 'comunidad_id_label']) !!}<span
                             class="required" style="color:red;" id="comunidad_id_span">*</span>
                         {!! Form::select('comunidad_id', $comunidad, old('comunidad_id'), ['placeholder' => trans('message.solicitud_action.comunidad'), 'class' => 'form-control', 'id' => 'comunidad_id']) !!}
+                    </div>
+                    <div style="text-align:left;">
+                        {!! Form::label('direccion','DIRECCION', ['class' => 'control-label']) !!}<span
+                            class="required" style="color:red;">*</span>
+                        {!! Form::text('direccion', old('direccion'), ['placeholder' => trans('message.solicitud_action.direccion'), 'class' => 'form-control', 'id' => 'direccion_user', 'required' => true]) !!}
                     </div>
                     <!-- <div style="text-align:left;">
                         {!! Form::label('jefecomunidad_id', 'JEFE DE COMUNIDAD', ['class' => 'control-label', 'id' => 'jefecomunidad_Label']) !!}
@@ -299,26 +237,26 @@
                         </select>
                     </div>
                     @endif
-                    <div style="text-align:left;">
-                        {!! Form::label('solicita', 'SOLICITA', ['class' => 'control-label']) !!}<span
-                            class="required" style="color:red;">*</span>
-                        {!! Form::text('solicita', isset($valores[0]["solicita"]) ? $valores[0]["solicita"] : '', ['placeholder' => 'Solicita', 'class' => 'form-control', 'id' => 'solicita_user', 'required' => true]) !!}
-                    </div>
-                    <div style="text-align:left;">
+
+                    <!-- <div style="text-align:left;">
                         {!! Form::label('venApp', 'CODIGO VENAPP', ['class' => 'control-label']) !!}
                         {!! Form::text('venApp', isset($valores[0]["venApp"]) ? $valores[0]["venApp"] : '', ['placeholder' => 'Codigo', 'class' => 'form-control', 'id' => 'venApp_user']) !!}
+                    </div> -->
+                    <div style="text-align:left;">
+                        <label>FECHA ACTA DE ENTREGA</label>
+                        <input type="date" id="fechaentrega" name="fechaentrega" class="form-control">
                     </div>
                     <div style="text-align:left;">
-                        {!! Form::label('direccionbeneficiario', trans('message.solicitud_action.direccionbeneficiario'), ['class' => 'control-label']) !!}<span
+                        {!! Form::label('solicita', 'BENEFICIO', ['class' => 'control-label']) !!}<span
                             class="required" style="color:red;">*</span>
-                        {!! Form::text('direccionbeneficiario', old('direccionbeneficiario'), ['placeholder' => trans('message.solicitud_action.direccionbeneficiario'), 'class' => 'form-control', 'id' => 'direccionbeneficiario_user', 'required' => true]) !!}
+                        {!! Form::textarea('solicita', isset($valores[0]["solicita"]) ? $valores[0]["solicita"] : '', ['placeholder' => 'Solicita', 'class' => 'form-control', 'id' => 'solicita_user', 'required' => true]) !!}
                     </div>
                     <div style="text-align:left;">
                         {!! Form::label('observacionbeneficiario', "OBSERVACION", ['class' => 'control-label']) !!}<span
                             class="required" style="color:red;">*</span>
                         {!! Form::textarea('observacionbeneficiario', old('observacionbeneficiario'), ['placeholder' => "OBSERVACION", 'class' => 'form-control', 'id' => 'observacionbeneficiario_user', 'required' => true]) !!}
                     </div>
-                    <div id="denunciado">
+                    <!-- <div id="denunciado">
                         <h3>DATOS DEL DENUNCIADO </h3>
                         <br>
                         <div style="text-align:left;">
@@ -423,10 +361,30 @@
                             <input type="checkbox" id="checkmotivo2" name="checkmotivo2">
                             <label class="form-check-label" for="defaultCheck1">Exposicion de Motivo</label>
                         </div>
-                    </div>
+                    </div> -->
 
-                    <div id="beneficiario">
-                        <h3>DATOS DEL SOLICITANTE</h3>
+                    <!-- <div id="beneficiario">
+                        <h3>DATOS DEL BENEFICIARIO</h3>
+                        <div style="text-align:left;">
+                        {!! Form::label('direccionbeneficiario', trans('message.solicitud_action.direccionbeneficiario'), ['class' => 'control-label']) !!}<span
+                            class="required" style="color:red;">*</span>
+                        {!! Form::text('direccionbeneficiario', old('direccionbeneficiario'), ['placeholder' => trans('message.solicitud_action.direccionbeneficiario'), 'class' => 'form-control', 'id' => 'direccionbeneficiario_user', 'required' => true]) !!}
+                    </div>
+                        <div style="text-align:left;">
+                            {!! Form::label('nombrebeneficiario', trans('message.solicitud_action.nombrebeneficiario'), ['class' => 'control-label']) !!}<span
+                                class="required" style="color:red;">*</span>
+                            {!! Form::text('nombrebeneficiario', old('nombrebeneficiario'), ['placeholder' => trans('message.solicitud_action.nombrebeneficiario'), 'class' => 'form-control', 'id' => 'nombrebeneficiario_user', 'required' => true]) !!}
+                        </div>
+                        <div style="text-align:left;">
+                            {!! Form::label('cedulabeneficiario', trans('message.solicitud_action.cedulabeneficiario'), ['class' => 'control-label']) !!}<span
+                                class="required" style="color:red;">*</span>
+                            {!! Form::text('cedulabeneficiario', old('cedulabeneficiario'), ['placeholder' => trans('message.solicitud_action.cedulabeneficiario'), 'class' => 'form-control', 'id' => 'cedulabeneficiario_user', 'required' => true]) !!}
+                        </div>
+                        <div style="text-align:left;">
+                            {!! Form::label('edadbeneficiario', 'EDAD BENEFICIARIO', ['class' => 'control-label']) !!}<span
+                                class="required" style="color:red;">*</span>
+                            {!! Form::text('edadbeneficiario', old('edadbeneficiario'), ['placeholder' => 'EDAD BENEFICIARIO', 'class' => 'form-control', 'id' => 'edadbeneficiario_user', 'required' => true]) !!}
+                        </div>
                         <div style="text-align:left;">
                         {!! Form::label('nombre', 'NOMBRES', ['class' => 'control-label']) !!}<span
                             class="required" style="color:red;">*</span>
@@ -454,6 +412,8 @@
                                 class="required" style="color:red;">*</span>
                             {!! Form::text('direccion', old('direccion'), ['placeholder' => trans('message.solicitud_action.direccion'), 'class' => 'form-control', 'id' => 'direccion_user', 'required' => true]) !!}
                         </div>
+                    </div>-->
+
                         <h3>RECAUDOS DE LA SOLICITUD</h3>
                         <br>
                         <div style="text-align:left;">
@@ -500,7 +460,6 @@
                             <input type="checkbox" id="ordenestudio" name="ordenestudio">
                             <label class="form-check-label" for="defaultCheck1">ORDEN DE ESTUDIO</label>
                         </div>
-                    </div>
                     <div style="text-align:left;">
 
                         @if($rols_id != 10)
@@ -852,8 +811,27 @@
     })
 </script>
 <style>
-section.content{
-        background-image: url("{{ url('/images/siacreate.jpg') }}");
-}
+    section.content {
+        background-image: url("{{ url('/images/icons/fondo5.jpeg') }}");
+        background-size: cover; /* Ajusta la imagen al tamaño de la sección */
+        animation: cambiarFondo 15s linear infinite; /* Animación para cambiar el fondo */
+        width: 100%;
+
+    }
+
+    @keyframes cambiarFondo {
+        0% {
+            background-image: url("{{ url('/images/icons/fondo1.jpeg') }}");
+        }
+        33.33% {
+            background-image: url("{{ url('/images/icons/fondo2.jpeg') }}"); /* Reemplaza con la ruta de tu segunda imagen */
+        }
+        66.66% {
+            background-image: url("{{ url('/images/icons/fondo3.jpeg') }}"); /* Reemplaza con la ruta de tu tercera imagen */
+        }
+        100% {
+            background-image: url("{{ url('/images/icons/fondo4-2.jpeg') }}");
+        }
+    }
 </style>
 @endsection
