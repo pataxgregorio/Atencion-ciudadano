@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\DB;
 class Municipio extends Model
 {
     use HasFactory;
-    protected $fillable = [     
+    protected $fillable = [
         'nombre',
-        
+
     ];
     public function datos_municipio(){
         try {
@@ -20,6 +20,11 @@ class Municipio extends Model
             $municipio = [];
             return $municipio;
         }
-        
+
+    }
+
+    public function getMunicipio($estado){
+        $municipio = DB::table('municipio')->where('estado_id','=', $estado)->orderBy('id')->limit(1)->get();
+        return $municipio;
     }
 }

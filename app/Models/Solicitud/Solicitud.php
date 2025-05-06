@@ -51,6 +51,15 @@ class Solicitud extends Model
         'denunciado',
     ];
 
+    public function BuscarPersonaCedula($cedula){
+        try {
+            $persona = DB::table('solicitud')->where('cedula', $cedula)->latest('id')->first();
+            return $persona;
+        }catch(Throwable $e){
+            $persona = [];
+            return $persona;
+        }
+    }
     public function encasodeemergencia()
     {
         $resultados = DB::table('solicitud')

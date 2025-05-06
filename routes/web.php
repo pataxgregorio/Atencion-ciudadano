@@ -338,6 +338,23 @@ Route::get('register/confirm/{confirmation_code}', 'Auth\RegisterController@conf
 
 */
 
+/* NUEVO */
+Route::get('/solicitud/registrarsolicitud', 'Solicitud\SolicitudController@RegistrarSolicitud')->name('solicitud.registrarsolicitud')->middleware('permiso:solicitud,add');
+Route::get('/solicitud/getpersona', 'Solicitud\SolicitudController@getPersona')->name('solicitud.getpersona')->middleware('permiso:solicitud,add');
+
+
+/* Endpoints que traen la info en el formulario */
+
+Route::get('/solicitud/municipio2', 'Solicitud\SolicitudController@getMunicipios')->name('municipio.get')->middleware('permiso:solicitud,edit');
+Route::get('/solicitud/parroquia2', 'Solicitud\SolicitudController@getParroquiaCreate')->name('parroquia.get')->middleware('permiso:solicitud,edit');
+Route::get('/solicitud/getComunidad', 'Solicitud\SolicitudController@getComunidad')->name('getComunidad2')->middleware('permiso:solicitud,view');
+
+
+/* NUEVO */
+
+
+
+
 Route::get('/solicitud', 'Solicitud\SolicitudController@index')->name('solicitud.index')->middleware('permiso:solicitud,view');
 Route::get('/solicitudfinalizadas', 'Solicitud\SolicitudController@indexfinalizadas')->name('solicitud.indexfinalizadas')->middleware('permiso:solicitud,view');
 Route::get('/solicitudfinalizadastotales', 'Solicitud\SolicitudController@indexfinalizadasTotales')->name('solicitud.indexfinalizadastotales')->middleware('permiso:solicitud,view');

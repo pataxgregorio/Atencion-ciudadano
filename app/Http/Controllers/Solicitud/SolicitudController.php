@@ -274,6 +274,55 @@ class SolicitudController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function RegistrarSolicitud()
+    {
+        $titulo_modulo = trans('message.users_action.new_user');
+        $count_notification = (new User)->count_noficaciones_user();
+        $roles = (new Rol)->datos_roles();
+        $estado = (new Estados)->datos_estados();
+        $municipio = (new Municipio)->datos_municipio();
+        $parroquia = (new Parroquia)->datos_parroquia();
+        $array_color = (new Colores)->getColores();
+        $tipo_solicitud = (new Tipo_Solicitud)->datos_tipo_solicitud();
+        $subtiposolicitud = (new Subtiposolicitud)->getSubtiposolicitud();
+        $direcciones = (new Direccion)->datos_direccion();
+        $enter = (new Enter)->datos_enter();
+        $comuna = [];
+        $coordinacion = [];
+        $comunidad = [];
+        $jefecomunidad = [];
+
+        $consulta = (new Solicitud)->ObtenerNumeroSolicitud();
+        $correlativoSALUD = $consulta ? $consulta + 1 : 116;
+
+
+        return view('Solicitud.solicitud_registrarsolicitud', compact('count_notification', 'titulo_modulo', 'roles','correlativoSALUD', 'municipio', 'comuna', 'comunidad','jefecomunidad', 'direcciones', 'parroquia', 'estado', 'coordinacion', 'enter', 'tipo_solicitud','subtiposolicitud', 'array_color'));
+    }
+
+    public function getPersona(Request $request)
+    {
+        $cedula = $request->cedula;
+        try{
+            $persona = (new Solicitud)->BuscarPersonaCedula($cedula);
+
+            return response()->json($persona);
+        }catch(Throwable $e){
+            return response()->json($e);
+        }
+    }
+
+    public function getMunicipios(Request $request){
+        $municipio = (new Municipio)->getMunicipio($request->estado);
+        return $municipio;
+    }
+
+    public function getParroquiaCreate(Request $request){
+        $id = $request->municipio;
+        $parroquias = Parroquia::where('municipio_id','=', $id)->get();
+        return response()->json($parroquias);
+    }
+
     public function create()
     {
         $titulo_modulo = trans('message.users_action.new_user');

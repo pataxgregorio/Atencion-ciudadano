@@ -8,10 +8,11 @@ use Illuminate\Support\Facades\DB;
 class Parroquia extends Model
 {
     use HasFactory;
-    protected $fillable = [     
+    protected $fillable = [
         'nombre',
-        
+
     ];
+    protected $table = 'parroquia';
     public function datos_parroquia(){
         try {
             $parroquia = DB::table('parroquia')->select('id','nombre')->orderBy('id')->pluck('nombre', 'id')->toArray();
@@ -20,6 +21,6 @@ class Parroquia extends Model
             $parroquia = [];
             return  $parroquia;
         }
-        
+
     }
 }
