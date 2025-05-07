@@ -33,7 +33,7 @@
 <div class="container table-borderless" >
     <div class="col-md-6 col-sm-6 table-borderless" >
         <div class="row table-borderless">
-        <iframe class="" style="width: 100%; height: 795px; width: 1200px; overflow: hidden;" src="http://192.168.250.11:9000/#/buscarcomunasnoauth" allowfullscreen seamless frameborder="0"></iframe>
+        <iframe class="" style="width: 100%; height: 795px; width: 1200px; overflow: hidden;" src="http://156.235.91.67:9000/#/buscarcomunasnoauth" allowfullscreen seamless frameborder="0"></iframe>
         </div>
     </div>
 </div>
