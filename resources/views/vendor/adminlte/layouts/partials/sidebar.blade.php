@@ -60,6 +60,8 @@
                 <li><a href="{{ url('/solicitud') }}"><i class='fa fa-link'></i> <span>Ver Solicitudes</span></a></li>
                 </ul>
             </li>
+            <li><a href="{{ url('/solicitud/registrarsolicitud') }}"><i class='fa fa-link'></i> <span>Farmacia</span></a></li>
+
             <li><a href="{{ url('/seguimiento') }}"><i class='fa fa-link'></i> <span>Seguimiento</span></a></li>
             <li class="treeview">
                 <a href="#"><i class='fa fa-link'></i> <span>Reporte</span> <i class="fa fa-angle-left pull-right"></i></a>
@@ -90,6 +92,8 @@
             <li><a href="{{ url('/users') }}"><i class='fa fa-link'></i> <span>{{ trans('message.users') }}</span></a></li>
             <li><a href="{{ url('/solicitud') }}"><i class='fa fa-link'></i> <span>{{ trans('message.request') }}</span></a></li>
             <li><a href="{{ url('/seguimiento') }}"><i class='fa fa-link'></i> <span>Seguimiento</span></a></li>
+            <li><a href="{{ url('/solicitud/registrarsolicitud') }}"><i class='fa fa-link'></i> <span>Farmacia</span></a></li>
+
             <li class="treeview">
                 <a href="#"><i class='fa fa-link'></i> <span>Reporte</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">

@@ -50,7 +50,7 @@
                 </form>
                 {!! Form::open(
                 array(
-                    'route' => array('solicitud.store'),
+                    'route' => array('solicitud.store2'),
                     'method' => 'POST',
                     'id' => 'form_solicitud_id',
                     'enctype' => 'multipart/form-data'
@@ -67,19 +67,7 @@
                     <h3>DATOS DEL SOLICITANTE</h3>
 
                     <br>
-                    <!-- <div style="text-align:left;">
-                        <label>TRABAJADOR DE LA ALCALDIA <span
-                        class="required" style="color:red;" id="teljefeUBCH_span">*</span></label>
-                        <select required name="trabajador" id="trabajador" class="selectpicker form-control" data-live-search="true"
-                            data-live-search-style="begins">
-                            <option value="NO">NO</option>
-                            <option value="EMPLEADO">EMPLEADO</option>
-                            <option value="OBRERO">OBRERO</option>
-                            <option value="JUBILADO">JUBILADO</option>
-                            <option value="PENSIONADO">PENSIONADO</option>
-                            <option value="PENSIONADO SOBREVIVIETE ALPAEZ">PENSIONADO SOBREVIVIETE ALPAEZ</option>
-                        </select>
-                    </div> -->
+
                     <input type="hidden" name="cedula" id="cedula_hidden">
                     <input type="hidden" name="nombre" id="nombre_hidden">
                     <input type="hidden" name="telefono" id="telefono_hidden">
@@ -103,18 +91,14 @@
                             class="required" style="color:red;">*</span>
                         {!! Form::text('nombre', old('nombre'), ['placeholder' => trans('message.users_action.nombre'), 'class' => 'form-control', 'id' => 'nombre_user', 'required' => true]) !!}
                         </div>
+
+                        <!-- @if($rols_id = 10) -->
                         <div style="text-align:left;">
-                            {!! Form::label('telefono', 'TELEFONO', ['class' => 'control-label']) !!}<span
-                                class="required" style="color:red;">*</span>
-                            {!! Form::text('telefono', old('telefono'), ['placeholder' => trans('message.solicitud_action.telefono'), 'class' => 'form-control', 'id' => 'telefono_user', 'required' => true]) !!}
+                            <!-- <label>EDAD</label><span -->
+                            <!-- class="" style="color:red;">*</span> -->
+                            <input type="date" id="fechanacimiento" name="fechanacimiento" class="form-control" style="visibility: hidden;">
                         </div>
-                        @if($rols_id = 10)
-                        <!-- <div style="text-align:left;">
-                            <label>EDAD</label><span
-                            class="required" style="color:red;">*</span>
-                            <input type="date" id="fechanacimiento" name="fechanacimiento" class="form-control" required>
-                        </div> -->
-                        @endif
+                        <!-- @endif -->
 
 
                     @if($rols_id != 10)
@@ -127,14 +111,7 @@
                         {!! Form::email('email', old('email'), ['placeholder' => trans('message.users_action.mail_ejemplo'), 'class' => 'form-control', 'id' => 'email_user']) !!}
                     </div>
                     @endif
-                    <div style="text-align:left;">
-                        <label>SEXO <span style="color:red;">*</span></label>
-                            <select name="sexo" id="sexo" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" required>
-                            <option value="">SELECCIONE UNA OPCION</option>
-                            <option value="MASCULINO">MASCULINO</option>
-                            <option value="FEMENINO">FEMENINO</option>
-                        </select>
-                    </div>
+
                     @if($rols_id != 10)
                     <div style="text-align:left;">
                         <label>ESTADO CIVIL*</label>
@@ -150,16 +127,6 @@
                     @endif
 
 
-                    <div style="text-align:left;">
-                        {!! Form::label('estado_id', 'ESTADO', ['class' => 'control-label']) !!}<span
-                            class="required" style="color:red;">*</span>
-                        {!! Form::select('estado_id', $estado, old('estado_id'), ['placeholder' => trans('message.solicitud_action.estado'), 'class' => 'form-control', 'id' => 'estado_id', 'required' => true]) !!}
-                    </div>
-                    <div style="text-align:left;">
-                        {!! Form::label('municipio_id', 'MUNICIPIO', ['class' => 'control-label']) !!}<span
-                            class="required" style="color:red;">*</span>
-                        {!! Form::select('municipio_id', $municipio, old('municipio_id'), ['placeholder' => trans('message.solicitud_action.municipio'), 'class' => 'form-control', 'id' => 'municipio_id', 'required' => true]) !!}
-                    </div>
 
                     <div style="text-align:left;">
                         {!! Form::label('parroquia_id', 'PARROQUIA', ['class' => 'control-label', 'id' => 'parroquia_id_label']) !!}<span
@@ -186,61 +153,7 @@
                             class="required" style="color:red;">*</span>
                         {!! Form::text('direccion', old('direccion'), ['placeholder' => trans('message.solicitud_action.direccion'), 'class' => 'form-control', 'id' => 'direccion_user', 'required' => true]) !!}
                     </div>
-                    <!-- <div style="text-align:left;">
-                        {!! Form::label('jefecomunidad_id', 'JEFE DE COMUNIDAD', ['class' => 'control-label', 'id' => 'jefecomunidad_Label']) !!}
-                        <select name="jefecomunidad_id" id="jefecomunidad_id" class="form-control">
-                            @foreach($jefecomunidad as $key => $value)
-                                <option value="{{ $value->id }}" @if(old('jefecomunidad_id', $solicitud_edit->jefecomunidad_id) == $value->id) selected @endif>
-                                    {{ $value->Nombre_Jefe_Comunidad }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    @if($rols_id != 10)
-                    <div style="text-align:left;">
-                        {!! Form::label('telefonoJEFE_label', 'TELEFONO DEL JEFE DE COMUNIDAD', ['class' => 'control-label', 'id' => 'telefonoJEFE_label']) !!}<span
-                            class="required" style="color:red;" id="telefonoJEFE_span">*</span>
-                        <p name="telefonoJEFE" id="telefonoJEFE" class="form-control" disabled>
-                            @foreach($jefecomunidad as $key => $value)
-                                <option value="{{ $value->id }}" @if(old('jefecomunidad_id', $solicitud_edit->jefecomunidad_id) == $value->id) selected @endif>
-                                    {{ $value->Telefono_Jefe_Comunidad }}
-                                </option>
-                            @endforeach
-                        </p>
-                    </div>
-                    @endif
-                    <div style="text-align:left;">
-                        {!! Form::label('nombreUBCH_label','NOMBRE DE UBCH', ['class' => 'control-label', 'id' => 'nombreUBCH_label']) !!}
-                        <p name="nombreUBCH" id="nombreUBCH" class="form-control" disabled>
-                            @foreach($jefecomunidad as $key => $value)
-                                <option value="{{ $value->id }}" @if(old('jefecomunidad_id', $solicitud_edit->jefecomunidad_id) == $value->id) selected @endif>
-                                    {{ $value->Nombre_Ubch }}
-                                </option>
-                            @endforeach
-                        </p>
-                    </div>
 
-                    <div style="text-align:left;">
-                        {!! Form::label('nomjefeUBCH_label', 'NOMBRES DEL JEFE DE UBCH', ['class' => 'control-label', 'id' => 'nomjefeUBCH_label']) !!}
-                        <p name="nomjefeUBCH" id="nomjefeUBCH" class="form-control" disabled>
-                            @foreach($jefecomunidad as $key => $value)
-                                <option value="{{ $value->id }}" @if(old('jefecomunidad_id', $solicitud_edit->jefecomunidad_id) == $value->id) selected @endif>
-                                    {{ $value->Nombre_Jefe_Ubch }}
-                                </option>
-                            @endforeach
-                        </p>
-                    </div>
-
-                    <div style="text-align:left;">
-                        {!! Form::label('teljefeUBCH_label', 'TELEFONO DEL JEFE DE UBCH', ['class' => 'control-label', 'id' => 'teljefeUBCH_label']) !!}
-                        <p name="teljefeUBCH" id="teljefeUBCH" class="form-control" disabled>
-                            @foreach($jefecomunidad as $key => $value)
-                                <option value="{{ $value->id }}" @if(old('jefecomunidad_id', $solicitud_edit->jefecomunidad_id) == $value->id) selected @endif>
-                                    {{ $value->Telefono_Jefe_Ubch }}
-                                </option>
-                            @endforeach
-                        </p>
-                    </div> -->
                     @if($rols_id == 10)
                     <div style="text-align:left;">
                     {!! Form::label('tipo_subsolicitud_id', 'TIPO SOLICITUD', ['class' => 'control-label']) !!}<span
@@ -253,14 +166,7 @@
                     </div>
                     @endif
 
-                    <!-- <div style="text-align:left;">
-                        {!! Form::label('venApp', 'CODIGO VENAPP', ['class' => 'control-label']) !!}
-                        {!! Form::text('venApp', isset($valores[0]["venApp"]) ? $valores[0]["venApp"] : '', ['placeholder' => 'Codigo', 'class' => 'form-control', 'id' => 'venApp_user']) !!}
-                    </div> -->
-                    <!-- <div style="text-align:left;">
-                        <label>FECHA ACTA DE ENTREGA</label>
-                        <input type="date" id="fechaentrega" name="fechaentrega" class="form-control">
-                    </div> -->
+
                     <div style="text-align:left;">
                         {!! Form::label('solicita', 'BENEFICIO', ['class' => 'control-label']) !!}<span
                             class="required" style="color:red;">*</span>
@@ -271,163 +177,7 @@
                             class="required" style="color:red;">*</span>
                         {!! Form::textarea('observacionbeneficiario', old('observacionbeneficiario'), ['placeholder' => "OBSERVACION", 'class' => 'form-control', 'id' => 'observacionbeneficiario_user', 'required' => true]) !!}
                     </div>
-                    <!-- <div id="denunciado">
-                        <h3>DATOS DEL DENUNCIADO </h3>
-                        <br>
-                        <div style="text-align:left;">
-                            {!! Form::label('ceduladenunciado', trans('message.solicitud_action.ceduladenunciado'), ['class' => 'control-label']) !!}<span
-                                class="required" style="color:red;">*</span>
-                            {!! Form::text('ceduladenunciado', old('ceduladenunciado'), ['placeholder' => trans('message.solicitud_action.ceduladenunciado'), 'class' => 'form-control', 'id' => 'ceduladenunciado_user']) !!}
-                        </div>
-                        <div style="text-align:left;">
-                            {!! Form::label('nombredenunciado', trans('message.solicitud_action.nombredenunciado'), ['class' => 'control-label']) !!}<span
-                                class="required" style="color:red;">*</span>
-                            {!! Form::text('nombredenunciado', old('nombredenunciado'), ['placeholder' => trans('message.solicitud_action.nombredenunciado'), 'class' => 'form-control', 'id' => 'nombredenunciado_user']) !!}
-                        </div>
-                        <div style="text-align:left;">
-                            {!! Form::label('testigo', trans('message.solicitud_action.testigo'), ['class' => 'control-label']) !!}<span
-                                class="required" style="color:red;">*</span>
-                            {!! Form::text('testigo', old('testigo'), ['placeholder' => trans('message.solicitud_action.testigo'), 'class' => 'form-control', 'id' => 'testigo_user']) !!}
-                        </div>
-                        <h3>Descripcion de Hechos </h3>
-                        <br>
 
-                        <div style="text-align:left;">
-                            {!! Form::label('relato', trans('message.solicitud_action.relato'), ['class' => 'control-label']) !!}<span
-                                class="required" style="color:red;">*</span>
-                            {!! Form::text('relato', old('relato'), ['placeholder' => trans('message.solicitud_action.relato'), 'class' => 'form-control', 'id' => 'relato_user']) !!}
-                        </div>
-                        <div style="text-align:left;">
-                            {!! Form::label('observacion', trans('message.solicitud_action.observacion'), ['class' => 'control-label']) !!}<span
-                                class="required" style="color:red;">*</span>
-                            {!! Form::text('observacion', old('observacion'), ['placeholder' => trans('message.solicitud_action.observacion'), 'class' => 'form-control', 'id' => 'observacion_user']) !!}
-                        </div>
-                        <div style="text-align:left;">
-                            <label>DENUNCIA PRESENTADA*</label>
-                            <select required name="presentada" id="presentada" class="selectpicker form-control"
-                                data-live-search="true" data-live-search-style="begins">
-                                <option value="SELECCIONE UNA OPCION">SELECCIONE UNA OPCION</option>
-                                <option value="SI">SI</option>
-                                <option value="NO">NO</option>
-                            </select>
-                        </div>
-                        <div style="text-align:left;">
-                            {!! Form::label('explique', trans('message.solicitud_action.explique'), ['class' => 'control-label']) !!}<span
-                                class="required" style="color:red;">*</span>
-                            {!! Form::text('explique', old('observacion'), ['placeholder' => trans('message.solicitud_action.explique'), 'class' => 'form-control', 'id' => 'explique_user']) !!}
-                        </div>
-                        <div style="text-align:left;">
-                            <label>COMPETENCIA*</label>
-                            <select required name="competencia" id="competencia" class="selectpicker form-control"
-                                data-live-search="true" data-live-search-style="begins">
-                                <option value="SELECCIONE UNA OPCION">SELECCIONE UNA OPCION</option>
-                                <option value="SI">SI</option>
-                                <option value="NO">NO</option>
-                            </select>
-                        </div>
-                        <div style="text-align:left;">
-                            {!! Form::label('explique2', trans('message.solicitud_action.explique'), ['class' => 'control-label']) !!}<span
-                                class="required" style="color:red;">*</span>
-                            {!! Form::text('explique2', old('observacion'), ['placeholder' => trans('message.solicitud_action.explique'), 'class' => 'form-control', 'id' => 'explique_user']) !!}
-                        </div>
-                        <h3>RECAUDOS DE LA DENUNCIA</h3>
-                        <br>
-                        <div class="col">
-                            <div style="text-align:left;">
-                                <input type="checkbox" id="checkcedula" name="checkcedula">
-                                <label class="form-check-label" for="defaultCheck1">Copia Cedula</label>
-                            </div>
-                            <div style="text-align:left;">
-                                <input type="checkbox" id="checkmotivo" name="checkmotivo">
-                                <label class="form-check-label" for="defaultCheck1">Exposicion de Motivo</label>
-                            </div>
-                            <div style="text-align:left;">
-                                <input type="checkbox" id="checkvideo" name="checkvideo">
-                                <label class="form-check-label" for="defaultCheck1">Video</label>
-                            </div>
-                            <div style="text-align:left;">
-                                <input type="checkbox" id="checkfoto" name="checkfoto">
-                                <label class="form-check-label" for="defaultCheck1">Fotos</label>
-                            </div>
-                            <div style="text-align:left;">
-                                <input type="checkbox" id="checkgrabacion" name="checkgrabacion">
-                                <label class="form-check-label" for="defaultCheck1">Grabacion</label>
-                            </div>
-                            <div style="text-align:left;">
-                                <input type="checkbox" id="checktestigo" name="checktestigo">
-                                <label class="form-check-label" for="defaultCheck1">Cedula Testigo</label>
-                            </div>
-                            <div style="text-align:left;">
-                                <input type="checkbox" id="checkresidencia" name="checkresidencia">
-                                <label class="form-check-label" for="defaultCheck1">Carta Residencia</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="sugerencia">
-                        <h3>Sugerencia o Asesoria</h3>
-                        <div style="text-align:left;">
-                            {!! Form::label('observacion2', trans('message.solicitud_action.observacion'), ['class' => 'control-label']) !!}<span
-                                class="required" style="color:red;">*</span>
-                            {!! Form::text('observacion2', old('observacion'), ['placeholder' => trans('message.solicitud_action.observacion'), 'class' => 'form-control', 'id' => 'observacion_user']) !!}
-                        </div>
-                        <h3>Recuados de la Solicitud</h3>
-                        <br>
-                        <div style="text-align:left;">
-                            <input type="checkbox" id="checkmotivo2" name="checkmotivo2">
-                            <label class="form-check-label" for="defaultCheck1">Exposicion de Motivo</label>
-                        </div>
-                    </div> -->
-
-                    <!-- <div id="beneficiario">
-                        <h3>DATOS DEL BENEFICIARIO</h3>
-                        <div style="text-align:left;">
-                        {!! Form::label('direccionbeneficiario', trans('message.solicitud_action.direccionbeneficiario'), ['class' => 'control-label']) !!}<span
-                            class="required" style="color:red;">*</span>
-                        {!! Form::text('direccionbeneficiario', old('direccionbeneficiario'), ['placeholder' => trans('message.solicitud_action.direccionbeneficiario'), 'class' => 'form-control', 'id' => 'direccionbeneficiario_user', 'required' => true]) !!}
-                    </div>
-                        <div style="text-align:left;">
-                            {!! Form::label('nombrebeneficiario', trans('message.solicitud_action.nombrebeneficiario'), ['class' => 'control-label']) !!}<span
-                                class="required" style="color:red;">*</span>
-                            {!! Form::text('nombrebeneficiario', old('nombrebeneficiario'), ['placeholder' => trans('message.solicitud_action.nombrebeneficiario'), 'class' => 'form-control', 'id' => 'nombrebeneficiario_user', 'required' => true]) !!}
-                        </div>
-                        <div style="text-align:left;">
-                            {!! Form::label('cedulabeneficiario', trans('message.solicitud_action.cedulabeneficiario'), ['class' => 'control-label']) !!}<span
-                                class="required" style="color:red;">*</span>
-                            {!! Form::text('cedulabeneficiario', old('cedulabeneficiario'), ['placeholder' => trans('message.solicitud_action.cedulabeneficiario'), 'class' => 'form-control', 'id' => 'cedulabeneficiario_user', 'required' => true]) !!}
-                        </div>
-                        <div style="text-align:left;">
-                            {!! Form::label('edadbeneficiario', 'EDAD BENEFICIARIO', ['class' => 'control-label']) !!}<span
-                                class="required" style="color:red;">*</span>
-                            {!! Form::text('edadbeneficiario', old('edadbeneficiario'), ['placeholder' => 'EDAD BENEFICIARIO', 'class' => 'form-control', 'id' => 'edadbeneficiario_user', 'required' => true]) !!}
-                        </div>
-                        <div style="text-align:left;">
-                        {!! Form::label('nombre', 'NOMBRES', ['class' => 'control-label']) !!}<span
-                            class="required" style="color:red;">*</span>
-                        {!! Form::text('nombre', old('nombre'), ['placeholder' => trans('message.users_action.nombre'), 'class' => 'form-control', 'id' => 'nombre_user', 'required' => true]) !!}
-                        </div>
-                        <div style="text-align:left;">
-                            {!! Form::label('cedula', 'CEDULA', ['class' => 'control-label']) !!}<span
-                                class="required" style="color:red;">*</span>
-                            {!! Form::text('cedula', old('cedula'), ['placeholder' => trans('message.solicitud_action.cedula'), 'class' => 'form-control', 'id' => 'cedula_user', 'required' => true]) !!}
-                        </div>
-                        <div style="text-align:left;">
-                            {!! Form::label('telefono', 'TELEFONO', ['class' => 'control-label']) !!}<span
-                                class="required" style="color:red;">*</span>
-                            {!! Form::text('telefono', old('telefono'), ['placeholder' => trans('message.solicitud_action.telefono'), 'class' => 'form-control', 'id' => 'telefono_user', 'required' => true]) !!}
-                        </div>
-                        @if($rols_id = 10)
-                        <div style="text-align:left;">
-                            <label>EDAD</label><span
-                            class="required" style="color:red;">*</span>
-                            <input type="text" id="fechanacimiento" name="fechanacimiento" class="form-control" required>
-                        </div>
-                        @endif
-                        <div style="text-align:left;">
-                            {!! Form::label('direccion','DIRECCION', ['class' => 'control-label']) !!}<span
-                                class="required" style="color:red;">*</span>
-                            {!! Form::text('direccion', old('direccion'), ['placeholder' => trans('message.solicitud_action.direccion'), 'class' => 'form-control', 'id' => 'direccion_user', 'required' => true]) !!}
-                        </div>
-                    </div>-->
 
                         <h3>RECAUDOS DE LA SOLICITUD</h3>
                         <br>
@@ -516,7 +266,7 @@
                 </div>
 
                 <br>
-                <!-- {!! Form::submit(trans('message.solicitud_action.new_solicitud'), ['class' => 'form-control btn btn-primary', 'title' => trans('message.solicitud_action.new_solicitud'), 'data-toggle' => 'tooltip', 'style' => 'background-color:' . $array_color['group_button_color'] . ';']) !!} -->
+                {!! Form::submit(trans('message.solicitud_action.new_solicitud'), ['class' => 'form-control btn btn-primary', 'title' => trans('message.solicitud_action.new_solicitud'), 'data-toggle' => 'tooltip', 'style' => 'background-color:' . $array_color['group_button_color'] . ';']) !!}
             </div>
             {!!  Form::close() !!}
         </div>
@@ -530,6 +280,20 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
+        // Deshabilitar el botón "Buscar" al cargar la página
+    $('#buscarCedula').prop('disabled', true);
+
+// Escuchar el evento 'input' en el campo de cédula
+$('#cedula_user').on('input', function() {
+    // Verificar si el campo de cédula tiene algún valor
+    if ($(this).val().trim() !== '') {
+        // Si tiene valor, habilitar el botón "Buscar"
+        $('#buscarCedula').prop('disabled', false);
+    } else {
+        // Si está vacío, deshabilitar el botón "Buscar"
+        $('#buscarCedula').prop('disabled', true);
+    }
+});
         var rolID = rolsJS;
         $("#div_nombre").hide();
         $("#div_telefono").hide();
@@ -576,71 +340,87 @@
 
         });
         $("#buscarCedula").click(function(event) {
-            event.preventDefault();
-            var cedula = $("#cedula_user").val();
+    event.preventDefault();
+    var cedula = $("#cedula_user").val();
 
-            $.ajax({
-                url: "{{ route('solicitud.getpersona') }}",
-                type: "GET",
-                data: { cedula: cedula },
-                dataType: "json"
-            })
-            .done(function(data) {
-                console.log('los datos son: ', data);
-                // Mostrar los campos del formulario
-                $("#div_nombre").show();
-                $("#div_telefono").show();
-                $("#div_sexo").show();
-                $("#div_fechanacimiento").show();
-                $("#div_estado").show();
-                $("#div_municipio").show();
-                $("#div_parroquia").show();
-                $("#div_comuna").show();
-                $("#div_comunidad").show();
-                $("#div_jefecomunidad").show();
-                $("#div_numero_jefe_comunidad").show();
-                $("#div_ubch").show();
-                $("#div_jefe_ubch").show();
-                $("#div_telefono_jefe_ubch").show();
-                $("#div_direccion").show();
+    $.ajax({
+        url: "{{ route('solicitud.getpersona') }}",
+        type: "GET",
+        data: { cedula: cedula },
+        dataType: "json"
+    })
+    .done(function(data) {
+        // Verificar si data está vacío o indica que no se encontraron resultados
+        if (!data || Object.keys(data).length === 0) {
+            alert("La cédula ingresada no existe.");
+            window.location.href = "{{ route('solicitud.create') }}"; // Redireccionar si no se encuentra
+            return; // Importante: detener la ejecución del resto del bloque .done()
+        }
 
-                // Asignar los valores básicos a los inputs invisibles
-                $("#nombre_user").val(data.nombre);
-                $("#telefono_user").val(data.telefono);
-                $("#sexo").val(data.sexo);
-                $("#fechanacimiento").val(data.fechanacimiento);
-                $("#estado_id").val(data.estado_id);
-                $("#direccion_user").val(data.direccion);
+        // Mostrar los campos del formulario
+      //  alert(JSON.stringify(data)); // Para ver la estructura de la data
+        $("#div_nombre").show();
+        $("#div_telefono").show();
+        $("#div_sexo").show();
+        $("#div_fechanacimiento").show();
+        $("#div_estado").show();
+        $("#div_municipio").show();
+        $("#div_parroquia").show();
+        $("#div_comuna").show();
+        $("#div_comunidad").show();
+        $("#div_jefecomunidad").show();
+        $("#div_numero_jefe_comunidad").show();
+        $("#div_ubch").show();
+        $("#div_jefe_ubch").show();
+        $("#div_telefono_jefe_ubch").show();
+        $("#div_direccion").show();
 
-                $("#cedula_hidden").val(data.cedula);
-                $("#nombre_hidden").val(data.nombre);
-                $("#telefono_hidden").val(data.telefono);
-                $("#sexo_hidden").val(data.sexo);
-                $("#fechanacimiento_hidden").val(data.fechanacimiento);
-                $("#estado_id_hidden").val(data.estado_id);
-                $("#municipio_id_hidden").val(data.municipio_id);
-                $("#parroquia_id_hidden").val(data.parroquia_id);
-                $("#comuna_id_hidden").val(data.comuna_id);
-                $("#comunidad_id_hidden").val(data.comunidad_id);
-                $("#direccion_hidden").val(data.direccion);
-                // --- Inicio de la cascada ---
-                cargarMunicipios(data.estado_id, data)
-                .then(municipio_id => cargarParroquias(municipio_id, data))
-                .then(parroquia_id => cargarComunas(parroquia_id, data))
-                .then(comuna_id => cargarComunidades(comuna_id, data))
-                .catch(error => {
-                    console.error("Error en la cascada:", error);
-                    alert("Ocurrió un error al cargar la información. Por favor, inténtalo de nuevo más tarde.");
-                });
-            })
-            .fail(function(xhr) {
-                if (xhr.responseJSON && xhr.responseJSON.error) {
-                    alert(xhr.responseJSON.error); // Mostrar el mensaje de error del servidor
-                } else {
-                    alert("Error al buscar la persona. Por favor, verifica la cédula.");
-                }
-            })
+        // Asignar los valores básicos a los inputs invisibles
+        $("#nombre_user").val(data.nombre);
+        $("#telefono_user").val(data.telefono);
+        $("#sexo").val(data.sexo);
+        $("#fechanacimiento").val(data.fechanacimiento);
+        $("#estado_id").val(data.estado_id);
+        $("#direccion_user").val(data.direccion);
+
+        $("#cedula_hidden").val(data.cedula);
+        $("#nombre_hidden").val(data.nombre);
+        $("#telefono_hidden").val(data.telefono);
+        $("#sexo_hidden").val(data.sexo);
+        $("#fechanacimiento_hidden").val(data.fechanacimiento);
+        $("#estado_id_hidden").val(data.estado_id);
+        $("#municipio_id_hidden").val(data.municipio_id);
+        $("#parroquia_id_hidden").val(data.parroquia_id);
+        $("#comuna_id_hidden").val(data.comuna_id);
+        $("#comunidad_id_hidden").val(data.comunidad_id);
+        $("#direccion_hidden").val(data.direccion);
+        // --- Inicio de la cascada ---
+        cargarMunicipios(data.estado_id, data)
+        .then(municipio_id => cargarParroquias(municipio_id, data))
+        .then(parroquia_id => cargarComunas(parroquia_id, data))
+        .then(comuna_id => cargarComunidades(comuna_id, data))
+        .catch(error => {
+            console.error("Error en la cascada:", error);
+            alert("Ocurrió un error al cargar la información adicional. Por favor, inténtalo de nuevo más tarde.");
         });
+    })
+    .fail(function(xhr) {
+        console.log("Error en la petición AJAX:", xhr); // Para depuración
+        if (xhr.responseJSON && xhr.responseJSON.error) {
+            alert(xhr.responseJSON.error); // Mostrar el mensaje de error específico del servidor
+        } else {
+            alert("Error al buscar la persona. Por favor, verifica la cédula e inténtalo de nuevo.");
+        }
+    });
+});
+
+function isEmpty(obj) {
+    for(var key in obj) {
+        if(obj.hasOwnProperty(key))
+            return false;
+    }
+    return true;
+}
         function cargarMunicipios(estado_id, data) {
             return $.ajax({
                 url: "{{ route('municipio.get') }}",
@@ -672,7 +452,7 @@
                 data: { parroquia: parroquia_id }
             })
             .then(function(comunas) {
-                llenarSelect("#comuna_id", comunas, data.comuna_id);
+                llenarSelect2("#comuna_id", comunas, data.comuna_id);
                 return data.comuna_id;
             });
         }
@@ -694,6 +474,14 @@
             $(selectId).append('<option value="">Seleccione una opción</option>');
             $.each(opciones, function (key, opcion) {
                 $(selectId).append('<option value="' + opcion.id + '">' + opcion.nombre + '</option>');
+            });
+            $(selectId).val(valorSeleccionado);
+        }
+        function llenarSelect2(selectId, opciones, valorSeleccionado) {
+            $(selectId).empty();
+            $(selectId).append('<option value="">Seleccione una opción</option>');
+            $.each(opciones, function (key, opcion) {
+                $(selectId).append('<option value="' + opcion.id + '">' + opcion.codigo + '</option>');
             });
             $(selectId).val(valorSeleccionado);
         }

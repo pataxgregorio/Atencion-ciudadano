@@ -361,6 +361,7 @@ Route::get('/solicitudfinalizadastotales', 'Solicitud\SolicitudController@indexf
 Route::get('/solicitud/create', 'Solicitud\SolicitudController@create')->name('solicitud.create')->middleware('permiso:solicitud,add');
 
 Route::post('/solicitud', 'Solicitud\SolicitudController@store')->name('solicitud.store')->middleware('permiso:solicitud,add');
+Route::post('/solicitud2', 'Solicitud\SolicitudController@store2')->name('solicitud.store2')->middleware('permiso:solicitud,add');
 
 Route::get('/solicitud/{solicitud}/view', 'Solicitud\SolicitudController@view')->name('solicitud.view')->middleware('permiso:solicitud,view');
 

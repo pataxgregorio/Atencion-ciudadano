@@ -85,7 +85,7 @@
     </div>
     <div class="col-md-6 col-sm-6 table-borderless" style="overflow: visible;">
         <div class="row table-borderless" style="overflow: visible;">
-            <iframe class="embed-responsive-item" style="width: 100%; height: 424px; overflow: visible;" src="http://156.235.91.67:9000/#/consultar2" allowfullscreen frameborder="0"></iframe>
+            <iframe class="embed-responsive-item" style="width: 100%; height: 424px; overflow: visible;" src="http://192.168.250.11:9000/#/consultar2" allowfullscreen frameborder="0"></iframe>
         </div>
     </div>
 @endsection

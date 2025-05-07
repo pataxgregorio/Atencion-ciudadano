@@ -86,7 +86,7 @@
 
 <script>
 const
- baseUrl = 'http://156.235.91.67:4000';
+ baseUrl = 'http://192.168.250.11:7000';
 
 $(document).ready(function() {
     var searchTerm = '<?php echo $cedula; ?>';
