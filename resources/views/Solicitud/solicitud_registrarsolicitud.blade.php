@@ -158,7 +158,7 @@
                     <div style="text-align:left;">
                     {!! Form::label('tipo_subsolicitud_id', 'TIPO SOLICITUD', ['class' => 'control-label']) !!}<span
                             class="required" style="color:red;">*</span>
-                        <select required name="tipo_subsolicitud_id" id="tipo_subsolicitud_id" class="form-control">
+                        <select required name="tipo_subsolicitud_id" id="tipo_subsolicitud_id" class="form-control" disabled>
                             @foreach($subtiposolicitud as $subtipo)
                                 <option value="{{ $subtipo->id }}" {{ old('tipo_subsolicitud_id') == $subtipo->id ? 'selected' : '' }}>{{ $subtipo->nombre }}</option>
                             @endforeach
