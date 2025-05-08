@@ -76,6 +76,24 @@ class SeguimientoController extends Controller
         $tipo_subsolicitud = subtiposolicitud::all()->pluck('nombre', 'id')->toArray();
         return view('Seguimiento.seguimiento_finalizadas', compact('count_notification','tipo_subsolicitud', 'tipo_alert','comuna','comunidad', 'array_color'));
     }
+    public function finalizadasfarmacia()
+    {
+        $count_notification = (new User)->count_noficaciones_user();
+        $tipo_alert = "";
+        if (session('delete') == true) {
+            $tipo_alert = "Delete";
+            session(['delete' => false]);
+        }
+        if (session('update') == true) {
+            $tipo_alert = "Update";
+            session(['update' => false]);
+        }
+        $array_color = (new Colores)->getColores();
+        $comuna = (new Comuna)->getComunasFilter();
+        $comunidad = (new Comunidad)->datos_comunidad($comuna);
+        $tipo_subsolicitud = subtiposolicitud::all()->pluck('nombre', 'id')->toArray();
+        return view('Seguimiento.seguimiento_farmacia', compact('count_notification','tipo_subsolicitud', 'tipo_alert','comuna','comunidad', 'array_color'));
+    }
 
     public function finalizadas2()
     {
@@ -126,6 +144,33 @@ class SeguimientoController extends Controller
         try {
             if ($request->ajax()) {
                 $data = (new Seguimiento)->getSolicitudList_Finalizadas($request->fecha_desde, $request->fecha_hasta, $request->tipo_subsolicitud, $request->comuna, $request->comunidad);
+
+                return datatables()->of($data)
+
+                    ->addColumn('edit', function ($data) {
+                        $user = Auth::user();
+                        if (($user->id != 1)) {
+                            $edit = '<a href="' . route('seguimiento.edit', $data->id) . '" id="edit_' . $data->id . '" class="btn btn-xs btn-primary" style="background-color: #2962ff;"><b><i class="fa fa-pencil"></i>&nbsp;' . trans('message.botones.go') . '</b></a>';
+                        } else {
+                            $edit = '<a href="' . route('seguimiento.edit', $data->id) . '" id="edit_' . $data->id . '" class="btn btn-xs btn-primary" style="background-color: #2962ff;"><b><i class="fa fa-pencil"></i>&nbsp;' . trans('message.botones.go') . '</b></a>';
+                        }
+                        return $edit;
+                    })
+                    ->addColumn('view', function ($data) {
+                        return '<a style="background-color: #5333ed;" href="' . route('seguimiento.view', $data->id) . '" id="view_' . $data->id . '" class="btn btn-xs btn-primary"><b><i class="fa fa-eye"></i>&nbsp;' . trans('message.botones.view') . '</b></a>';
+                    })
+
+                    ->rawColumns(['edit', 'view', 'del'])->toJson();
+            }
+        } catch (Throwable $e) {
+            echo "Captured Throwable: " . $e->getMessage(), "\n";
+        }
+    }
+    public function getSeguimientoFinalizadasfarma(Request $request)
+    {
+        try {
+            if ($request->ajax()) {
+                $data = (new Seguimiento)->getSolicitudList_Finalizadas_farmacia($request->fecha_desde, $request->fecha_hasta, $request->tipo_subsolicitud, $request->comuna, $request->comunidad);
 
                 return datatables()->of($data)
 

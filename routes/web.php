@@ -505,8 +505,11 @@ Route::get('/seguimiento/getproductos2', 'Seguimiento\SeguimientoController@getp
 /* REPORTES FINALIZADAS */
 
 Route::get('/finalizadas', 'Seguimiento\SeguimientoController@finalizadas')->name('seguimiento.finalizadas')->middleware('permiso:seguimiento,view');
+Route::get('/finalizadasfarmacia', 'Seguimiento\SeguimientoController@finalizadasfarmacia')->name('seguimiento.finalizadasfarmacia')->middleware('permiso:seguimiento,view');
 
 Route::get('/seguimiento/finalizadas', 'Seguimiento\SeguimientoController@getSeguimientoFinalizadas')->name('seguimiento.finalizadas')->middleware('permiso:seguimiento,view');
+Route::get('/seguimiento/finalizadasfarmacia', 'Seguimiento\SeguimientoController@getSeguimientoFinalizadasfarma')->name('seguimiento.finalizadasfarma')->middleware('permiso:seguimiento,view');
+
 
 
 /* REPORTE TOTALES EN ANALISIS Y REGISTRADAS POR FECHA  */

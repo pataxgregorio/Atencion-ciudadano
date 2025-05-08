@@ -58,10 +58,11 @@ class Seguimiento extends Model
             ->join('direccion', 'solicitud.direccion_id', '=', 'direccion.id')
             ->join('users' , 'solicitud.users_id', '=', 'users.id')
             ->join('comuna', 'solicitud.comuna_id', '=', 'comuna.id')
+            ->join('comunidad', 'solicitud.comunidad_id', '=', 'comunidad.id')
             ->join('rols', 'users.rols_id', '=', 'rols.id')
             ->join('status', 'solicitud.status_id', '=', 'status.id')
             ->join('tipo_subsolicitud', 'solicitud.tipo_subsolicitud_id', '=', 'tipo_subsolicitud.id')
-            ->select('solicitud.beneficiario','solicitud.id','solicitud.solicitud_salud_id as saludID','comuna.codigo as comuna','solicitud.fecha as fecha','solicitud.fechanacimiento as edad','solicitud.direccion as direccion','users.name as usuario','solicitud.nombre AS solicitante','solicitud.cedula as cedula','tipo_subsolicitud.nombre AS nombretipo','direccion.nombre AS direccionnombre','status.nombre AS nombrestatus')
+            ->select('solicitud.beneficiario','solicitud.id','solicitud.solicitud_salud_id as saludID','comuna.codigo as comuna','comunidad.nombre as comunidad','solicitud.fecha as fecha','solicitud.fechanacimiento as edad','solicitud.direccion as direccion','users.name as usuario','solicitud.nombre AS solicitante','solicitud.cedula as cedula','tipo_subsolicitud.nombre AS nombretipo','direccion.nombre AS direccionnombre','status.nombre AS nombrestatus')
             ->where ('solicitud.tipo_solicitud_id', '=',6)
             ->where ('rols_id', '=', $rols_id)
             ->where ('status_id', '=',5)
@@ -88,7 +89,7 @@ class Seguimiento extends Model
             ->join('comuna', 'solicitud.comuna_id', '=', 'comuna.id')
             ->join('comunidad', 'solicitud.comunidad_id', '=', 'comunidad.id')
             ->join('tipo_subsolicitud', 'solicitud.tipo_subsolicitud_id', '=', 'tipo_subsolicitud.id')
-            ->select('solicitud.beneficiario','solicitud.id','solicitud.solicitud_salud_id as saludID','comuna.codigo as comuna','solicitud.fecha as fecha','solicitud.fechanacimiento as edad','solicitud.direccion as direccion','users.name as usuario','solicitud.nombre AS solicitante','solicitud.cedula as cedula','tipo_subsolicitud.nombre AS nombretipo','direccion.nombre AS direccionnombre','status.nombre AS nombrestatus')
+            ->select('solicitud.beneficiario','solicitud.id','solicitud.solicitud_salud_id as saludID','comuna.codigo as comuna','comunidad.nombre as comunidad','solicitud.fecha as fecha','solicitud.fechanacimiento as edad','solicitud.direccion as direccion','users.name as usuario','solicitud.nombre AS solicitante','solicitud.cedula as cedula','tipo_subsolicitud.nombre AS nombretipo','direccion.nombre AS direccionnombre','status.nombre AS nombrestatus')
             ->where ('tipo_solicitud.id', '=',6)
             ->where ('rols_id', '=', $rols_id)
             ->where ('status_id', '=',5)
@@ -127,7 +128,88 @@ class Seguimiento extends Model
         }
 
     }
+    public function getSolicitudList_Finalizadas_farmacia($fechaDesde, $fechaHasta, $tipo_subsolicitud, $comuna, $comunidad){
+        try {
+            $rols_id = auth()->user()->rols_id;
+            if($fechaDesde == NULL && $fechaHasta == NULL && $tipo_subsolicitud == NULL && $comuna == NULL && $comunidad == NULL){
+            $solicitud = DB::table('solicitud')
+            ->join('tipo_solicitud', 'solicitud.tipo_solicitud_id', '=', 'tipo_solicitud.id')
+            ->join('direccion', 'solicitud.direccion_id', '=', 'direccion.id')
+            ->join('users' , 'solicitud.users_id', '=', 'users.id')
+            ->join('comuna', 'solicitud.comuna_id', '=', 'comuna.id')
+            ->join('comunidad', 'solicitud.comunidad_id', '=', 'comunidad.id')
+            ->join('rols', 'users.rols_id', '=', 'rols.id')
+            ->join('status', 'solicitud.status_id', '=', 'status.id')
+            ->join('tipo_subsolicitud', 'solicitud.tipo_subsolicitud_id', '=', 'tipo_subsolicitud.id')
+            ->select('solicitud.beneficiario','solicitud.id','solicitud.solicitud_salud_id as saludID','comuna.codigo as comuna','comunidad.nombre as comunidad','solicitud.fecha as fecha','solicitud.fechanacimiento as edad','solicitud.direccion as direccion','users.name as usuario','solicitud.nombre AS solicitante','solicitud.cedula as cedula','tipo_subsolicitud.nombre AS nombretipo','direccion.nombre AS direccionnombre','status.nombre AS nombrestatus')
+            ->where ('solicitud.tipo_solicitud_id', '=',6)
+            ->where ('rols_id', '=', $rols_id)
+            ->where ('status_id', '=',5)
+            ->whereIn('tipo_subsolicitud.id', [1, 4])
 
+            ->get();
+
+            foreach ($solicitud as $item) {
+    if (isset($item->beneficiario)) {  // Verificar si beneficiario existe
+        $beneficiario = json_decode($item->beneficiario, true);
+        $item->solicita = $beneficiario[0]['solicita'] ?? null;
+    } else {
+        $item->solicita = null; // O cualquier valor predeterminado que desees
+    }
+    unset($item->beneficiario);
+}
+
+            return $solicitud;
+        }else{
+            $solicitud = DB::table('solicitud')
+            ->join('tipo_solicitud', 'solicitud.tipo_solicitud_id', '=', 'tipo_solicitud.id')
+            ->join('direccion', 'solicitud.direccion_id', '=', 'direccion.id')
+            ->join('users' , 'solicitud.users_id', '=', 'users.id')
+            ->join('rols', 'users.rols_id', '=', 'rols.id')
+            ->join('status', 'solicitud.status_id', '=', 'status.id')
+            ->join('comuna', 'solicitud.comuna_id', '=', 'comuna.id')
+            ->join('comunidad', 'solicitud.comunidad_id', '=', 'comunidad.id')
+            ->join('tipo_subsolicitud', 'solicitud.tipo_subsolicitud_id', '=', 'tipo_subsolicitud.id')
+            ->select('solicitud.beneficiario','solicitud.id','solicitud.solicitud_salud_id as saludID','comuna.codigo as comuna','comunidad.nombre as comunidad','solicitud.fecha as fecha','solicitud.fechanacimiento as edad','solicitud.direccion as direccion','users.name as usuario','solicitud.nombre AS solicitante','solicitud.cedula as cedula','tipo_subsolicitud.nombre AS nombretipo','direccion.nombre AS direccionnombre','status.nombre AS nombrestatus')
+            ->where ('tipo_solicitud.id', '=',6)
+            ->where ('rols_id', '=', $rols_id)
+            ->where ('status_id', '=',5)
+            ->whereIn('tipo_subsolicitud.id', [1, 4])
+            ->where(function ($query) use ($fechaDesde, $fechaHasta, $tipo_subsolicitud, $comuna, $comunidad) {
+                if (!empty($fechaDesde)) {
+                    $query->Where('solicitud.fecha', '>=', $fechaDesde);
+                }
+                if (!empty($fechaHasta)) {
+                    $query->Where('solicitud.fecha', '<=', $fechaHasta);
+                }
+                if (!empty($tipo_subsolicitud)) {
+                    $query->Where('solicitud.tipo_subsolicitud_id', '=', $tipo_subsolicitud);
+                }
+                if (!empty($comuna)) {
+                    $query->Where('solicitud.comuna_id', '=', $comuna);
+                }
+                if (!empty($comunidad)) {
+                    $query->Where('solicitud.comunidad_id', '=', $comunidad);
+                }
+            })
+            ->get();
+            foreach ($solicitud as $item) {
+                if (isset($item->beneficiario)) {  // Verificar si beneficiario existe
+                    $beneficiario = json_decode($item->beneficiario, true);
+                    $item->solicita = $beneficiario[0]['solicita'] ?? null;
+                } else {
+                    $item->solicita = null; // O cualquier valor predeterminado que desees
+                }
+                unset($item->beneficiario);
+            }
+            return $solicitud;
+        }
+        }catch(Throwable $e){
+            $solicitud = [];
+            return $solicitud;
+        }
+
+    }
     public function getSolicitudList_Finalizadas2($fechaDesde, $fechaHasta){
         try {
             $rols_id = auth()->user()->rols_id;

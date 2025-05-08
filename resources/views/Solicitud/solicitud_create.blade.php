@@ -59,19 +59,7 @@
                     <h3>DATOS DEL SOLICITANTE</h3>
 
                     <br>
-                    <!-- <div style="text-align:left;">
-                        <label>TRABAJADOR DE LA ALCALDIA <span
-                        class="required" style="color:red;" id="teljefeUBCH_span">*</span></label>
-                        <select required name="trabajador" id="trabajador" class="selectpicker form-control" data-live-search="true"
-                            data-live-search-style="begins">
-                            <option value="NO">NO</option>
-                            <option value="EMPLEADO">EMPLEADO</option>
-                            <option value="OBRERO">OBRERO</option>
-                            <option value="JUBILADO">JUBILADO</option>
-                            <option value="PENSIONADO">PENSIONADO</option>
-                            <option value="PENSIONADO SOBREVIVIETE ALPAEZ">PENSIONADO SOBREVIVIETE ALPAEZ</option>
-                        </select>
-                    </div> -->
+
                     <div style="text-align:left;">
                         {!! Form::label('solicitud_salud_id_label', 'ID DE LA SOLICITUD', ['class' => 'control-label']) !!}<span
                             class="required" style="color:red;">*</span>
@@ -79,15 +67,16 @@
                         <input type="text" name="solicitud_salud_id" id="solicitud_salud_id" value="{{ $correlativoSALUD }}" hidden>
                     </div>
                         <div style="text-align:left;">
-                        {!! Form::label('nombre', 'NOMBRES', ['class' => 'control-label']) !!}<span
-                            class="required" style="color:red;">*</span>
-                        {!! Form::text('nombre', old('nombre'), ['placeholder' => trans('message.users_action.nombre'), 'class' => 'form-control', 'id' => 'nombre_user', 'required' => true]) !!}
-                        </div>
-                        <div style="text-align:left;">
                             {!! Form::label('cedula', 'CEDULA', ['class' => 'control-label']) !!}<span
                                 class="required" style="color:red;">*</span>
                             {!! Form::text('cedula', old('cedula'), ['placeholder' => trans('message.solicitud_action.cedula'), 'class' => 'form-control', 'id' => 'cedula_user', 'required' => true]) !!}
                         </div>
+                        <div style="text-align:left;">
+                        {!! Form::label('nombre', 'NOMBRES', ['class' => 'control-label']) !!}<span
+                            class="required" style="color:red;">*</span>
+                        {!! Form::text('nombre', old('nombre'), ['placeholder' => trans('message.users_action.nombre'), 'class' => 'form-control', 'id' => 'nombre_user', 'required' => true]) !!}
+                        </div>
+
                         <div style="text-align:left;">
                             {!! Form::label('telefono', 'TELEFONO', ['class' => 'control-label']) !!}<span
                                 class="required" style="color:red;">*</span>
