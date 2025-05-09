@@ -75,8 +75,7 @@
             </table>
         </div>
     </div>
-    <a href="#" id="btn_listado"> <button class="btn btn-primary" style="padding:5px;">Imprimir Listado</button> </a>
-    <button class="btn btn-primary" style="padding:5px;" id="btn_totales">Imprimir Totales</button>
+    <a href="#" id="btn_listado"> <button class="btn btn-primary" style="padding:5px;">Imprimir Reporte</button> </a>
 </div>
 
 
@@ -100,7 +99,7 @@
             var comunidad = $('#comunidad').val();
 
             // Construye la URL con los parámetros
-            var url = "{{ route('imprimir2') }}" + "?fecha_desde=" + fechaDesde + "&fecha_hasta=" + fechaHasta + "&tipo_subsolicitud=" + tipo_subsolicitud + "&comuna=" + comuna + "&comunidad=" + comunidad;
+            var url = "{{ route('imprimirfarmacia') }}" + "?fecha_desde=" + fechaDesde + "&fecha_hasta=" + fechaHasta + "&comuna=" + comuna + "&comunidad=" + comunidad;
 
             // Redirige a la URL construida
             window.location.href = url;

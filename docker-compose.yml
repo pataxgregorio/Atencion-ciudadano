@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  sia-dev-env:
+    image: rojdev/sia-dev-env:0.1
+    volumes:
+      - /home/latitude/Atencion-ciudadano:/home/ubuntu
+    command: tail -f /dev/null
+    ports:
+      - "4000:4000"
+    networks:
+      - app-network
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: innovacion123
+      MYSQL_DATABASE: alcadia
+      MYSQL_USER: innovacion
+      MYSQL_PASSWORD: innovacion123
+      MYSQL_MAX_ALLOWED_PACKET: 100M
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - app-network
+    ports:
+      - "3310:3306"
+
+  phpmyadmin:
+    image: phpmyadmin
+    depends_on:
+      - mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: innovacion123
+      PMA_HOST: mysql
+      MYSQL_USER: innovacion
+      MYSQL_PASSWORD: innovacion123
+      UPLOAD_LIMIT: 100M
+    ports:
+      - "8080:80"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql_data:

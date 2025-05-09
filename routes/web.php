@@ -349,7 +349,7 @@ Route::get('/solicitud/municipio2', 'Solicitud\SolicitudController@getMunicipios
 Route::get('/solicitud/parroquia2', 'Solicitud\SolicitudController@getParroquiaCreate')->name('parroquia.get')->middleware('permiso:solicitud,edit');
 Route::get('/solicitud/getComunidad', 'Solicitud\SolicitudController@getComunidad')->name('getComunidad2')->middleware('permiso:solicitud,view');
 
-
+Route::get('/imprimirfarmacia', 'Solicitud\SolicitudController@imprimirfarmacia')->name('imprimirfarmacia');
 /* NUEVO */
 
 

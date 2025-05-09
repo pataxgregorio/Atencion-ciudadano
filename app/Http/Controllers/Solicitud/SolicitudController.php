@@ -4390,4 +4390,221 @@ public function imprimir4(Request $request)
 
     return redirect()->back();
 }
+public function imprimirfarmacia(Request $request) {
+    setlocale(LC_TIME, 'es_ES.UTF-8');
+
+    $input = $request->all();
+    $fechadesde = $input['fecha_desde'];
+    $fechahasta = $input['fecha_hasta'];
+    $comuna= isset($input['comuna']) ? $input['comuna'] : '';
+    $comunidad = isset($input['comunidad']) ? $input['comunidad'] : '';
+    $diadesde = date('d', strtotime($fechadesde));
+    $mesdesde = date('m', strtotime($fechadesde));
+    $anodesde = date('Y', strtotime($fechadesde));
+    $diahasta = date('d', strtotime($fechahasta));
+    $meshasta = date('m', strtotime($fechahasta));
+    $anohasta = date('Y', strtotime($fechahasta));
+    $data = (new Seguimiento)->getSolicitudList_Finalizadas_farmacia($fechadesde, $fechahasta, NULL,$comuna, $comunidad);
+    $solicitudesMedicina = $data->filter(function($item){
+        return $item->nombretipo === 'MEDICINA';
+    })->count();
+    $solicitudesInsumos = $data->filter(function($item){
+        return $item->nombretipo === 'INSUMOS';
+    })->count();
+    $solicitudestotales = count($data);
+    $participantesTotal = "";
+    $etiquetaComuna = '';
+    $etiquetaComunidad = '';
+    $etiquetaFechas = '';
+    $etiquetatipo_subsolicitud = '';
+    $mes='';
+    $comuna = Comuna::find($comuna);
+    $comunidad = Comunidad::find($comunidad);
+    foreach ($data as $participante) {
+        $participantes =<<<HTML
+                <tr>
+                    <td>$participante->saludID</td>
+                    <td>$participante->usuario</td>
+                    <td>$participante->solicitante</td>
+                    <td>$participante->edad</td>
+                    <td>$participante->cedula</td>
+                    <td>$participante->direccion</td>
+                    <td>$participante->nombretipo</td>
+                    <td>$participante->solicita</td>
+                </tr>
+        HTML;
+        $participantesTotal .= $participantes;
+    }
+
+    $solicitudesPorMes = [];
+
+    foreach ($data as $participante) {
+        $mes = date('Y-m', strtotime($participante->fecha));
+        if (!isset($solicitudesPorMes[$mes])) {
+            $solicitudesPorMes[$mes] = [];
+        }
+        $solicitudesPorMes[$mes][] = $participante;
+    }
+
+    if (!empty($comuna)) {
+        $etiquetaComuna = "<h5 style='text-align:left;'>COMUNA: $comuna->codigo</h5>";
+        }
+    if (!empty($fechadesde) && !empty($fechahasta)) {
+        $etiquetaFechas = "<h3 style='text-align:center;'>SEMANA $diadesde-$mesdesde-$anodesde al $diahasta-$meshasta-$anohasta</h3>";
+        $mes = date('m', strtotime($fechadesde));
+        if($mes == '01'){
+            $mes = 'Enero';
+        }
+        if($mes == '02'){
+            $mes = 'Febrero';
+        }
+        if($mes == '03'){
+            $mes = 'Marzo';
+        }
+        if($mes == '04'){
+            $mes = 'Abril';
+        }
+        if($mes == '05'){
+            $mes = 'Mayo';
+        }
+        if($mes == '06'){
+            $mes = 'Junio';
+        }
+        if($mes == '07'){
+            $mes = 'Julio';
+        }
+        if($mes == '08'){
+            $mes = 'Agosto';
+        }
+        if($mes == '09'){
+            $mes = 'Septiembre';
+        }
+        if($mes == '10'){
+            $mes = 'Octubre';
+        }
+        if($mes == '11'){
+            $mes = 'Noviembre';
+        }
+        if($mes == '12'){
+            $mes = 'Diciembre';
+        }
+        $mes = strtoupper($mes);
+    }
+    if (!empty($comunidad)) {
+        $etiquetaComunidad = "<h5 style='text-align:left;'>COMUNIDAD: $comunidad->nombre</h5>";
+        }
+    if (!empty($tipo_subsolicitud)) {
+        $etiquetatipo_subsolicitud = "<h5 style='text-align:left;'>TIPO SOLICITUD: $tipo_subsolicitud->nombre</h5>";
+        }
+    // Crea una variable para el nombre del archivo PDF
+    $nombreArchivo = "Reporte de solicitudes finalizadas";
+    $totalfinalizadas = '<h4 style="text-align:left;">Total de solicitudes finalizadas en el periodo seleccionado: '.$solicitudestotales.'</h4>';
+
+    // Agrega información al nombre del archivo según las variables con valor
+    if (!empty($fechadesde) && !empty($fechahasta)) {
+    $nombreArchivo .= " desde el $diadesde-$mesdesde-$anodesde al $diahasta-$meshasta-$anohasta";
+    }
+    if (!empty($comuna)) {
+    $nombreArchivo .= " Comuna $comuna->codigo";
+    }
+    if (!empty($comunidad)) {
+    $nombreArchivo .= " Comunidad $comunidad->nombre";
+    }
+    if (!empty($tipo_subsolicitud)) {
+    $nombreArchivo .= " Tipo $tipo_subsolicitud->nombre";
+    $totalfinalizadas = '<h4 style="text-align:left;">Total de solicitudes de '.$tipo_subsolicitud->nombre.' finalizadas en el periodo seleccionado: ' . $solicitudestotales . '</h4>';
+    }
+    // Agrega la extensión .pdf al nombre del archivo
+    $nombreArchivo .= ".pdf";
+
+    $html =
+    <<<HTML
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <style>
+                body {
+                    font-family: sans-serif;
+                }
+
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+
+                th, td {
+                    text-align:center;
+                    border: 1px solid #ddd;
+                }
+
+                th {
+                    font-size: 12px;
+                    background-color: #f0f0f0;
+                }
+                td{
+                    font-size: 12px;
+                }
+        </style>
+    </head>
+    <body>
+    <img src="https://prensa.alcaldiapaez.gob.ve/wp-content/uploads/sites/2/2024/06/CINTILLO-POLITICAS-SOCIALES-Y-COMUNITARIAS-Y-PODER-POPULAR.jpg" alt="" srcset="" width="100%">
+    <h3 style="text-align:center; margin-top: 320px;">REPORTE DE ENTREGAS</h3>
+    <h3 style="text-align:center;">FARMACIA</h3>
+    <h3 style="text-align:center; margin-button: 25px;">$mes</h3>
+    $etiquetaFechas
+    <br>
+    <table >
+    <tr>
+        <th>MEDICINAS</th>
+        <th>INSUMOS MEDICOS</th>
+        <th>TOTAL</th>
+    </tr>
+    <tr>
+        <td>$solicitudesMedicina</td>
+        <td>$solicitudesInsumos</td>
+        <td>$solicitudestotales</td>
+    </tr>
+    </table>
+    
+    HTML;
+
+    foreach ($solicitudesPorMes as $mes => $solicitudes) {
+        $html .= "<table style='page-break-before: always;'>";
+        $html .= "<tr>";
+        $html .= "<th>N°</th>";
+        $html .= "<th>NOMBRE/APELLIDO</th>";
+        $html .= "<th>Cedula</th>";
+        $html .= "<th>Beneficio</th>";
+        $html .= "<th>Tipo Solicitud</th>";
+        $html .= "<th>Comunidad</th>";
+        $html .= "<th>Comuna</th>";
+        $html .= "</tr>";
+
+        foreach ($solicitudes as $participante) {
+            $html .= "<tr>";
+            $html .= "<td>$participante->saludID</td>";
+            $html .= "<td>$participante->solicitante</td>";
+            $html .= "<td>$participante->cedula</td>";
+            $html .= "<td>$participante->solicita</td>";
+            $html .= "<td>$participante->nombretipo</td>";
+            $html .= "<td>$participante->comuna</td>";
+            $html .= "<td>$participante->comunidad</td>";
+            $html .= "</tr>";
+        }
+
+        $html .= "</table>";
+    }
+    $html .= "</div></body></html>";
+
+    $options = new Options;
+    $options->set('isRemoteEnabled', true);
+    $dompdf = new Dompdf($options);
+    $dompdf->loadHtml($html);
+    $dompdf->setPaper('legal', 'portrait');
+    $dompdf->render();
+    $dompdf->stream($nombreArchivo, array("Attachment"=>1));
+
+    return redirect()->back();
+}
 }

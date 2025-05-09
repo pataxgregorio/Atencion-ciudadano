@@ -150,14 +150,14 @@ class Seguimiento extends Model
             ->get();
 
             foreach ($solicitud as $item) {
-    if (isset($item->beneficiario)) {  // Verificar si beneficiario existe
-        $beneficiario = json_decode($item->beneficiario, true);
-        $item->solicita = $beneficiario[0]['solicita'] ?? null;
-    } else {
-        $item->solicita = null; // O cualquier valor predeterminado que desees
-    }
-    unset($item->beneficiario);
-}
+                if (isset($item->beneficiario)) {  // Verificar si beneficiario existe
+                    $beneficiario = json_decode($item->beneficiario, true);
+                    $item->solicita = $beneficiario[0]['solicita'] ?? null;
+                } else {
+                    $item->solicita = null; // O cualquier valor predeterminado que desees
+                }
+                unset($item->beneficiario);
+            }
 
             return $solicitud;
         }else{
