@@ -877,7 +877,7 @@ class SolicitudController extends Controller
                 'sexo' => $input['sexo'],
                 'email' => null,
                 'direccion' => $input['direccion'],
-                'fecha' =>  \Carbon\Carbon::now('America/Caracas'),
+                'fecha' =>  $input['fechaentrega'],
                 'telefono' => null,
                 'telefono2' => null,
                 'organismo' => NULL,
@@ -4566,7 +4566,7 @@ public function imprimirfarmacia(Request $request) {
         <td>$solicitudestotales</td>
     </tr>
     </table>
-    
+
     HTML;
 
     foreach ($solicitudesPorMes as $mes => $solicitudes) {
