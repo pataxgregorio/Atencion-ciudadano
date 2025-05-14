@@ -621,8 +621,8 @@ class SolicitudController extends Controller
             ]);
 
 
- //           $solicitud->save();
-   //         DB::commit();
+         $solicitud->save();
+           DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
         }

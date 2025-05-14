@@ -48,10 +48,14 @@
                         <form id="buscarPersonaForm">
                         @csrf
 
-                        <div class="col-md-6" style="text-align:left; margin-left: -20px">
+                        <div class="col-md-4" style="text-align:left">
                             {!! Form::label('cedula', trans('message.solicitud_action.cedula'), ['class' => 'control-label']) !!}<span class="required" style="color:red;">*</span>
-                            {!! Form::text('cedula', old('cedula'), ['placeholder' => trans('message.solicitud_action.cedula'), 'class' => 'form-control', 'id' => 'cedula_user', 'required' => true]) !!}
-                            <button type="button" class="btn-primary" style="margin-top: 20px;" id="buscarCedula">Buscar</button>
+                            <div class="row">
+                                <div class="col-md-12">
+                                {!! Form::text('cedula', old('cedula'), ['placeholder' => trans('message.solicitud_action.cedula'), 'class' => 'form-control', 'id' => 'cedula_user', 'required' => true]) !!}
+                                <button type="button" class="btn btn-primary ml-2" style="margin-left: 220px; margin-top: -60px" id="buscarCedula">Buscar</button>
+                                </div>
+                            </div>
                         </div>
                       </form>
                         {!! Form::open(
@@ -69,7 +73,7 @@
                                 <div class="form-group ">
                                         <div style="text-align:left;">
                                             @if($rols_id == 10)
-                                            <input type="text" name="tipo_solicitud_id" id="tipo_solicitud_id" value=6 hidden>
+                                            <input type="text" name="tipo_solicitud_id" id="tipo_solicitud_id" value=12 hidden>
                                             @endif
                                         </div>
                                     <h3>DATOS DEL SOLICITANTE</h3>
@@ -189,7 +193,7 @@
                                                     {!! Form::textarea('observacionbeneficiario', old('observacionbeneficiario'), ['placeholder' => "OBSERVACION", 'class' => 'form-control', 'id' => 'observacionbeneficiario_user', 'required' => true]) !!}
                                                 </div>
                                 </div>{{-- fin form group--}}
-                                </div>{{-- fin del col-6 primARIO--}}
+                                </div>{{-- fin del col-12 primARIO--}}
                                     <div class="col-md-4" style="margin-top: 300px;">
                                         <h3>RECAUDOS DE LA SOLICITUD</h3>
                                         <br>
@@ -242,7 +246,7 @@
 
                                             {!!  Form::close() !!}
                                         </div>
-                                     </div>{{-- fin del col-6 secundario--}}
+                                     </div>{{-- fin del col-12 secundario--}}
 
 
                     </div>{{-- fin del row secundario--}}
