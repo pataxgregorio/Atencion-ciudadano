@@ -18,7 +18,7 @@
 </div>
     <div style="text-align: right;">
         <span>Nro. de la Solicitud:</span>
-        <input type="text" class="form-control" value="{{ $correlativoSALUD }}" style="width: 100px; display: inline-block;" readonly>
+        <input type="text" class="form-control" value="{{ $correlativoSALUD }}" style="font-weight: bold; font-size: 28px; width: 100px; display: inline-block;" readonly>
     </div>
 @endsection
 
@@ -48,7 +48,7 @@
                         <form id="buscarPersonaForm">
                         @csrf
 
-                        <div class="col-md-9" style="text-align:left; margin-left: -20px">
+                        <div class="col-md-6" style="text-align:left; margin-left: -20px">
                             {!! Form::label('cedula', trans('message.solicitud_action.cedula'), ['class' => 'control-label']) !!}<span class="required" style="color:red;">*</span>
                             {!! Form::text('cedula', old('cedula'), ['placeholder' => trans('message.solicitud_action.cedula'), 'class' => 'form-control', 'id' => 'cedula_user', 'required' => true]) !!}
                             <button type="button" class="btn-primary" style="margin-top: 20px;" id="buscarCedula">Buscar</button>
@@ -136,7 +136,7 @@
 
 
 
-                                            <div style="text-align:left;">
+                                            <div style="text-align:left; display: none;">
                                                 {!! Form::label('parroquia_id', 'PARROQUIA', ['class' => 'control-label', 'id' => 'parroquia_id_label']) !!}<span
                                                     class="required" style="color:red;" id="parroquia_id_span">*</span>
                                                 {!! Form::select('parroquia_id', $parroquia, old('parroquia_id'), ['placeholder' => trans('message.solicitud_action.parroquia'), 'class' => 'form-control', 'id' => 'parroquia_id']) !!}
@@ -156,7 +156,7 @@
                                                         class="required" style="color:red;" id="comunidad_id_span">*</span>
                                                     {!! Form::select('comunidad_id', $comunidad, old('comunidad_id'), ['placeholder' => trans('message.solicitud_action.comunidad'), 'class' => 'form-control', 'id' => 'comunidad_id']) !!}
                                                 </div>
-                                                <div style="text-align:left;">
+                                                <div style="text-align:left; display: none;">
                                                     {!! Form::label('direccion','DIRECCION', ['class' => 'control-label']) !!}<span
                                                         class="required" style="color:red;">*</span>
                                                     {!! Form::text('direccion', old('direccion'), ['placeholder' => trans('message.solicitud_action.direccion'), 'class' => 'form-control', 'id' => 'direccion_user', 'required' => true]) !!}
@@ -190,7 +190,7 @@
                                                 </div>
                                 </div>{{-- fin form group--}}
                                 </div>{{-- fin del col-6 primARIO--}}
-                                    <div class="col-md-4" style="margin-top: 450px;">
+                                    <div class="col-md-4" style="margin-top: 300px;">
                                         <h3>RECAUDOS DE LA SOLICITUD</h3>
                                         <br>
                                         <div style="text-align:left;">

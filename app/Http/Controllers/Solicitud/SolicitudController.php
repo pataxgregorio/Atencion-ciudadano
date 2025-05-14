@@ -654,6 +654,7 @@ class SolicitudController extends Controller
         try {
             $input = $request->all();
 
+
             $input['users_id'] = Auth::user()->id;
             //  $data['is_deleted'] = false;
             $recaudos = NULL;
