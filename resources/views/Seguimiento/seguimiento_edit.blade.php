@@ -845,7 +845,7 @@
 
             <div class="row table-borderless">
 
-                <iframe class="embed-responsive-item" style="width: 100%; height: 800px; overflow: visible;" src="http://192.168.250.11:4000/iframe/buscarsolicitud?param={{$solicitud_edit->cedula}}" allowfullscreen frameborder="0"></iframe>
+                <iframe class="embed-responsive-item" style="width: 100%; height: 800px; overflow: visible;" src="http://156.235.91.67:4000/iframe/buscarsolicitud?param={{$solicitud_edit->cedula}}" allowfullscreen frameborder="0"></iframe>
 
             </div>
 

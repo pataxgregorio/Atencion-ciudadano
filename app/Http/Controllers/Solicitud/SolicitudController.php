@@ -374,6 +374,7 @@ class SolicitudController extends Controller
         DB::beginTransaction();
         try {
             $input = $request->all();
+            $input['tipo_solicitud_id'] = 6;
 
             $input['users_id'] = Auth::user()->id;
             //  $data['is_deleted'] = false;
@@ -580,11 +581,11 @@ class SolicitudController extends Controller
                 'solicitud_salud_id' => $nuevoNumero,
                 'users_id' => $input['users_id'],
                 'trabajador' => null,
-                'direccion_id' => $input['direcciones_id'],
-                'coordinacion_id' => $input['coordinacion_id'],
-                'tipo_solicitud_id' => $input['tipo_solicitud_id'],
+                'direccion_id' => 5,
+                'coordinacion_id' => null,
+                'tipo_solicitud_id' =>6,
                 'tipo_subsolicitud_id' => $input['tipo_subsolicitud_id'],
-                'enter_descentralizados_id' => $input['enter_id'],
+                'enter_descentralizados_id' => null,
                 'estado_id' => $input['estado_id'],
                 'municipio_id' => $input['municipio_id'],
                 'parroquia_id' => $input['parroquia_id'],
@@ -599,14 +600,14 @@ class SolicitudController extends Controller
                 'email' => $input['email'],
                 'direccion' => $input['direccion'],
                 'fecha' => $input['fechaentrega'],
-                'telefono' => null,
-                'telefono2' => $input['telefono2'],
+                'telefono' => $input['telefono'],
+                'telefono2' => null,
                 'organismo' => NULL,
-                'asignacion' => $input['asignacion'],
-                'edocivil' => $input['edocivil'],
+                'asignacion' => null,
+                'edocivil' => null,
                 'fechaNacimiento' => null,
-                'nivelestudio' => $input['niveleducativo'],
-                'profesion' => $input['profesion'],
+                'nivelestudio' =>null,
+                'profesion' => null,
                 'recaudos' => $input['recaudos'],
                 'beneficiario' => $input['beneficiario'],
                 'quejas' => $input['quejas'],
