@@ -298,7 +298,7 @@ $("#buscarCedula").click(function(event) {
         // Verificar si data está vacío o indica que no se encontraron resultados
         if (!data || Object.keys(data).length === 0) {
             alert("La cédula ingresada no existe.");
-            window.location.href = "{{ route('solicitud.create') }}"; // Redireccionar si no se encuentra
+        //    window.location.href = "{{ route('solicitud.create') }}"; // Redireccionar si no se encuentra
             return; // Importante: detener la ejecución del resto del bloque .done()
         }
 
