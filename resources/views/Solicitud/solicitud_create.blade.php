@@ -110,7 +110,7 @@
                                             {!! Form::email('email', old('email'), ['placeholder' => trans('message.users_action.mail_ejemplo'), 'class' => 'form-control', 'id' => 'email_user']) !!}
                                         </div>
                                         @endif
-                                        <div style="text-align:left;">
+                                        <div style="text-align:left;" id="sexo1">
                                             <label>SEXO <span style="color:red;">*</span></label>
                                                 <select name="sexo" id="sexo" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" required>
                                                 <option value="">SELECCIONE UNA OPCION</option>
@@ -133,18 +133,18 @@
                                         @endif
 
 
-                                        <div style="text-align:left;">
+                                        <div style="text-align:left;" id="estado">
                                             {!! Form::label('estado_id', 'ESTADO', ['class' => 'control-label']) !!}<span
                                                 class="required" style="color:red;">*</span>
                                             {!! Form::select('estado_id', $estado, old('estado_id'), ['placeholder' => trans('message.solicitud_action.estado'), 'class' => 'form-control', 'id' => 'estado_id', 'required' => true]) !!}
                                         </div>
-                                        <div style="text-align:left;">
+                                        <div style="text-align:left;" id ="minicipio">
                                             {!! Form::label('municipio_id', 'MUNICIPIO', ['class' => 'control-label']) !!}<span
                                                 class="required" style="color:red;">*</span>
                                             {!! Form::select('municipio_id', $municipio, old('municipio_id'), ['placeholder' => trans('message.solicitud_action.municipio'), 'class' => 'form-control', 'id' => 'municipio_id', 'required' => true]) !!}
                                         </div>
 
-                                        <div style="text-align:left;">
+                                        <div style="text-align:left;" id="parroquia">
                                             {!! Form::label('parroquia_id', 'PARROQUIA', ['class' => 'control-label', 'id' => 'parroquia_id_label']) !!}<span
                                                 class="required" style="color:red;" id="parroquia_id_span">*</span>
                                             {!! Form::select('parroquia_id', $parroquia, old('parroquia_id'), ['placeholder' => trans('message.solicitud_action.parroquia'), 'class' => 'form-control', 'id' => 'parroquia_id']) !!}
@@ -164,7 +164,7 @@
                                                 class="required" style="color:red;" id="comunidad_id_span">*</span>
                                             {!! Form::select('comunidad_id', $comunidad, old('comunidad_id'), ['placeholder' => trans('message.solicitud_action.comunidad'), 'class' => 'form-control', 'id' => 'comunidad_id']) !!}
                                         </div>
-                                        <div style="text-align:left;">
+                                        <div style="text-align:left;" id="direccion1">
                                             {!! Form::label('direccion','DIRECCION', ['class' => 'control-label']) !!}<span
                                                 class="required" style="color:red;">*</span>
                                             {!! Form::text('direccion', old('direccion'), ['placeholder' => trans('message.solicitud_action.direccion'), 'class' => 'form-control', 'id' => 'direccion_user', 'required' => true]) !!}
@@ -268,6 +268,12 @@
 
     $(document).ready(function () {
         var rolID = rolsJS;
+        document.getElementById('estado').style.display = 'none';
+        document.getElementById('minicipio').style.display = 'none';
+        document.getElementById('parroquia').style.display = 'none';
+        document.getElementById('sexo1').style.display = 'none';
+        document.getElementById('direccion1').style.display = 'none';
+
 
         // $("#comuna_id").empty()  $('#buscarCedula').prop('disabled', true);
 
@@ -298,6 +304,12 @@ $("#buscarCedula").click(function(event) {
         // Verificar si data está vacío o indica que no se encontraron resultados
         if (!data || Object.keys(data).length === 0) {
             alert("La cédula ingresada no existe.");
+            document.getElementById('estado').style.display = 'block';
+            document.getElementById('minicipio').style.display = 'block';
+            document.getElementById('parroquia').style.display = 'block';
+            document.getElementById('sexo1').style.display = 'block';
+            document.getElementById('direccion1').style.display = 'block';
+
         //    window.location.href = "{{ route('solicitud.create') }}"; // Redireccionar si no se encuentra
             return; // Importante: detener la ejecución del resto del bloque .done()
         }
