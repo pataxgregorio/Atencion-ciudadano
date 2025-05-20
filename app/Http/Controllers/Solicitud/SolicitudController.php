@@ -655,7 +655,6 @@ class SolicitudController extends Controller
         try {
             $input = $request->all();
 
-
             $input['users_id'] = Auth::user()->id;
             //  $data['is_deleted'] = false;
             $recaudos = NULL;
@@ -864,7 +863,7 @@ class SolicitudController extends Controller
                 'direccion_id' => 5,
                 'coordinacion_id' => null,
                 'tipo_solicitud_id' => 6,
-                'tipo_subsolicitud_id' => 1,
+                'tipo_subsolicitud_id' => $input['tipo_subsolicitud_id'],
                 'enter_descentralizados_id' => null,
                 'estado_id' => $input['estado_id'],
                 'municipio_id' => $input['municipio_id'],

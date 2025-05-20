@@ -73,7 +73,7 @@
                                 <div class="form-group ">
                                         <div style="text-align:left;">
                                             @if($rols_id == 10)
-                                            <input type="text" name="tipo_solicitud_id" id="tipo_solicitud_id" value=12 hidden>
+                                            <input type="text" name="tipo_solicitud_id" id="tipo_solicitud_id" value=6 hidden>
                                             @endif
                                         </div>
                                     <h3>DATOS DEL SOLICITANTE</h3>
@@ -168,11 +168,13 @@
 
                                                 @if($rols_id == 10)
                                                 <div style="text-align:left;">
-                                                {!! Form::label('tipo_subsolicitud_id', 'TIPO SOLICITUD', ['class' => 'control-label']) !!}<span
-                                                        class="required" style="color:red;">*</span>
-                                                    <select required name="tipo_subsolicitud_id" id="tipo_subsolicitud_id" class="form-control" disabled>
+                                                    {!! Form::label('tipo_subsolicitud_id', 'TIPO SOLICITUD', ['class' => 'control-label']) !!}<span
+                                                            class="required" style="color:red;">*</span>
+                                                    <select required name="tipo_subsolicitud_id" id="tipo_subsolicitud_id" class="form-control" >
                                                         @foreach($subtiposolicitud as $subtipo)
-                                                            <option value="{{ $subtipo->id }}" {{ old('tipo_subsolicitud_id') == $subtipo->id ? 'selected' : '' }}>{{ $subtipo->nombre }}</option>
+                                                            @if(in_array($subtipo->id, [1, 4]))
+                                                                <option value="{{ $subtipo->id }}" {{ old('tipo_subsolicitud_id') == $subtipo->id ? 'selected' : '' }}>{{ $subtipo->nombre }}</option>
+                                                            @endif
                                                         @endforeach
                                                     </select>
                                                 </div>

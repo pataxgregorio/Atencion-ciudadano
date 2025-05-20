@@ -87,7 +87,7 @@
 
 <script>
 const
- baseUrl = 'http://156.235.91.67:4000';
+ baseUrl = 'http://192.168.0.123:4000';
 
  $(document).ready(function() {
     // Attach click event to the search button
