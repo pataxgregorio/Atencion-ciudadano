@@ -154,6 +154,7 @@ class Solicitud extends Model
                     ->join('comunidad', 'solicitud.comunidad_id', '=', 'comunidad.id')
                     ->join('tipo_subsolicitud', 'solicitud.tipo_subsolicitud_id', '=', 'tipo_subsolicitud.id')
                     ->select('solicitud.solicitud_salud_id as id','solicitud.nombre AS solicitante','comuna.codigo AS comuna','solicitud.cedula as cedula','solicitud.fecha AS fecha','comunidad.nombre AS comunidad','tipo_subsolicitud.nombre AS nombretipo','users.name AS analista','solicitud.beneficiario as beneficiario','solicitud.quejas AS quejas','solicitud.reclamo AS reclamo','solicitud.denuncia as denuncia','solicitud.denunciado as denunciado','direccion.nombre AS direccionnombre','status.nombre AS nombrestatus')
+                    ->orderBy('solicitud.solicitud_salud_id', 'desc')
                     ->get();
                     $solicitudbeneficiario =[];
                     // se iteran las solicitudes para obterner la cedula del beneficiario
@@ -173,6 +174,7 @@ class Solicitud extends Model
                             ->join('tipo_subsolicitud', 'solicitud.tipo_subsolicitud_id', '=', 'tipo_subsolicitud.id')
                             ->select('solicitud.solicitud_salud_id as id','solicitud.nombre AS solicitante','solicitud.cedula as cedula','comuna.codigo AS comuna','solicitud.fecha AS fecha','comunidad.nombre AS comunidad','tipo_subsolicitud.nombre AS nombretipo','users.name AS analista','solicitud.beneficiario as beneficiario','solicitud.quejas AS quejas','solicitud.reclamo AS reclamo','solicitud.denuncia as denuncia','solicitud.denunciado as denunciado','direccion.nombre AS direccionnombre','status.nombre AS nombrestatus')
                             ->where('solicitud.solicitud_salud_id', $idsolicitud)
+                            ->orderBy('solicitud.solicitud_salud_id', 'desc')
                             ->get();
                             //agregar cedula2 =$cedulaBeneficiario en solicitud3
                             $solicitud3[0]->cedula2 = $cedulaBeneficiario;

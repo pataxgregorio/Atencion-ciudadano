@@ -80,7 +80,6 @@
             {
                 data: 'saludID', name: 'saludID',
                 "render": function ( data, type, row ) {
-
                     return '<div style="text-align:center;"><b>'+data+'</b></div>';
                 }
             },
@@ -116,7 +115,8 @@
                 "next": "Siguiente",
                 "previous": "Anterior",
             }
-        }
+        },
+        order: [[ 2, 'asc' ]] // Ordena por la tercera columna (índice 2) de forma ascendente
     });
   });
 </script>

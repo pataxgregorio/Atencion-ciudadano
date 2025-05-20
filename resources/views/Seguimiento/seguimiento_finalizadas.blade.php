@@ -183,6 +183,7 @@
                 {data: 'nombretipo', name: 'nombretipo'},
                 {data: 'solicita', name: 'solicita'},
             ],
+            "order": [[ 2, "asc" ]], // Ahora el ordenamiento es ascendente.
             "language": {
                 "lengthMenu": "Mostrar _MENU_ registros por página",
                 "zeroRecords": "Nada encontrado !!! - disculpe",

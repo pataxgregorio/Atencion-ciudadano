@@ -163,14 +163,14 @@
                         return '<div style="text-align:center;"><b>'+data+'</b></div>';
                     }
                 },
-             /*   {
+               {
                     data: 'fecha', name: 'fecha',
                     "render": function ( data, type, row ) {
                         var fechaMoment = moment(data);
                         var fechaFormateada = fechaMoment.format('DD-MM-YYYY, HH:mm');
                         return fechaFormateada;
                     }
-                },*/
+                },
                 {data: 'solicitante', name: 'solicitante'},
                 {data: 'solicita', name: 'solicita'},
                 {data: 'comuna', name: 'comuna'},
@@ -188,7 +188,8 @@
                     "next": "Siguiente",
                     "previous": "Anterior",
                 }
-            }
+            },
+            order: [[ 1, 'asc' ]] // Esta línea agrega el ordenamiento por la segunda columna (índice 1, que es 'fecha') de forma ascendente ('asc')
         });
 
         $('#btn_filtrar').click(function() {

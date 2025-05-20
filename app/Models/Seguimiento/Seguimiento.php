@@ -93,6 +93,7 @@ class Seguimiento extends Model
             ->where ('tipo_solicitud.id', '=',6)
             ->where ('rols_id', '=', $rols_id)
             ->where ('status_id', '=',5)
+
             ->where(function ($query) use ($fechaDesde, $fechaHasta, $tipo_subsolicitud, $comuna, $comunidad) {
                 if (!empty($fechaDesde)) {
                     $query->Where('solicitud.fecha', '>=', $fechaDesde);
@@ -128,7 +129,8 @@ class Seguimiento extends Model
         }
 
     }
-    public function getSolicitudList_Finalizadas_farmacia($fechaDesde, $fechaHasta, $tipo_subsolicitud, $comuna, $comunidad){
+
+     public function getSolicitudList_Finalizadas_farmacia($fechaDesde, $fechaHasta, $tipo_subsolicitud, $comuna, $comunidad){
         try {
             $rols_id = auth()->user()->rols_id;
             if($fechaDesde == NULL && $fechaHasta == NULL && $tipo_subsolicitud == NULL && $comuna == NULL && $comunidad == NULL){
