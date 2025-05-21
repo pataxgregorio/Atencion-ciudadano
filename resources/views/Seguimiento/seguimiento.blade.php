@@ -116,7 +116,7 @@
                 "previous": "Anterior",
             }
         },
-        order: [[ 2, 'asc' ]] // Ordena por la tercera columna (índice 2) de forma ascendente
+        order: [[ 2, 'desc' ]] // Ordena por la tercera columna (índice 2) de forma ascendente
     });
   });
 </script>

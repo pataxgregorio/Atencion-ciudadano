@@ -27,17 +27,15 @@
 
 <main>
 
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-6 offset-md-3">
-            <div class="input-group">
-                <input type="text" class="form-control"
- id="searchInput" placeholder="Cédula o Número de Solicitud">
-                <div class="input-group-append">
-                    <button class="btn btn-primary" type="button" id="searchButton">Buscar</button>
-                </div>
-            </div>
+<div class="container" style="margin-left: 50px">
+    <div class="row justify-content-center">
+        <div class="col-md-3">
+        <input type="text" class="form-control" id="searchInput" placeholder="Cédula o Número de Solicitud">
         </div>
+        <div>
+        <button class="btn btn-primary" type="button" id="searchButton">Buscar</button>
+        </div>
+
     </div>
     <div id="cardsContainer" class="row"></div>
     <div id="seguimientoCardContainer" class="row mt-4" style="display:none;">
@@ -47,7 +45,7 @@
         No se encontraron resultados.
     </div>
 
-    <div id="initialMessage" class="text-center mt-3">
+    <div id="initialMessage" class="text-center mt-3" style="margin-left: -900px">
         Ingrese un número de cédula o solicitud para buscar.
     </div>
 </div>
