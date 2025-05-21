@@ -51,7 +51,7 @@
             <!-- Optionally, you can add icons to the links -->
             <li><a href="{{ url('/dashboard') }}"><i class='fa fa-link'></i> <span>{{ trans('message.dashboard') }}</span></a></li>
             <!-- Optionally, you can add icons to the links -->
-            <!-- <li><a href="{{ url('/solicitud/buscarsolicitud') }}"><i class='fa fa-link'></i> <span>{{'Buscar Solicitudes'}}</span></a></li>             -->
+            <li><a href="{{ url('/solicitud/buscarsolicitud') }}"><i class='fa fa-link'></i> <span>{{'Buscar Solicitudes'}}</span></a></li>
 
             <li class="treeview">
                 <a href="#"><i class='fa fa-link'></i> <span>Solicitudes</span> <i class="fa fa-angle-left pull-right"></i></a>
