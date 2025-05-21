@@ -48,15 +48,15 @@
                         <form id="buscarPersonaForm">
                         @csrf
 
-                        <div class="col-md-4" style="text-align:left">
-                            {!! Form::label('cedula', trans('message.solicitud_action.cedula'), ['class' => 'control-label']) !!}<span class="required" style="color:red;">*</span>
-                            <div class="row">
-                                <div class="col-md-12">
-                                {!! Form::text('cedula', old('cedula'), ['placeholder' => trans('message.solicitud_action.cedula'), 'class' => 'form-control', 'id' => 'cedula_user', 'required' => true]) !!}
-                                <button type="button" class="btn btn-primary ml-2" style="margin-left: 220px; margin-top: -60px" id="buscarCedula">Buscar</button>
+                         <div class="col-md-6" >
+                                {!! Form::label('cedula', trans('message.solicitud_action.cedula'), ['class' => 'control-label']) !!}<span class="required" style="color:red;">*</span>
+                                <div class="row">
+                                    <div class="col-md-6" >
+                                    {!! Form::text('cedula', old('cedula'), ['placeholder' => trans('message.solicitud_action.cedula'), 'class' => 'form-control', 'id' => 'cedula_user', 'required' => true]) !!}
+                                    <button type="button" class="btn btn-primary ml-2" style="margin-left: 250px; margin-top: -60px" id="buscarCedula">Buscar</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                       </form>
                         {!! Form::open(
                             array(
