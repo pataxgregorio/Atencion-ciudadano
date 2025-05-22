@@ -30,36 +30,39 @@
 <h2 style="margin: -25px 0px -25px 0px; text-align: center"><img src="{{ url('/images/icons/logoSIA.png') }}" alt="logo" height="100px" >Reporte Solicitudes Finalizadas</h2>
 
 <div class="container-fluid">
-    <div class="card">
+    <div class="card" style= "justify-content: center; margin: 50px 0px 0px 550px">
         <div class="card-body">
             <div class="row">
-                <div class="col-md-3">
+            <div class="col-md-4" >
+                <div class="col-md-12">
                     <label for="fecha_desde">Fecha Desde:</label>
                     <input type="date" class="form-control" id="fecha_desde">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-12">
                     <label for="fecha_hasta">Fecha Hasta:</label>
                     <input type="date" class="form-control" id="fecha_hasta">
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-12">
                     <label for="tipo_subsolicitud">Tipo Solicitud</label>
                     {!! Form::select('tipo_subsolicitud', [NULL => 'Seleccionar'] + $tipo_subsolicitud, NULL, ['class' => 'form-control', 'id' => 'tipo_subsolicitud']) !!}
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-12">
                     <label for="comuna">Comuna</label>
                     {!! Form::select('comuna', [NULL => 'Seleccionar'] + $comuna, NULL, ['class' => 'form-control', 'id' => 'comuna']) !!}
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-12">
                     {!! Form::label('comunidad', 'Comunidad', ['class' => 'control-label', 'id' => 'comunidad_label']) !!}<span
                         class="required" style="color:red;" id="comunidad_id_span">*</span>
                     {!! Form::select('comunidad', $comunidad, old('comunidad'), ['placeholder' => trans('message.solicitud_action.comunidad'), 'class' => 'form-control', 'id' => 'comunidad']) !!}
                 </div>
-                <div class="col-md-2">
+                {{-- <div class="col-md-2">
                     <button class="btn btn-primary" id="btn_filtrar" style="margin-top: 25px;">Filtrar</button>
+                </         </div> --}}
+
                 </div>
             </div>
             <br>
-            <table class="table table-bordered solicitud_all">
+            <table class="table table-bordered solicitud_all" style="display: none">
                 <thead>
                     <tr>
                     <th>Nro Solicitud</th>
@@ -78,6 +81,7 @@
             </table>
         </div>
     </div>
+    <div class="col-md-12" style="margin-left: 550px; margin-top: px">
     <a href="#" id="btn_listado"> <button class="btn btn-primary" style="padding:5px;">Imprimir Listado</button> </a>
     <button class="btn btn-primary" style="padding:5px;" id="btn_totales">Imprimir Totales</button>
 </div>
@@ -144,7 +148,7 @@
                 }
             });
         });
-
+/*
         var table = $('.solicitud_all').DataTable({
             processing: true,
             serverSide: true,
@@ -184,6 +188,7 @@
                 {data: 'solicita', name: 'solicita'},
             ],
             "order": [[ 2, "asc" ]], // Ahora el ordenamiento es ascendente.
+
             "language": {
                 "lengthMenu": "Mostrar _MENU_ registros por página",
                 "zeroRecords": "Nada encontrado !!! - disculpe",
@@ -196,7 +201,7 @@
                     "previous": "Anterior",
                 }
             }
-        });
+        });*/
 
         $('#btn_filtrar').click(function() {
             table.ajax.reload();

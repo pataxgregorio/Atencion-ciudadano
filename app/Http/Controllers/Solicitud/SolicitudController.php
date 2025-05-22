@@ -4109,7 +4109,6 @@ public function imprimir3(Request $request) {
         HTML;
         $printSolicitudRegistradas .= $participantes;
     }
-
     foreach ($solfinalizadas as $finalizada) {
         $finalizadas =<<<HTML
                 <tr>
@@ -4413,7 +4412,7 @@ public function imprimirfarmacia(Request $request) {
         return $item->nombretipo === 'INSUMOS';
     })->count();
     $solicitudestotales = count($data);
-    $participantesTotal = "";
+    $participantesTotal = ""; // Esta variable ya no se usará para la tabla principal, ya que la construiremos dinámicamente
     $etiquetaComuna = '';
     $etiquetaComunidad = '';
     $etiquetaFechas = '';
@@ -4421,21 +4420,6 @@ public function imprimirfarmacia(Request $request) {
     $mes='';
     $comuna = Comuna::find($comuna);
     $comunidad = Comunidad::find($comunidad);
-    foreach ($data as $participante) {
-        $participantes =<<<HTML
-                <tr>
-                    <td>$participante->saludID</td>
-                    <td>$participante->usuario</td>
-                    <td>$participante->solicitante</td>
-                    <td>$participante->edad</td>
-                    <td>$participante->cedula</td>
-                    <td>$participante->direccion</td>
-                    <td>$participante->nombretipo</td>
-                    <td>$participante->solicita</td>
-                </tr>
-        HTML;
-        $participantesTotal .= $participantes;
-    }
 
     $solicitudesPorMes = [];
 
@@ -4546,10 +4530,25 @@ public function imprimirfarmacia(Request $request) {
                 td{
                     font-size: 12px;
                 }
+                /* Estilos para el pie de página */
+                .footer {
+                    position: fixed;
+                    bottom: 0;
+                    left: 0;
+                    width: 100%;
+                    text-align: center;
+                    padding: 10px 0;
+                }
+                .footer img {
+                    width: 10%; /* Ajusta el tamaño del logo según sea necesario */
+                    display: block; /* Para centrar la imagen */
+                    margin: 0 auto; /* Para centrar la imagen */
+                }
         </style>
     </head>
     <body>
     <img src="https://prensa.alcaldiapaez.gob.ve/wp-content/uploads/sites/2/2024/06/CINTILLO-POLITICAS-SOCIALES-Y-COMUNITARIAS-Y-PODER-POPULAR.jpg" alt="" srcset="" width="100%">
+
     <h3 style="text-align:center; margin-top: 320px;">REPORTE DE ENTREGAS</h3>
     <h3 style="text-align:center;">FARMACIA</h3>
     <h3 style="text-align:center; margin-button: 25px;">$mes</h3>
@@ -4567,10 +4566,13 @@ public function imprimirfarmacia(Request $request) {
         <td>$solicitudestotales</td>
     </tr>
     </table>
-
+     <div class="footer">
+        <img src="https://alcaldiapaez.gob.ve/wp-content/uploads/2025/05/logoSIA.png"style="width: 20% display: block;">
+        <h5 style=" text-align: right ; margin-top: -60px;">Sistema  integral de Atención al Ciudadano</h5>
+    </div>
     HTML;
 
-    foreach ($solicitudesPorMes as $mes => $solicitudes) {
+    foreach ($solicitudesPorMes as $mesAgrupado => $solicitudes) {
         $html .= "<table style='page-break-before: always;'>";
         $html .= "<tr>";
         $html .= "<th>N°</th>";
@@ -4582,7 +4584,23 @@ public function imprimirfarmacia(Request $request) {
         $html .= "<th>Comuna</th>";
         $html .= "</tr>";
 
+        $rowCount = 0; // Reiniciar el contador de filas para cada grupo de mes
+
         foreach ($solicitudes as $participante) {
+            if ($rowCount > 0 && $rowCount % 25 === 0) {
+                // Si ya se han agregado 25 registros y no es el primer registro, cierra la tabla actual y abre una nueva
+                $html .= "</table>";
+                $html .= "<table style='page-break-before: always;'>"; // Salto de página
+                $html .= "<tr>";
+                $html .= "<th>N°</th>";
+                $html .= "<th>NOMBRE/APELLIDO</th>";
+                $html .= "<th>Cedula</th>";
+                $html .= "<th>Beneficio</th>";
+                $html .= "<th>Tipo Solicitud</th>";
+                $html .= "<th>Comunidad</th>";
+                $html .= "<th>Comuna</th>";
+                $html .= "</tr>";
+            }
             $html .= "<tr>";
             $html .= "<td>$participante->saludID</td>";
             $html .= "<td>$participante->solicitante</td>";
@@ -4592,11 +4610,17 @@ public function imprimirfarmacia(Request $request) {
             $html .= "<td>$participante->comuna</td>";
             $html .= "<td>$participante->comunidad</td>";
             $html .= "</tr>";
+            $rowCount++;
         }
 
-        $html .= "</table>";
+        $html .= "</table>"; // Cerrar la última tabla del grupo de mes
     }
-    $html .= "</div></body></html>";
+
+    // Se agrega el div del pie de página al final del body
+    $html .= <<<HTML
+
+    </body></html>
+    HTML;
 
     $options = new Options;
     $options->set('isRemoteEnabled', true);
