@@ -10,7 +10,7 @@
 
 @section('contentheader_title')
 <div>
-<h2 style="margin: -25px 0px 0px 25pxpx"><img src="{{ url('/images/icons/logoSIA.png') }}" alt="logo" height="100px" >Crear Solicitud</h2>
+<h2 style="margin: -25px 0px 0px 25px"><img src="{{ url('/images/icons/logoSIA.png') }}" alt="logo" height="100px" >Crear Solicitud</h2>
 
     @component('components.boton_back', ['ruta' => route('solicitud.index'), 'color' => $array_color['back_button_color']])
     Botón de retorno
@@ -49,7 +49,7 @@
                         <form id="buscarPersonaForm">
                         @csrf
 
-                            <div class="col-md-6" style="padding-left: 90px">
+                            <div class="col-md-6">
                                 {!! Form::label('cedula', trans('message.solicitud_action.cedula'), ['class' => 'control-label']) !!}<span class="required" style="color:red;">*</span>
                                 <div class="row">
                                     <div class="col-md-6" >
