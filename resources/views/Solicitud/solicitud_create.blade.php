@@ -25,8 +25,10 @@
 
 @section('main-content')
 
-<div class="ontainer-fluid" style="" >
- <div class="row" style="">  {{-- Added a row to manage the layout --}}
+<div class="container-fluid w-50" style="" >
+ <div class="row" style="margin-left: 100px">  {{-- Added a row to manage the layout --}}
+  <div class="col-md-9">  {{-- columna principal    9 --}}
+
     <div class="card">
         <div class="card-body">
             <div class="col-lg-12 col-xs-12">
@@ -197,7 +199,7 @@
                                             {!! Form::textarea('observacionbeneficiario', old('observacionbeneficiario'), ['placeholder' => "OBSERVACION", 'class' => 'form-control', 'id' => 'observacionbeneficiario_user', 'required' => true]) !!}
                                         </div>
                                 </div>  {{-- End of main column for two-column layout --}}
-                                <div class="col-md-6" style="margin-left: 800px; margin-top: -500px;">
+                                <div class="col-md-6" style="margin-left: 700px; margin-top: -500px;">
 
                                         <h3>RECAUDOS DE LA SOLICITUD</h3>
                                         <br>
@@ -258,6 +260,7 @@
           </div>{{-- fin del col-md-12 principal --}}
         </div>{{-- fin del card body principal --}}
     </div>{{-- fin del card principal --}}
+  </div>
     </div>{{-- fin del row principal --}}
  </div>{{-- fin del cointainer principal --}}
  @endsection
