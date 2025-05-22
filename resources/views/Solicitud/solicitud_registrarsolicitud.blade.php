@@ -80,6 +80,7 @@
 
                                      <br>
 
+                                        <input type="hidden" name="fecha_hidden" id="fecha_hidden">
                                         <input type="hidden" name="cedula" id="cedula_hidden">
                                         <input type="hidden" name="nombre" id="nombre_hidden">
                                         <input type="hidden" name="telefono" id="telefono_hidden">
@@ -265,6 +266,7 @@
 
 @endsection
 @section('script_datatable')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 
 
 <script type="text/javascript">
@@ -333,77 +335,92 @@ $('#cedula_user').on('input', function() {
     event.preventDefault();
     var cedula = $("#cedula_user").val();
 
-    $.ajax({
-        url: "{{ route('solicitud.getpersona') }}",
-        type: "GET",
-        data: { cedula: cedula },
-        dataType: "json"
-    })
-    .done(function(data) {
-        // Verificar si data está vacío o indica que no se encontraron resultados
-        if (!data || Object.keys(data).length === 0) {
-            alert("La cédula ingresada no existe.");
-            window.location.href = "{{ route('solicitud.create') }}"; // Redireccionar si no se encuentra
-            return; // Importante: detener la ejecución del resto del bloque .done()
-        }
+$.ajax({
+    url: "{{ route('solicitud.getpersona') }}",
+    type: "GET",
+    data: { cedula: cedula },
+    dataType: "json"
+})
+.done(function(data) {
+    // Verificar si data está vacío o indica que no se encontraron resultados
+    if (!data || Object.keys(data).length === 0) {
+        alert("La cédula ingresada no existe.");
+        window.location.href = "{{ route('solicitud.create') }}"; // Redireccionar si no se encuentra
+        return; // Importante: detener la ejecución del resto del bloque .done()
+    }
 
-        // Mostrar los campos del formulario
-      //  alert(JSON.stringify(data)); // Para ver la estructura de la data
-        $("#div_nombre").show();
-        $("#div_telefono").show();
-        $("#div_sexo").show();
-        $("#div_fechanacimiento").show();
-        $("#div_estado").show();
-        $("#div_municipio").show();
-        $("#div_parroquia").show();
-        $("#div_comuna").show();
-        $("#div_comunidad").show();
-        $("#div_jefecomunidad").show();
-        $("#div_numero_jefe_comunidad").show();
-        $("#div_ubch").show();
-        $("#div_jefe_ubch").show();
-        $("#div_telefono_jefe_ubch").show();
-        $("#div_direccion").show();
+    // Mostrar los campos del formulario
+    $("#div_nombre").show();
+    $("#div_telefono").show();
+    $("#div_sexo").show();
+    $("#div_fechanacimiento").show();
+    $("#div_estado").show();
+    $("#div_municipio").show();
+    $("#div_parroquia").show();
+    $("#div_comuna").show();
+    $("#div_comunidad").show();
+    $("#div_jefecomunidad").show();
+    $("#div_numero_jefe_comunidad").show();
+    $("#div_ubch").show();
+    $("#div_jefe_ubch").show();
+    $("#div_telefono_jefe_ubch").show();
+    $("#div_direccion").show();
 
-        // Asignar los valores básicos a los inputs invisibles
-        $("#nombre_user").val(data.nombre);
-        $("#telefono_user").val(data.telefono);
-        $("#sexo").val(data.sexo);
-        $("#fechanacimiento").val(data.fechanacimiento);
-        $("#estado_id").val(data.estado_id);
-        $("#direccion_user").val(data.direccion);
+    // Asignar los valores básicos a los inputs invisibles
 
-        $("#cedula_hidden").val(data.cedula);
-        $("#nombre_hidden").val(data.nombre);
-        $("#telefono_hidden").val(data.telefono);
-        $("#sexo_hidden").val(data.sexo);
-        $("#fechanacimiento_hidden").val(data.fechanacimiento);
-        $("#estado_id_hidden").val(data.estado_id);
-        $("#municipio_id_hidden").val(data.municipio_id);
-        $("#parroquia_id_hidden").val(data.parroquia_id);
-        $("#comuna_id_hidden").val(data.comuna_id);
-        $("#comunidad_id_hidden").val(data.comunidad_id);
-        $("#direccion_hidden").val(data.direccion);
-        // --- Inicio de la cascada ---
-        cargarMunicipios(data.estado_id, data)
-        .then(municipio_id => cargarParroquias(municipio_id, data))
-        .then(parroquia_id => cargarComunas(parroquia_id, data))
-        .then(comuna_id => cargarComunidades(comuna_id, data))
-        .catch(error => {
-            console.error("Error en la cascada:", error);
-            alert("Ocurrió un error al cargar la información adicional. Por favor, inténtalo de nuevo más tarde.");
-        });
-    })
-    .fail(function(xhr) {
-        console.log("Error en la petición AJAX:", xhr); // Para depuración
-        if (xhr.responseJSON && xhr.responseJSON.error) {
-            alert(xhr.responseJSON.error); // Mostrar el mensaje de error específico del servidor
-        } else {
-            alert("Error al buscar la persona. Por favor, verifica la cédula e inténtalo de nuevo.");
-        }
+    // Convertir la fecha de string a objeto Date antes de pasarla a la función
+    // Asegúrate de que data.fecha tenga un formato que Date() pueda parsear correctamente,
+    // por ejemplo 'YYYY-MM-DD' o 'YYYY/MM/DD'.
+    const fechaUltimaSolicitud = new Date(data.fecha);
+    var fechaMoment = moment(data.fecha);
+    var fechaFormateada = fechaMoment.format('DD-MM-YYYY');
+    // Calcular los días transcurridos
+    let dias = calcularDiasTranscurridos(fechaUltimaSolicitud);
+
+    // Corregir la sintaxis del if y el mensaje de la alerta
+    if (dias < 30) {
+        alert("El solicitante tiene menos de 30 días de haber solicitado el beneficio. La Última fecha de solicitud: " + fechaFormateada);
+    }
+
+    $("#nombre_user").val(data.nombre);
+    $("#telefono_user").val(data.telefono);
+    $("#sexo").val(data.sexo);
+    $("#fechanacimiento").val(data.fechanacimiento);
+    $("#estado_id").val(data.estado_id);
+    $("#direccion_user").val(data.direccion);
+
+    $("#cedula_hidden").val(data.cedula);
+    $("#nombre_hidden").val(data.nombre);
+    $("#telefono_hidden").val(data.telefono);
+    $("#sexo_hidden").val(data.sexo);
+    $("#fechanacimiento_hidden").val(data.fechanacimiento);
+    $("#estado_id_hidden").val(data.estado_id);
+    $("#municipio_id_hidden").val(data.municipio_id);
+    $("#parroquia_id_hidden").val(data.parroquia_id);
+    $("#comuna_id_hidden").val(data.comuna_id);
+    $("#comunidad_id_hidden").val(data.comunidad_id);
+    $("#direccion_hidden").val(data.direccion);
+
+    // --- Inicio de la cascada ---
+    // (Asegúrate de que las funciones cargarMunicipios, cargarParroquias, etc., estén definidas)
+    cargarMunicipios(data.estado_id, data)
+    .then(municipio_id => cargarParroquias(municipio_id, data))
+    .then(parroquia_id => cargarComunas(parroquia_id, data))
+    .then(comuna_id => cargarComunidades(comuna_id, data))
+    .catch(error => {
+        console.error("Error en la cascada:", error);
+        alert("Ocurrió un error al cargar la información adicional. Por favor, inténtalo de nuevo más tarde.");
     });
+})
+.fail(function(xhr) {
+    console.log("Error en la petición AJAX:", xhr); // Para depuración
+    if (xhr.responseJSON && xhr.responseJSON.error) {
+        alert(xhr.responseJSON.error); // Mostrar el mensaje de error específico del servidor
+    } else {
+        alert("Error al buscar la persona. Por favor, verifica la cédula e inténtalo de nuevo.");
+    }
 });
-
+});
 function isEmpty(obj) {
     for(var key in obj) {
         if(obj.hasOwnProperty(key))
@@ -458,6 +475,32 @@ function isEmpty(obj) {
                 return data.comunidad_id;
             });
         }
+        function calcularDiasTranscurridos(fechaInput) {
+    // 1. Validar si la entrada es un objeto Date válido
+    if (!(fechaInput instanceof Date) || isNaN(fechaInput.getTime())) {
+        console.error("La entrada 'fechaInput' debe ser un objeto Date válido. Se recibió:", fechaInput);
+        return NaN; // Retorna NaN o maneja el error como prefieras
+    }
+
+    // 2. Obtener la fecha actual (solo la fecha, sin la hora)
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0); // Establecer la hora a medianoche
+
+    // 3. Ajustar la fecha de entrada a medianoche también
+    const fechaAjustada = new Date(fechaInput); // Crea una nueva instancia para no modificar el original si es necesario
+    fechaAjustada.setHours(0, 0, 0, 0);
+
+    // 4. Calcular la diferencia en milisegundos
+    const diferenciaMilisegundos = hoy.getTime() - fechaAjustada.getTime();
+
+    // 5. Definir los milisegundos en un día
+    const milisegundosEnUnDia = 1000 * 60 * 60 * 24;
+
+    // 6. Convertir la diferencia de milisegundos a días y redondear hacia abajo
+    const diasTranscurridos = Math.floor(diferenciaMilisegundos / milisegundosEnUnDia);
+
+    return diasTranscurridos;
+}
 
         function llenarSelect(selectId, opciones, valorSeleccionado) {
             $(selectId).empty();

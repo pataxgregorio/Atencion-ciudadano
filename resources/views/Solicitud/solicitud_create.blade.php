@@ -262,6 +262,7 @@
  </div>{{-- fin del cointainer principal --}}
  @endsection
 @section('script_datatable')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 
 
 <script type="text/javascript">
@@ -333,6 +334,15 @@ $("#buscarCedula").click(function(event) {
         $("#div_direccion").show();
 
         // Asignar los valores básicos a los inputs invisibles
+        const fechaUltimaSolicitud = new Date(data.fecha);
+        let dias = calcularDiasTranscurridos(fechaUltimaSolicitud);
+// Corregir la sintaxis del if y el mensaje de la alerta
+        var fechaMoment = moment(data.fecha);
+       var fechaFormateada = fechaMoment.format('DD-MM-YYYY');
+
+            if (dias < 30) {
+                alert("El solicitante tiene menos de 30 días de haber solicitado el beneficio. La Última fecha de solicitud: " + fechaFormateada);
+            }
         $("#cedula_hidden").val(data.cedula);
         $("#nombre_user").val(data.nombre);
         $("#telefono_user").val(data.telefono);
@@ -368,7 +378,32 @@ $("#buscarCedula").click(function(event) {
         }
     });
 });
+function calcularDiasTranscurridos(fechaInput) {
+    // 1. Validar si la entrada es un objeto Date válido
+    if (!(fechaInput instanceof Date) || isNaN(fechaInput.getTime())) {
+        console.error("La entrada 'fechaInput' debe ser un objeto Date válido. Se recibió:", fechaInput);
+        return NaN; // Retorna NaN o maneja el error como prefieras
+    }
 
+    // 2. Obtener la fecha actual (solo la fecha, sin la hora)
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0); // Establecer la hora a medianoche
+
+    // 3. Ajustar la fecha de entrada a medianoche también
+    const fechaAjustada = new Date(fechaInput); // Crea una nueva instancia para no modificar el original si es necesario
+    fechaAjustada.setHours(0, 0, 0, 0);
+
+    // 4. Calcular la diferencia en milisegundos
+    const diferenciaMilisegundos = hoy.getTime() - fechaAjustada.getTime();
+
+    // 5. Definir los milisegundos en un día
+    const milisegundosEnUnDia = 1000 * 60 * 60 * 24;
+
+    // 6. Convertir la diferencia de milisegundos a días y redondear hacia abajo
+    const diasTranscurridos = Math.floor(diferenciaMilisegundos / milisegundosEnUnDia);
+
+    return diasTranscurridos;
+}
 function cargarMunicipios(estado_id, data) {
             return $.ajax({
                 url: "{{ route('municipio.get') }}",
