@@ -49,15 +49,7 @@
                         <form id="buscarPersonaForm">
                         @csrf
 
-                            <div class="col-md-6">
-                                {!! Form::label('cedula', trans('message.solicitud_action.cedula'), ['class' => 'control-label']) !!}<span class="required" style="color:red;">*</span>
-                                <div class="row">
-                                    <div class="col-md-6" >
-                                    {!! Form::text('cedula', old('cedula'), ['placeholder' => trans('message.solicitud_action.cedula'), 'class' => 'form-control', 'id' => 'cedula_user', 'required' => true]) !!}
-                                    <button type="button" class="btn btn-primary ml-2" style="margin-left: 250px; margin-top: -60px" id="buscarCedula">Buscar</button>
-                                    </div>
-                                </div>
-                            </div>
+
                         </form>
 
                             {!! Form::open(
@@ -70,6 +62,15 @@
                         ) !!}
 
                      {{ csrf_field() }}
+                      <div class="col-md-6">
+                                {!! Form::label('cedula', trans('message.solicitud_action.cedula'), ['class' => 'control-label']) !!}<span class="required" style="color:red;">*</span>
+                                <div class="row">
+                                    <div class="col-md-6" >
+                                    {!! Form::text('cedula', old('cedula'), ['placeholder' => trans('message.solicitud_action.cedula'), 'class' => 'form-control', 'id' => 'cedula_user', 'required' => true]) !!}
+                                    <button type="button" class="btn btn-primary ml-2" style="margin-left: 250px; margin-top: -60px" id="buscarCedula">Buscar</button>
+                                    </div>
+                                </div>
+                            </div>
                     <br>
                     <br>
                     <br>
@@ -313,7 +314,7 @@ $("#buscarCedula").click(function(event) {
             document.getElementById('parroquia').style.display = 'block';
             document.getElementById('sexo1').style.display = 'block';
             document.getElementById('direccion1').style.display = 'block';
-
+           $("#cedula_hidden").val($("#cedula_user").val());
         //    window.location.href = "{{ route('solicitud.create') }}"; // Redireccionar si no se encuentra
             return; // Importante: detener la ejecución del resto del bloque .done()
         }
@@ -357,7 +358,7 @@ $("#buscarCedula").click(function(event) {
         $("#parroquia_id").val(data.parroquia_id);
          $("#comuna_id").val(data.comuna_id);
          $("#comunidad_id").val(data.comunidad_id);
-  $("#municipio_id_hidden").val(data.municipio_id);
+         $("#municipio_id_hidden").val(data.municipio_id);
         $("#parroquia_id_hidden").val(data.parroquia_id);
         $("#comuna_id_hidden").val(data.comuna_id);
         $("#comunidad_id_hidden").val(data.comunidad_id);
