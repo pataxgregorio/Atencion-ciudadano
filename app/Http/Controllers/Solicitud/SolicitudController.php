@@ -4521,7 +4521,7 @@ public function imprimirfarmacia(Request $request) {
         return $item->nombretipo === 'INSUMOS';
     })->count();
     $solicitudestotales = count($data);
-    $participantesTotal = ""; // Esta variable ya no se usará para la tabla principal, ya que la construiremos dinámicamente
+    $participantesTotal = "";
     $etiquetaComuna = '';
     $etiquetaComunidad = '';
     $etiquetaFechas = '';
@@ -4587,34 +4587,24 @@ public function imprimirfarmacia(Request $request) {
     if (!empty($comunidad)) {
         $etiquetaComunidad = "<h5 style='text-align:left;'>COMUNIDAD: $comunidad->nombre</h5>";
         }
-    if (!empty($tipo_subsolicitud)) {
-        $etiquetatipo_subsolicitud = "<h5 style='text-align:left;'>TIPO SOLICITUD: $tipo_subsolicitud->nombre</h5>";
-        }
-    // Crea una variable para el nombre del archivo PDF
     $nombreArchivo = "Reporte de solicitudes finalizadas";
-    $totalfinalizadas = '<h4 style="text-align:left;">Total de solicitudes finalizadas en el periodo seleccionado: '.$solicitudestotales.'</h4>';
+    $totalfinalizadas = '<h4 style="text-align:left;">Total de solicitudes finalizadas en el periodo seleccionado: '.$solicitudestotales.'</h4>'; // Línea corregida
 
-    // Agrega información al nombre del archivo según las variables con valor
     if (!empty($fechadesde) && !empty($fechahasta)) {
-    $nombreArchivo .= " desde el $diadesde-$mesdesde-$anodesde al $diahasta-$meshasta-$anohasta";
+        $nombreArchivo .= " desde el $diadesde-$mesdesde-$anodesde al $diahasta-$meshasta-$anohasta";
     }
     if (!empty($comuna)) {
-    $nombreArchivo .= " Comuna $comuna->codigo";
+        $nombreArchivo .= " Comuna $comuna->codigo";
     }
     if (!empty($comunidad)) {
-    $nombreArchivo .= " Comunidad $comunidad->nombre";
+        $nombreArchivo .= " Comunidad $comunidad->nombre";
     }
-    if (!empty($tipo_subsolicitud)) {
-    $nombreArchivo .= " Tipo $tipo_subsolicitud->nombre";
-    $totalfinalizadas = '<h4 style="text-align:left;">Total de solicitudes de '.$tipo_subsolicitud->nombre.' finalizadas en el periodo seleccionado: ' . $solicitudestotales . '</h4>';
-    }
-    // Agrega la extensión .pdf al nombre del archivo
     $nombreArchivo .= ".pdf";
 
     $html =
     <<<HTML
     <!DOCTYPE html>
-    <html lang="en">
+    <html lang="es">
     <head>
         <meta charset="UTF-8">
         <style>
@@ -4630,16 +4620,41 @@ public function imprimirfarmacia(Request $request) {
                 th, td {
                     text-align:center;
                     border: 1px solid #ddd;
+                    padding: 8px;
+                    font-size: 10px; /* Reducido un poco la fuente para más espacio */
+                    word-wrap: break-word;
+                    overflow-wrap: break-word;
+                    vertical-align: top; /* Alinea el contenido en la parte superior */
                 }
 
-                th {
-                    font-size: 12px;
+                /* Aplicar ancho específico solo a las columnas que lo necesitan para controlar el wrap */
+                .detail-table th:nth-child(1), /* N° */
+                .detail-table td:nth-child(1) { width: 5%; }
+                .detail-table th:nth-child(2), /* NOMBRE/APELLIDO */
+                .detail-table td:nth-child(2) { width: 18%; }
+                .detail-table th:nth-child(3), /* Cedula */
+                .detail-table td:nth-child(3) { width: 10%; }
+                .detail-table th:nth-child(4), /* Beneficio - Esta es la clave */
+                .detail-table td:nth-child(4) {
+                    width: 30%; /* Aumentado para dar más espacio a Beneficio */
+                    text-align: left; /* Alineado a la izquierda para mejor lectura de texto largo */
+                }
+                .detail-table th:nth-child(5), /* Tipo Solicitud */
+                .detail-table td:nth-child(5) { width: 10%; }
+                .detail-table th:nth-child(6), /* Comunidad */
+                .detail-table td:nth-child(6) { width: 14%; }
+                .detail-table th:nth-child(7), /* Comuna */
+                .detail-table td:nth-child(7) { width: 13%; }
+
+
+                /* Estilos para el encabezado de las tablas de detalle (sticky en teoría, pero más para diseño) */
+                .detail-table th {
+                    font-size: 11px; /* Ligeramente más grande que las celdas */
                     background-color: #f0f0f0;
+                    position: sticky; /* Sticky ayuda a Dompdf a repetir el thead */
+                    top: 0;
                 }
-                td{
-                    font-size: 12px;
-                }
-                /* Estilos para el pie de página */
+                /* Pie de página */
                 .footer {
                     position: fixed;
                     bottom: 0;
@@ -4649,9 +4664,13 @@ public function imprimirfarmacia(Request $request) {
                     padding: 10px 0;
                 }
                 .footer img {
-                    width: 10%; /* Ajusta el tamaño del logo según sea necesario */
-                    display: block; /* Para centrar la imagen */
-                    margin: 0 auto; /* Para centrar la imagen */
+                    width: 10%;
+                    display: block;
+                    margin: 0 auto;
+                }
+                /* Salto de página */
+                .page-break {
+                    page-break-before: always;
                 }
         </style>
     </head>
@@ -4679,53 +4698,74 @@ public function imprimirfarmacia(Request $request) {
         <img src="https://alcaldiapaez.gob.ve/wp-content/uploads/2025/05/logoSIA.png"style="width: 20% display: block;">
         <h5 style=" text-align: right ; margin-top: -60px;">Sistema  integral de Atención al Ciudadano</h5>
     </div>
+
+    <div class="page-break"></div>
+
     HTML;
 
-    foreach ($solicitudesPorMes as $mesAgrupado => $solicitudes) {
-        $html .= "<table style='page-break-before: always;'>";
-        $html .= "<tr>";
-        $html .= "<th>N°</th>";
-        $html .= "<th>NOMBRE/APELLIDO</th>";
-        $html .= "<th>Cedula</th>";
-        $html .= "<th>Beneficio</th>";
-        $html .= "<th>Tipo Solicitud</th>";
-        $html .= "<th>Comunidad</th>";
-        $html .= "<th>Comuna</th>";
-        $html .= "</tr>";
+    // Lógica para las tablas paginadas
+    // Hemos ajustado este número. Es un valor que debería permitir que incluso las filas con texto largo
+    // quepan sin desbordarse drásticamente. Menos filas por página, pero más consistentes.
+    $registrosPorPagina = 12; // Reducido para dar más espacio a filas largas
 
-        $rowCount = 0; // Reiniciar el contador de filas para cada grupo de mes
+    $rowCount = 0;
 
-        foreach ($solicitudes as $participante) {
-            if ($rowCount > 0 && $rowCount % 25 === 0) {
-                // Si ya se han agregado 25 registros y no es el primer registro, cierra la tabla actual y abre una nueva
-                $html .= "</table>";
-                $html .= "<table style='page-break-before: always;'>"; // Salto de página
-                $html .= "<tr>";
-                $html .= "<th>N°</th>";
-                $html .= "<th>NOMBRE/APELLIDO</th>";
-                $html .= "<th>Cedula</th>";
-                $html .= "<th>Beneficio</th>";
-                $html .= "<th>Tipo Solicitud</th>";
-                $html .= "<th>Comunidad</th>";
-                $html .= "<th>Comuna</th>";
-                $html .= "</tr>";
-            }
+    $html .= "<table class='detail-table'>";
+    $html .= "<thead>"; // Encabezado de la tabla para que se repita en cada nueva página
+    $html .= "<tr>";
+    $html .= "<th>N°</th>";
+    $html .= "<th>NOMBRE/APELLIDO</th>";
+    $html .= "<th>Cedula</th>";
+    $html .= "<th>Beneficio</th>";
+    $html .= "<th>Tipo Solicitud</th>";
+    $html .= "<th>Comunidad</th>";
+    $html .= "<th>Comuna</th>";
+    $html .= "</tr>";
+    $html .= "</thead>";
+    $html .= "<tbody>"; // Cuerpo de la tabla
+
+    foreach ($data as $participante) {
+        // Antes de agregar una nueva fila, verificamos si necesitamos un salto de página.
+        // La condición es: si ya hay filas en la página actual Y
+        // el número de filas en la página actual es un múltiplo exacto de $registrosPorPagina.
+        if ($rowCount > 0 && ($rowCount % $registrosPorPagina) === 0) {
+            $html .= "</tbody>"; // Cierra el cuerpo de la tabla actual
+            $html .= "</table>"; // Cierra la tabla actual
+            $html .= "<div class='page-break'></div>"; // Salto de página
+            $html .= "<table class='detail-table'>"; // Abre una nueva tabla en la nueva página
+            $html .= "<thead>"; // Vuelve a imprimir el encabezado para la nueva página
             $html .= "<tr>";
-            $html .= "<td>$participante->saludID</td>";
-            $html .= "<td>$participante->solicitante</td>";
-            $html .= "<td>$participante->cedula</td>";
-            $html .= "<td>$participante->solicita</td>";
-            $html .= "<td>$participante->nombretipo</td>";
-            $html .= "<td>$participante->comuna</td>";
-            $html .= "<td>$participante->comunidad</td>";
+            $html .= "<th>N°</th>";
+            $html .= "<th>NOMBRE/APELLIDO</th>";
+            $html .= "<th>Cedula</th>";
+            $html .= "<th>Beneficio</th>";
+            $html .= "<th>Tipo Solicitud</th>";
+            $html .= "<th>Comunidad</th>";
+            $html .= "<th>Comuna</th>";
             $html .= "</tr>";
-            $rowCount++;
+            $html .= "</thead>";
+            $html .= "<tbody>"; // Abre un nuevo cuerpo de tabla
         }
 
-        $html .= "</table>"; // Cerrar la última tabla del grupo de mes
+        $html .= "<tr>";
+        $html .= "<td>" . htmlspecialchars($participante->saludID) . "</td>";
+        $html .= "<td>" . htmlspecialchars($participante->solicitante) . "</td>";
+        $html .= "<td>" . htmlspecialchars($participante->cedula) . "</td>";
+        // Asegúrate de que este campo pueda manejar contenido largo y se envuelva correctamente
+        $html .= "<td>" . htmlspecialchars($participante->solicita) . "</td>";
+        $html .= "<td>" . htmlspecialchars($participante->nombretipo) . "</td>";
+        $html .= "<td>" . htmlspecialchars($participante->comuna) . "</td>";
+        $html .= "<td>" . htmlspecialchars($participante->comunidad) . "</td>";
+        $html .= "</tr>";
+        $rowCount++;
     }
 
-    // Se agrega el div del pie de página al final del body
+    // Cierre de la última tabla si hay registros
+    if ($rowCount > 0) {
+        $html .= "</tbody>";
+        $html .= "</table>";
+    }
+
     $html .= <<<HTML
 
     </body></html>
@@ -4740,5 +4780,4 @@ public function imprimirfarmacia(Request $request) {
     $dompdf->stream($nombreArchivo, array("Attachment"=>1));
 
     return redirect()->back();
-}
-}
+}}
