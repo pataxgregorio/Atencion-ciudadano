@@ -18,6 +18,7 @@ use App\Models\Direccion\Direccion;
 use App\Models\Enter\Enter;
 use App\Models\Coordinacion\Coordinacion;
 use App\Models\Tipo_Solicitud\Tipo_Solicitud;
+//use Dompdf\Adapter\CPDF::$get
 use Auth;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -3902,49 +3903,37 @@ class SolicitudController extends Controller
         $dompdf->stream("Solicitud Numero $solicitud_salud_id Direccion Politicas Sociales.pdf", array("Attachment" => 1));
         return redirect()->back();
     }
-    public function imprimir2(Request $request) {
+    public function imprimir2(Request $request)
+    {
         setlocale(LC_TIME, 'es_ES.UTF-8');
 
         $input = $request->all();
         $fechadesde = $input['fecha_desde'];
         $fechahasta = $input['fecha_hasta'];
-        $tipo_subsolicitud = $input['tipo_subsolicitud'];
-        $comuna= isset($input['comuna']) ? $input['comuna'] : '';
-        $comunidad = isset($input['comunidad']) ? $input['comunidad'] : '';
+        $tipo_subsolicitud_id = $input['tipo_subsolicitud'];
+        $comuna_id = isset($input['comuna']) ? $input['comuna'] : '';
+        $comunidad_id = isset($input['comunidad']) ? $input['comunidad'] : '';
+
         $diadesde = date('d', strtotime($fechadesde));
         $mesdesde = date('m', strtotime($fechadesde));
         $anodesde = date('Y', strtotime($fechadesde));
         $diahasta = date('d', strtotime($fechahasta));
         $meshasta = date('m', strtotime($fechahasta));
         $anohasta = date('Y', strtotime($fechahasta));
-        $data = (new Seguimiento)->getSolicitudList_Finalizadas($fechadesde, $fechahasta, $tipo_subsolicitud,$comuna, $comunidad);
+
+        $data = (new Seguimiento)->getSolicitudList_Finalizadas($fechadesde, $fechahasta, $tipo_subsolicitud_id, $comuna_id, $comunidad_id);
         $solicitudestotales = count($data);
-        $participantesTotal = "";
+
         $etiquetaComuna = '';
         $etiquetaComunidad = '';
         $etiquetaFechas = '';
         $etiquetatipo_subsolicitud = '';
-        $comuna = Comuna::find($comuna);
-        $comunidad = Comunidad::find($comunidad);
-        $tipo_subsolicitud = subtiposolicitud::find($tipo_subsolicitud);
-        foreach ($data as $participante) {
-            $participantes =<<<HTML
-                    <tr>
-                        <td>$participante->saludID</td>
-                        <td>$participante->usuario</td>
-                        <td>$participante->solicitante</td>
-                        <td>$participante->edad</td>
-                        <td>$participante->cedula</td>
-                        <td>$participante->direccion</td>
-                        <td>$participante->nombretipo</td>
-                        <td>$participante->solicita</td>
-                    </tr>
-            HTML;
-            $participantesTotal .= $participantes;
-        }
+
+        $comuna = !empty($comuna_id) ? Comuna::find($comuna_id) : null;
+        $comunidad = !empty($comunidad_id) ? Comunidad::find($comunidad_id) : null;
+        $tipo_subsolicitud = !empty($tipo_subsolicitud_id) ? SubtipoSolicitud::find($tipo_subsolicitud_id) : null;
 
         $solicitudesPorMes = [];
-
         foreach ($data as $participante) {
             $mes = date('Y-m', strtotime($participante->fecha));
             if (!isset($solicitudesPorMes[$mes])) {
@@ -3955,56 +3944,63 @@ class SolicitudController extends Controller
 
         if (!empty($comuna)) {
             $etiquetaComuna = "<h5 style='text-align:left;'>COMUNA: $comuna->codigo</h5>";
-            }
+        }
         if (!empty($fechadesde) && !empty($fechahasta)) {
             $etiquetaFechas = "<h5 style='text-align:left;'>Reporte de solicitudes finalizadas desde el $diadesde-$mesdesde-$anodesde hasta el $diahasta-$meshasta-$anohasta</h5>";
-            }
+        }
         if (!empty($comunidad)) {
             $etiquetaComunidad = "<h5 style='text-align:left;'>COMUNIDAD: $comunidad->nombre</h5>";
-            }
+        }
         if (!empty($tipo_subsolicitud)) {
             $etiquetatipo_subsolicitud = "<h5 style='text-align:left;'>TIPO SOLICITUD: $tipo_subsolicitud->nombre</h5>";
-            }
-        // Crea una variable para el nombre del archivo PDF
-        $nombreArchivo = "Reporte de solicitudes finalizadas";
-        $totalfinalizadas = '<h4 style="text-align:left;">Total de solicitudes finalizadas en el periodo seleccionado: '.$solicitudestotales.'</h4>';
+        }
 
-        // Agrega información al nombre del archivo según las variables con valor
+        $nombreArchivo = "Reporte de solicitudes finalizadas";
+        // **************** CORRECCIÓN AQUÍ ****************
+        $totalfinalizadas = "<h4 style='text-align:left;'>Total de solicitudes finalizadas en el periodo seleccionado: " . $solicitudestotales . "</h4>";
+        // *************************************************
+
         if (!empty($fechadesde) && !empty($fechahasta)) {
-        $nombreArchivo .= " desde el $diadesde-$mesdesde-$anodesde al $diahasta-$meshasta-$anohasta";
+            $nombreArchivo .= " desde el $diadesde-$mesdesde-$anodesde al $diahasta-$meshasta-$anohasta";
         }
         if (!empty($comuna)) {
-        $nombreArchivo .= " Comuna $comuna->codigo";
+            $nombreArchivo .= " Comuna $comuna->codigo";
         }
         if (!empty($comunidad)) {
-        $nombreArchivo .= " Comunidad $comunidad->nombre";
+            $nombreArchivo .= " Comunidad $comunidad->nombre";
         }
         if (!empty($tipo_subsolicitud)) {
-        $nombreArchivo .= " Tipo $tipo_subsolicitud->nombre";
-        $totalfinalizadas = '<h4 style="text-align:left;">Total de solicitudes de '.$tipo_subsolicitud->nombre.' finalizadas en el periodo seleccionado: ' . $solicitudestotales . '</h4>';
+            $nombreArchivo .= " Tipo " . $tipo_subsolicitud->nombre;
+            // **************** CORRECCIÓN AQUÍ ****************
+            $totalfinalizadas = "<h4 style='text-align:left;'>Total de solicitudes de " . $tipo_subsolicitud->nombre . " finalizadas en el periodo seleccionado: " . $solicitudestotales . "</h4>";
+            // *************************************************
         }
-        // Agrega la extensión .pdf al nombre del archivo
         $nombreArchivo .= ".pdf";
 
+        $footerImageUrl = public_path('images/logoSIA.png');
+
         $html =
-        <<<HTML
+            <<<HTML
         <!DOCTYPE html>
-        <html lang="en">
+        <html lang="es">
         <head>
             <meta charset="UTF-8">
             <style>
                     body {
                         font-family: sans-serif;
+                        padding-bottom: 70px; /* Mismo valor que el margin-bottom de @page */
                     }
 
                     table {
                         width: 100%;
                         border-collapse: collapse;
+                        margin-bottom: 20px;
                     }
 
                     th, td {
                         text-align:center;
                         border: 1px solid #ddd;
+                        padding: 8px;
                     }
 
                     th {
@@ -4013,6 +4009,28 @@ class SolicitudController extends Controller
                     }
                     td{
                         font-size: 12px;
+                    }
+                    /* Estilo para el salto de página */
+                    .page-break {
+                        page-break-after: always;
+                    }
+
+                    /* Nuevo estilo para el pie de página fijo en cada página */
+                    @page {
+                        margin-bottom: 70px; /* Ajusta este valor para el espacio del footer */
+                    }
+                    .footer {
+                        position: fixed;
+                        bottom: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 60px; /* Altura del footer */
+                        text-align: center;
+                        font-size: 10px;
+                        border-top: 1px solid #ddd;
+                        padding-top: 5px;
+                        box-sizing: border-box; /* Para que el padding no añada al height total */
+                        z-index: 1000; /* Asegura que esté por encima de otros elementos */
                     }
             </style>
         </head>
@@ -4028,46 +4046,74 @@ class SolicitudController extends Controller
                 <br>
         HTML;
 
-        foreach ($solicitudesPorMes as $mes => $solicitudes) {
+        $registrosPorPagina = 9;
+
+        $mesesKeys = array_keys($solicitudesPorMes);
+        $totalMonths = count($mesesKeys);
+
+        foreach ($mesesKeys as $monthIndex => $mes) {
+            $solicitudes = $solicitudesPorMes[$mes];
+            $isLastMonth = ($monthIndex == $totalMonths - 1);
+
             $html .= "<h3>Solicitudes del mes: " . strftime('%B %Y', strtotime($mes)) . "</h3>";
             $solicitudesMes = count($solicitudes);
-            $html .= "<h4 style='text-align:left;'>Total de solicitudes finalizadas en el mes ". strftime('%B %Y', strtotime($mes)) .": $solicitudesMes</h4>";
-            $html .= "<table>";
-            $html .= "<tr>";
-            $html .= "<th>Correlativo</th>";
-            $html .= "<th>Funcionario Receptor</th>";
-            $html .= "<th>Solicitante</th>";
-            $html .= "<th>Edad</th>";
-            $html .= "<th>Cedula Solicitante</th>";
-            $html .= "<th>Direccion</th>";
-            $html .= "<th>Tipo Solicitud</th>";
-            $html .= "<th>Beneficio</th>";
-            $html .= "</tr>";
+            $html .= "<h4 style='text-align:left;'>Total de solicitudes finalizadas en el mes " . strftime('%B %Y', strtotime($mes)) . ": $solicitudesMes</h4>";
 
-            foreach ($solicitudes as $participante) {
+            $paginasSolicitudes = array_chunk($solicitudes, $registrosPorPagina);
+
+            foreach ($paginasSolicitudes as $paginaIndex => $solicitudesDePagina) {
+                $html .= "<table>";
                 $html .= "<tr>";
-                $html .= "<td>$participante->saludID</td>";
-                $html .= "<td>$participante->usuario</td>";
-                $html .= "<td>$participante->solicitante</td>";
-                $html .= "<td>$participante->edad</td>";
-                $html .= "<td>$participante->cedula</td>";
-                $html .= "<td>$participante->direccion</td>";
-                $html .= "<td>$participante->nombretipo</td>";
-                $html .= "<td>$participante->solicita</td>";
+                $html .= "<th>Correlativo</th>";
+                $html .= "<th>Funcionario Receptor</th>";
+                $html .= "<th>Solicitante</th>";
+                $html .= "<th>Edad</th>";
+                $html .= "<th>Cedula Solicitante</th>";
+                $html .= "<th>Direccion</th>";
+                $html .= "<th>Tipo Solicitud</th>";
+                $html .= "<th>Beneficio</th>";
                 $html .= "</tr>";
-            }
 
-            $html .= "</table>";
+                foreach ($solicitudesDePagina as $participante) {
+                    $html .= "<tr>";
+                    $html .= "<td>$participante->saludID</td>";
+                    $html .= "<td>$participante->usuario</td>";
+                    $html .= "<td>$participante->solicitante</td>";
+                    $html .= "<td>$participante->edad</td>";
+                    $html .= "<td>$participante->cedula</td>";
+                    $html .= "<td>$participante->direccion</td>";
+                    $html .= "<td>$participante->nombretipo</td>";
+                    $html .= "<td>$participante->solicita</td>";
+                    $html .= "</tr>";
+                }
+                $html .= "</table>";
+
+                $isLastPageOfCurrentMonth = ($paginaIndex == count($paginasSolicitudes) - 1);
+                if (!$isLastPageOfCurrentMonth || !$isLastMonth) {
+                     $html .= '<div class="page-break"></div>';
+                }
+            }
         }
-        $html .= "</div></body></html>";
+
+        $html .= <<<FOOTER
+        <div class="footer" style="text-align: right;">
+            <img src="https://alcaldiapaez.gob.ve/wp-content/uploads/2025/05/logoSIA.png" style="width: 150px; height: auto; display: inline-block; vertical-align: middle; margin-right: 10px;">
+            <h2 style="display: inline-block; vertical-align: middle; margin: 0; font-weight: bold;">Sistema integral de Atención al Ciudadano</h2>
+        </div>
+        FOOTER;
+
+        $html .= "</body></html>";
 
         $options = new Options;
         $options->set('isRemoteEnabled', true);
+        $options->set('enable_html5_parser', true);
+
         $dompdf = new Dompdf($options);
         $dompdf->loadHtml($html);
         $dompdf->setPaper('legal', 'portrait');
+
         $dompdf->render();
-        $dompdf->stream($nombreArchivo, array("Attachment"=>1));
+        $dompdf->stream($nombreArchivo, array("Attachment" => 1));
 
         return redirect()->back();
     }
@@ -4207,189 +4253,252 @@ public function imprimir3(Request $request) {
     return redirect()->back();
 }
 
-public function imprimir4(Request $request)
-{
-    setlocale(LC_TIME, 'es_ES.UTF-8');
+    public function imprimir4(Request $request)
+    {
+        setlocale(LC_TIME, 'es_ES.UTF-8');
 
-    $input = $request->all();
+        $input = $request->all();
 
-    $fechadesde = $input['fecha_desde'];
-    $fechahasta = $input['fecha_hasta'];
-    $tipo_subsolicitud = $input['tipo_subsolicitud'];
-    $comuna = isset($input['comuna']) ? $input['comuna'] : null;
-    $comunidad = isset($input['comunidad']) ? $input['comunidad'] : null;
+        $fechadesde = $input['fecha_desde'];
+        $fechahasta = $input['fecha_hasta'];
+        $tipo_subsolicitud = $input['tipo_subsolicitud'];
+        $comuna = isset($input['comuna']) ? $input['comuna'] : null;
+        $comunidad = isset($input['comunidad']) ? $input['comunidad'] : null;
 
-    // Formatear fechas
-    $diadesde = date('d', strtotime($fechadesde));
-    $mesdesde = date('m', strtotime($fechadesde));
-    $anodesde = date('Y', strtotime($fechadesde));
-    $diahasta = date('d', strtotime($fechahasta));
-    $meshasta = date('m', strtotime($fechahasta));
-    $anohasta = date('Y', strtotime($fechahasta));
+        // Formatear fechas
+        $diadesde = date('d', strtotime($fechadesde));
+        $mesdesde = date('m', strtotime($fechadesde));
+        $anodesde = date('Y', strtotime($fechadesde));
+        $diahasta = date('d', strtotime($fechahasta));
+        $meshasta = date('m', strtotime($fechahasta));
+        $anohasta = date('Y', strtotime($fechahasta));
 
-    // Obtener solicitudes finalizadas
-    $data = (new Seguimiento)->getSolicitudList_Finalizadas($fechadesde, $fechahasta, $tipo_subsolicitud, $comuna, $comunidad);
+        // Obtener solicitudes finalizadas
+        $data = (new Seguimiento)->getSolicitudList_Finalizadas($fechadesde, $fechahasta, $tipo_subsolicitud, $comuna, $comunidad);
 
-    // Obtener el total de solicitudes finalizadas por tipo de subsolicitud
-    $finalizadas = (new Solicitud)->reportetotalcasosatendidosSALUD($fechadesde, $fechahasta, $tipo_subsolicitud, $comuna, $comunidad);
-    $solicitudestotales =  $finalizadas->TOTAL_SOLICITUD;
+        // Obtener el total de solicitudes finalizadas por tipo de subsolicitud
+        $finalizadas = (new Solicitud)->reportetotalcasosatendidosSALUD($fechadesde, $fechahasta, $tipo_subsolicitud, $comuna, $comunidad);
+        $solicitudestotales =  $finalizadas->TOTAL_SOLICITUD;
 
-    // Inicializar variables para las etiquetas
-    $etiquetaComuna = '';
-    $etiquetaComunidad = '';
-    $etiquetaFechas = '';
-    $etiquetatipo_subsolicitud = '';
+        // Inicializar variables para las etiquetas
+        $etiquetaComuna = '';
+        $etiquetaComunidad = '';
+        $etiquetaFechas = '';
+        $etiquetatipo_subsolicitud = '';
 
-    // Obtener información de comuna, comunidad y tipo de subsolicitud (si existen)
-    if ($comuna) {
-        $comuna = Comuna::find($comuna);
-        $etiquetaComuna = "<h5 style='text-align:left;'>COMUNA: $comuna->codigo</h5>";
-    }
+        // Obtener información de comuna, comunidad y tipo de subsolicitud (si existen)
+        if ($comuna) {
+            $comuna = Comuna::find($comuna);
+            $etiquetaComuna = "<h5 style='text-align:left;'>COMUNA: $comuna->codigo</h5>";
+        }
 
-    if ($comunidad) {
-        $comunidad = Comunidad::find($comunidad);
-        $etiquetaComunidad = "<h5 style='text-align:left;'>COMUNIDAD: $comunidad->nombre</h5>";
-    }
+        if ($comunidad) {
+            $comunidad = Comunidad::find($comunidad);
+            $etiquetaComunidad = "<h5 style='text-align:left;'>COMUNIDAD: $comunidad->nombre</h5>";
+        }
 
-    if ($tipo_subsolicitud) {
-        $tipo_subsolicitud = subtiposolicitud::find($tipo_subsolicitud);
-        $etiquetatipo_subsolicitud = "<h5 style='text-align:left;'>TIPO SOLICITUD: $tipo_subsolicitud->nombre</h5>";
-    }
+        if ($tipo_subsolicitud) {
+            $tipo_subsolicitud = subtiposolicitud::find($tipo_subsolicitud);
+            $etiquetatipo_subsolicitud = "<h5 style='text-align:left;'>TIPO SOLICITUD: $tipo_subsolicitud->nombre</h5>";
+        }
 
-    // Generar etiqueta de fechas
-    if (!empty($fechadesde) && !empty($fechahasta)) {
-        $etiquetaFechas = "<h5 style='text-align:left;'>Reporte de solicitudes finalizadas desde el $diadesde-$mesdesde-$anodesde hasta el $diahasta-$meshasta-$anohasta</h5>";
-    }
+        // Generar etiqueta de fechas
+        if (!empty($fechadesde) && !empty($fechahasta)) {
+            $etiquetaFechas = "<h5 style='text-align:left;'>Reporte de solicitudes finalizadas desde el $diadesde-$mesdesde-$anodesde hasta el $diahasta-$meshasta-$anohasta</h5>";
+        }
 
-    // Construir el nombre del archivo
-    $nombreArchivo = "Reporte de solicitudes finalizadas";
+        // Construir el nombre del archivo
+        $nombreArchivo = "Reporte de solicitudes finalizadas";
 
-    if (!empty($fechadesde) && !empty($fechahasta)) {
-        $nombreArchivo .= " desde el $diadesde-$mesdesde-$anodesde al $diahasta-$meshasta-$anohasta";
-    }
+        if (!empty($fechadesde) && !empty($fechahasta)) {
+            $nombreArchivo .= " desde el $diadesde-$mesdesde-$anodesde al $diahasta-$meshasta-$anohasta";
+        }
 
-    if (!empty($comuna)) {
-        $nombreArchivo .= " Comuna $comuna->codigo";
-    }
+        if (!empty($comuna)) {
+            $nombreArchivo .= " Comuna " . ($comuna ? $comuna->codigo : ''); // Usar el objeto comuna si existe
+        }
 
-    if (!empty($comunidad)) {
-        $nombreArchivo .= " Comunidad $comunidad->nombre";
-    }
+        if (!empty($comunidad)) {
+            $nombreArchivo .= " Comunidad " . ($comunidad ? $comunidad->nombre : ''); // Usar el objeto comunidad si existe
+        }
 
-    if (!empty($tipo_subsolicitud)) {
-        $nombreArchivo .= " Tipo $tipo_subsolicitud->nombre";
-    }
+        if (!empty($tipo_subsolicitud)) {
+            $nombreArchivo .= " Tipo " . ($tipo_subsolicitud ? $tipo_subsolicitud->nombre : ''); // Usar el objeto tipo_subsolicitud si existe
+        }
 
-    $nombreArchivo .= ".pdf";
+        $nombreArchivo .= ".pdf";
 
-    // Generar el HTML del reporte
-    $html = <<<HTML
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <style>
-            body {
-                font-family: sans-serif;
-            }
-            table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-            th, td {
-                text-align:center;
-                border: 1px solid #ddd;
-            }
-            th {
-                font-size: 12px;
-                background-color: #f0f0f0;
-            }
-            td{
-                font-size: 12px;
-            }
-        </style>
-    </head>
-    <body>
-    <img src="https://prensa.alcaldiapaez.gob.ve/wp-content/uploads/sites/2/2024/06/CINTILLO-POLITICAS-SOCIALES-Y-COMUNITARIAS-Y-PODER-POPULAR.jpg" alt="" srcset="" width="100%">
-    <h3 style="text-align:left;">Dirección de Politicas Sociales y Poder Popular</h3>
-    HTML;
+        // Generar el HTML del reporte
+        $html = <<<HTML
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <style>
+                body {
+                    font-family: sans-serif;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-bottom: 20px; /* Espacio después de cada tabla */
+                }
+                th, td {
+                    text-align:center;
+                    border: 1px solid #ddd;
+                    padding: 8px; /* Añadido padding para mejor legibilidad */
+                }
+                th {
+                    font-size: 12px;
+                    background-color: #f0f0f0;
+                }
+                td{
+                    font-size: 12px;
+                }
+                /* Estilo para el salto de página */
+                .page-break {
+                    page-break-after: always;
+                }
+                /* Estilo para el footer */
+                .footer {
+                    position: fixed;
+                    bottom: 0;
+                    width: 100%;
+                    text-align: right;
+                    padding: 10px 0;
+                    font-size: 10px; /* Ajusta el tamaño de fuente si es necesario */
+                    border-top: 1px solid #ccc; /* Línea separadora */
+                }
+                .footer img {
+                    width: 100px; /* Ajusta el tamaño de la imagen */
+                    height: auto;
+                    display: inline-block;
+                    vertical-align: middle;
+                    margin-right: 5px; /* Espacio entre imagen y texto */
+                }
+                .footer h2 {
+                    display: inline-block;
+                    vertical-align: middle;
+                    margin: 0;
+                    font-weight: bold;
+                    font-size: 14px; /* Ajusta el tamaño del título */
+                }
+            </style>
+        </head>
+        <body>
+        <img src="https://prensa.alcaldiapaez.gob.ve/wp-content/uploads/sites/2/2024/06/CINTILLO-POLITICAS-SOCIALES-Y-COMUNITARIAS-Y-PODER-POPULAR.jpg" alt="" srcset="" width="100%">
+        <h3 style="text-align:left;">Dirección de Politicas Sociales y Poder Popular</h3>
+        HTML;
 
-    // Mostrar el total de solicitudes finalizadas
-    if ($tipo_subsolicitud) {
-        $html .= '<h4 style="text-align:left;">Total de solicitudes de ' . $tipo_subsolicitud->nombre . ' finalizadas en el periodo seleccionado: ' . $solicitudestotales . '</h4>';
-    } else {
-        $html .= '<h4 style="text-align:left;">Total de solicitudes finalizadas en el periodo seleccionado: ' . $solicitudestotales . '</h4>';
-    }
+        // Mostrar el total de solicitudes finalizadas
+        if ($tipo_subsolicitud) {
+            $html .= '<h4 style="text-align:left;">Total de solicitudes de ' . $tipo_subsolicitud->nombre . ' finalizadas en el periodo seleccionado: ' . $solicitudestotales . '</h4>';
+        } else {
+            $html .= '<h4 style="text-align:left;">Total de solicitudes finalizadas en el periodo seleccionado: ' . $solicitudestotales . '</h4>';
+        }
 
-    // Agregar las etiquetas
-    $html .= $etiquetatipo_subsolicitud;
-    $html .= $etiquetaFechas;
-    $html .= $etiquetaComuna;
-    $html .= $etiquetaComunidad;
-    $html .= "<br>";
+        // Agregar las etiquetas
+        $html .= $etiquetatipo_subsolicitud;
+        $html .= $etiquetaFechas;
+        $html .= $etiquetaComuna;
+        $html .= $etiquetaComunidad;
+        $html .= "<br>";
 
-    // Mostrar la tabla con el total de solicitudes por tipo de subsolicitud si no se especifica un tipo
-  //  if (!$tipo_subsolicitud) {
+        // === Primera tabla: Total de solicitudes general ===
+        // Esta tabla siempre va al inicio, antes de las tablas por mes.
         $html .= '<table>';
         $html .= '<tr><th>Tipo de Solicitud</th><th>Total</th></tr>';
         foreach ($finalizadas as $key => $value) {
-            if ($value > 0) { // Condición para mostrar solo filas con valor mayor que 0
+            // Asegúrate de que $value sea un número antes de la comparación
+            if (is_numeric($value) && $value > 0) { // Condición para mostrar solo filas con valor mayor que 0
                 $html .= "<tr><td>" . str_replace('_', ' ', $key) . "</td><td>$value</td></tr>";
             }
         }
         $html .= '</table>';
-    //}
 
-    // Agrupar solicitudes por mes
-    $solicitudesPorMes = [];
-    foreach ($data as $participante) {
-        $mes = date('Y-m', strtotime($participante->fecha));
-        if (!isset($solicitudesPorMes[$mes])) {
-            $solicitudesPorMes[$mes] = [];
+        // Variable para contar las tablas que se han impreso en la página actual
+        $tables_on_current_page = 1; // Ya hemos impreso la primera tabla (total general)
+
+        // Agrupar solicitudes por mes
+        $solicitudesPorMes = [];
+        foreach ($data as $participante) {
+            $mes = date('Y-m', strtotime($participante->fecha));
+            if (!isset($solicitudesPorMes[$mes])) {
+                $solicitudesPorMes[$mes] = [];
+            }
+            $solicitudesPorMes[$mes][] = $participante;
         }
-        $solicitudesPorMes[$mes][] = $participante;
-    }
 
-    foreach ($solicitudesPorMes as $mes => $solicitudes) {
+        // Iterar sobre los meses para generar tablas de solicitudes por mes
+        $totalMeses = count($solicitudesPorMes);
+        $contadorMeses = 0;
 
-        $html .= "<h3>Solicitudes del mes: " . strftime('%B %Y', strtotime($mes)) . "</h3>";
-     //var_dump($mes . '-01',$mes . '-' . date('t', strtotime($mes)),$tipo_subsolicitud->id,$comuna->id,$comunidad->id);
-     //exit();
-     $finalizadasMes = (new Solicitud)->reportetotalcasosatendidosSALUD($mes . '-01', $mes . '-' . date('t', strtotime($mes)), $tipo_subsolicitud ? $tipo_subsolicitud->id : null, $comuna ? $comuna->id : null, $comunidad ? $comunidad->id : null);
+        foreach ($solicitudesPorMes as $mes => $solicitudes) {
+            $contadorMeses++;
 
-        // Obtener el total de solicitudes del mes actual desde $finalizadasMes
-        $solicitudesMes = $finalizadasMes->TOTAL_SOLICITUD;
+            // Incrementa el contador de tablas
+            $tables_on_current_page++;
 
-        $html .= "<h4 style='text-align:left;'>Total de solicitudes finalizadas en el mes de " . strftime('%B %Y', strtotime($mes)) . ": $solicitudesMes</h4>";
+            $html .= "<h3>Solicitudes del mes: " . strftime('%B %Y', strtotime($mes)) . "</h3>";
 
+            $finalizadasMes = (new Solicitud)->reportetotalcasosatendidosSALUD($mes . '-01', $mes . '-' . date('t', strtotime($mes)), $tipo_subsolicitud ? $tipo_subsolicitud->id : null, $comuna ? $comuna->id : null, $comunidad ? $comunidad->id : null);
 
-        // Filtrar los datos de $finalizadas para el mes actual
-        $finalizadasMes = (new Solicitud)->reportetotalcasosatendidosSALUD($mes . '-01', $mes . '-' . date('t', strtotime($mes)), $tipo_subsolicitud ? $tipo_subsolicitud->id : null, $comuna ? $comuna->id : null, $comunidad ? $comunidad->id : null);
-        // Mostrar la tabla con el total de solicitudes por tipo de subsolicitud
-        $html .= '<table>';
-        $html .= '<tr><th>Tipo de Solicitud</th><th>Total</th></tr>';
-        foreach ($finalizadasMes as $key => $value) {
-            if ($value > 0) { // Condición para mostrar solo filas con valor mayor que 0
-                $html .= "<tr><td>" . str_replace('_', ' ', $key) . "</td><td>$value</td></tr>";
+            // Obtener el total de solicitudes del mes actual desde $finalizadasMes
+            $solicitudesMes = $finalizadasMes->TOTAL_SOLICITUD;
+
+            $html .= "<h4 style='text-align:left;'>Total de solicitudes finalizadas en el mes de " . strftime('%B %Y', strtotime($mes)) . ": $solicitudesMes</h4>";
+
+            // Mostrar la tabla con el total de solicitudes por tipo de subsolicitud para el mes actual
+            $html .= '<table>';
+            $html .= '<tr><th>Tipo de Solicitud</th><th>Total</th></tr>';
+            foreach ($finalizadasMes as $key => $value) {
+                // Asegúrate de que $value sea un número antes de la comparación
+                if (is_numeric($value) && $value > 0) { // Condición para mostrar solo filas con valor mayor que 0
+                    $html .= "<tr><td>" . str_replace('_', ' ', $key) . "</td><td>$value</td></tr>";
+                }
+            }
+            $html .= '</table>';
+
+            // === Lógica de salto de página ===
+            // Si hemos generado 3 tablas (incluyendo la inicial) y no es la última tabla en general,
+            // o si es la última tabla y el contador de tablas en la página es un múltiplo de 3,
+            // inserta un salto de página.
+            if ($tables_on_current_page % 2 === 0 && $contadorMeses < $totalMeses) {
+                $html .= '<div class="page-break"></div>';
+                $tables_on_current_page = 0; // Reiniciar el contador de tablas para la nueva página
             }
         }
 
-        $html .= '</table>';
+        // === Añadir el pie de página al final del body ===
+        // Dompdf puede tener problemas con fixed positioning en algunos casos,
+        // pero esta es la forma estándar de añadirlo globalmente.
+        $html .= <<<FOOTER
+        <div class="footer">
+            <img src="https://alcaldiapaez.gob.ve/wp-content/uploads/2025/05/logoSIA.png" style="width: 150px; height: auto;">
+            <h2 style="font-weight: bold;">Sistema Integral de Atención al Ciudadano</h2>
+        </div>
+        FOOTER;
+
+        $html .= "</body></html>";
+
+        $options = new Options;
+        $options->set('isRemoteEnabled', true);
+        $dompdf = new Dompdf($options);
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('legal', 'portrait');
+        $dompdf->render();
+
+        // Para asegurar que el footer se repita en cada página, Dompdf tiene una función
+        // para renderizar callbacks. Para este caso, lo más sencillo es usar CSS.
+        // Si el footer no se repite, es posible que necesites explorar callbacks de Dompdf
+        // o renderizar el footer en JavaScript después de la carga si fuera un HTML dinámico,
+        // pero para un PDF estático, CSS suele ser suficiente.
+
+        $dompdf->stream($nombreArchivo, array("Attachment"=>1));
+
+        return redirect()->back();
     }
 
-
-    $html .= "</body></html>";
-
-    $options = new Options;
-    $options->set('isRemoteEnabled', true);
-    $dompdf = new Dompdf($options);
-    $dompdf->loadHtml($html);
-    $dompdf->setPaper('legal', 'portrait');
-    $dompdf->render();
-    $dompdf->stream($nombreArchivo, array("Attachment"=>1));
-
-    return redirect()->back();
-}
 public function imprimirfarmacia(Request $request) {
     setlocale(LC_TIME, 'es_ES.UTF-8');
 
