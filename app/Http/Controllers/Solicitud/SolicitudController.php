@@ -4424,15 +4424,7 @@ public function imprimir3(Request $request) {
             }
         }
         $html .= '</table>';
-        if ( $count == 0) {
-            $html .= <<<FOOTER
-        <div class="footer" style="text-align: right;">
-            <img src="https://alcaldiapaez.gob.ve/wp-content/uploads/2025/05/logoSIA.png" style="width: 150px; height: auto; display: inline-block; vertical-align: middle; margin-right: 10px;">
-            <h2 style="display: inline-block; vertical-align: middle; margin: 0; font-weight: bold;">Sistema integral de Atención al Ciudadano</h2>
-        </div>
-        FOOTER;
-        $count++;
-        }
+
         // Variable para contar las tablas que se han impreso en la página actual
         $tables_on_current_page = 1; // Ya hemos impreso la primera tabla (total general)
 
@@ -4475,7 +4467,15 @@ public function imprimir3(Request $request) {
                 }
             }
             $html .= '</table>';
-
+            if ( $count == 0) {
+                $html .= <<<FOOTER
+            <div class="footer" style="text-align: right;">
+                <img src="https://alcaldiapaez.gob.ve/wp-content/uploads/2025/05/logoSIA.png" style="width: 150px; height: auto; display: inline-block; vertical-align: middle; margin-right: 10px;">
+                <h2 style="display: inline-block; vertical-align: middle; margin: 0; font-weight: bold;">Sistema integral de Atención al Ciudadano</h2>
+            </div>
+            FOOTER;
+            $count++;
+            }
             // === Lógica de salto de página ===
             // Si hemos generado 3 tablas (incluyendo la inicial) y no es la última tabla en general,
             // o si es la última tabla y el contador de tablas en la página es un múltiplo de 3,
@@ -4489,12 +4489,7 @@ public function imprimir3(Request $request) {
         // === Añadir el pie de página al final del body ===
         // Dompdf puede tener problemas con fixed positioning en algunos casos,
         // pero esta es la forma estándar de añadirlo globalmente.
-        $html .= <<<FOOTER
-        <div class="footer">
-            <img src="https://alcaldiapaez.gob.ve/wp-content/uploads/2025/05/logoSIA.png" style="width: 150px; height: auto;">
-            <h2 style="font-weight: bold;">Sistema Integral de Atención al Ciudadano</h2>
-        </div>
-        FOOTER;
+
 
         $html .= "</body></html>";
 
