@@ -3906,7 +3906,7 @@ class SolicitudController extends Controller
     public function imprimir2(Request $request)
     {
         setlocale(LC_TIME, 'es_ES.UTF-8');
-
+        $count = 0;
         $input = $request->all();
         $fechadesde = $input['fecha_desde'];
         $fechahasta = $input['fecha_hasta'];
@@ -4087,6 +4087,15 @@ class SolicitudController extends Controller
                     $html .= "</tr>";
                 }
                 $html .= "</table>";
+                if ( $count == 0) {
+                    $html .= <<<FOOTER
+                <div class="footer" style="text-align: right;">
+                    <img src="https://alcaldiapaez.gob.ve/wp-content/uploads/2025/05/logoSIA.png" style="width: 150px; height: auto; display: inline-block; vertical-align: middle; margin-right: 10px;">
+                    <h2 style="display: inline-block; vertical-align: middle; margin: 0; font-weight: bold;">Sistema integral de Atención al Ciudadano</h2>
+                </div>
+                FOOTER;
+                $count++;
+                }
 
                 $isLastPageOfCurrentMonth = ($paginaIndex == count($paginasSolicitudes) - 1);
                 if (!$isLastPageOfCurrentMonth || !$isLastMonth) {
@@ -4258,7 +4267,7 @@ public function imprimir3(Request $request) {
         setlocale(LC_TIME, 'es_ES.UTF-8');
 
         $input = $request->all();
-
+        $count = 0;
         $fechadesde = $input['fecha_desde'];
         $fechahasta = $input['fecha_hasta'];
         $tipo_subsolicitud = $input['tipo_subsolicitud'];
@@ -4415,7 +4424,15 @@ public function imprimir3(Request $request) {
             }
         }
         $html .= '</table>';
-
+        if ( $count == 0) {
+            $html .= <<<FOOTER
+        <div class="footer" style="text-align: right;">
+            <img src="https://alcaldiapaez.gob.ve/wp-content/uploads/2025/05/logoSIA.png" style="width: 150px; height: auto; display: inline-block; vertical-align: middle; margin-right: 10px;">
+            <h2 style="display: inline-block; vertical-align: middle; margin: 0; font-weight: bold;">Sistema integral de Atención al Ciudadano</h2>
+        </div>
+        FOOTER;
+        $count++;
+        }
         // Variable para contar las tablas que se han impreso en la página actual
         $tables_on_current_page = 1; // Ya hemos impreso la primera tabla (total general)
 
