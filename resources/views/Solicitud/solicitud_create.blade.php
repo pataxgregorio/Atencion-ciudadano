@@ -200,7 +200,7 @@
                                             {!! Form::textarea('observacionbeneficiario', old('observacionbeneficiario'), ['placeholder' => "OBSERVACION", 'class' => 'form-control', 'id' => 'observacionbeneficiario_user', 'required' => true]) !!}
                                         </div>
                                 </div>  {{-- End of main column for two-column layout --}}
-                                <div class="col-md-6" style="margin-left: 700px; margin-top: -500px;">
+                                <div class="col-md-6" style="margin-left: 700px; margin-top: -200px;">
 
                                         <h3>RECAUDOS DE LA SOLICITUD</h3>
                                         <br>
