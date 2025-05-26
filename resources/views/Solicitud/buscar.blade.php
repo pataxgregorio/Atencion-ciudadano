@@ -147,6 +147,7 @@ const
                         <div class="card-header"><span style="font-weight: bold;">Solicitud: #${solicitud.id}</span></div>
                         <div class="card-body">
                             <h5 class="card-title"><span style="font-weight: bold;">Solicitante: ${solicitud.solicitante}</span></h5>
+                            <h5 class="card-title"><span style="font-weight: bold;">Cedula: ${solicitud.cedula}</span></h5>
                             <p class="card-text"><span style="font-weight: bold;">Estatus: ${solicitud.nombrestatus} ${getIconForStatus(solicitud.nombrestatus)}</span></p>
                             <p class="card-text">Fecha: ${formatDate(solicitud.fecha)}</p>
                             <p class="card-text">Tipo Solicitud: ${solicitud.nombretipo} ${getIconForTipoSolicitud(solicitud.nombretipo)}</p>`;

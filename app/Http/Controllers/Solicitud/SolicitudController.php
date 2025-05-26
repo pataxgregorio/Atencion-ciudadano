@@ -3903,10 +3903,10 @@ class SolicitudController extends Controller
         $dompdf->stream("Solicitud Numero $solicitud_salud_id Direccion Politicas Sociales.pdf", array("Attachment" => 1));
         return redirect()->back();
     }
-    public function imprimir2(Request $request)
+   public function imprimir2(Request $request)
     {
         setlocale(LC_TIME, 'es_ES.UTF-8');
-        $count = 0;
+        $count = 0; // Esta variable parece no usarse después de la primera parte.
         $input = $request->all();
         $fechadesde = $input['fecha_desde'];
         $fechahasta = $input['fecha_hasta'];
@@ -3914,6 +3914,7 @@ class SolicitudController extends Controller
         $comuna_id = isset($input['comuna']) ? $input['comuna'] : '';
         $comunidad_id = isset($input['comunidad']) ? $input['comunidad'] : '';
 
+        // Formatear fechas para mostrar en el reporte
         $diadesde = date('d', strtotime($fechadesde));
         $mesdesde = date('m', strtotime($fechadesde));
         $anodesde = date('Y', strtotime($fechadesde));
@@ -3921,18 +3922,152 @@ class SolicitudController extends Controller
         $meshasta = date('m', strtotime($fechahasta));
         $anohasta = date('Y', strtotime($fechahasta));
 
+        // Obtener solicitudes finalizadas para las páginas de detalle
         $data = (new Seguimiento)->getSolicitudList_Finalizadas($fechadesde, $fechahasta, $tipo_subsolicitud_id, $comuna_id, $comunidad_id);
-        $solicitudestotales = count($data);
+        $solicitudestotales_detalle = count($data); // Total para el encabezado de las páginas de detalle
 
+        // Obtener solicitudes finalizadas para la primera página (resumen)
+        $finalizadas_resumen = (new Solicitud)->reportetotalcasosatendidosSALUD($fechadesde, $fechahasta, $tipo_subsolicitud_id, $comuna_id, $comunidad_id);
+        $solicitudestotales_resumen = $finalizadas_resumen->TOTAL_SOLICITUD; // Total para la portada
+
+        // Inicializar variables de etiquetas
         $etiquetaComuna = '';
         $etiquetaComunidad = '';
         $etiquetaFechas = '';
         $etiquetatipo_subsolicitud = '';
 
+        // Obtener objetos de modelos para etiquetas y nombres de archivo
         $comuna = !empty($comuna_id) ? Comuna::find($comuna_id) : null;
         $comunidad = !empty($comunidad_id) ? Comunidad::find($comunidad_id) : null;
         $tipo_subsolicitud = !empty($tipo_subsolicitud_id) ? SubtipoSolicitud::find($tipo_subsolicitud_id) : null;
 
+        // Generar etiquetas para la primera página
+        if ($comuna) {
+            $etiquetaComuna = "<h5 style='text-align:left;'>COMUNA: " . $comuna->codigo . "</h5>";
+        }
+        if ($comunidad) {
+            $etiquetaComunidad = "<h5 style='text-align:left;'>COMUNIDAD: " . $comunidad->nombre . "</h5>";
+        }
+        if ($tipo_subsolicitud) {
+            $etiquetatipo_subsolicitud = "<h5 style='text-align:left;'>TIPO SOLICITUD: " . $tipo_subsolicitud->nombre . "</h5>";
+        }
+        if (!empty($fechadesde) && !empty($fechahasta)) {
+            $etiquetaFechas = "<h5 style='text-align:left;'>Reporte de solicitudes finalizadas desde el $diadesde-$mesdesde-$anodesde hasta el $diahasta-$meshasta-$anohasta</h5>";
+        }
+
+        // Construir el nombre del archivo
+        $nombreArchivo = "Reporte de solicitudes finalizadas";
+        if (!empty($fechadesde) && !empty($fechahasta)) {
+            $nombreArchivo .= " desde el $diadesde-$mesdesde-$anodesde al $diahasta-$meshasta-$anohasta";
+        }
+        if ($comuna) {
+            $nombreArchivo .= " Comuna " . $comuna->codigo;
+        }
+        if ($comunidad) {
+            $nombreArchivo .= " Comunidad " . $comunidad->nombre;
+        }
+        if ($tipo_subsolicitud) {
+            $nombreArchivo .= " Tipo " . $tipo_subsolicitud->nombre;
+        }
+        $nombreArchivo .= ".pdf";
+
+        // === Generar el HTML de la primera página (Portada) ===
+        $htmlPortada = <<<HTML
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="UTF-8">
+            <style>
+                body {
+                    font-family: sans-serif;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-bottom: 20px;
+                }
+                th, td {
+                    text-align:center;
+                    border: 1px solid #ddd;
+                    padding: 8px;
+                }
+                th {
+                    font-size: 12px;
+                    background-color: #f0f0f0;
+                }
+                td{
+                    font-size: 12px;
+                }
+                .page-break {
+                    page-break-after: always;
+                }
+                .footer {
+                    position: fixed;
+                    bottom: 0;
+                    width: 100%;
+                    text-align: right;
+                    padding: 10px 0;
+                    font-size: 10px;
+                    border-top: 1px solid #ccc;
+                }
+                .footer img {
+                    width: 100px;
+                    height: auto;
+                    display: inline-block;
+                    vertical-align: middle;
+                    margin-right: 5px;
+                }
+                .footer h2 {
+                    display: inline-block;
+                    vertical-align: middle;
+                    margin: 0;
+                    font-weight: bold;
+                    font-size: 14px;
+                }
+            </style>
+        </head>
+        <body>
+        <img src="https://prensa.alcaldiapaez.gob.ve/wp-content/uploads/sites/2/2024/06/CINTILLO-POLITICAS-SOCIALES-Y-COMUNITARIAS-Y-PODER-POPULAR.jpg" alt="" srcset="" width="100%">
+        <h3 style="text-align:left;">Dirección de Politicas Sociales y Poder Popular</h3>
+HTML;
+
+        // Mostrar el total de solicitudes finalizadas para la portada
+        if ($tipo_subsolicitud) {
+            $htmlPortada .= '<h4 style="text-align:left;">Total de solicitudes de ' . $tipo_subsolicitud->nombre . ' finalizadas en el periodo seleccionado: ' . $solicitudestotales_resumen . '</h4>';
+        } else {
+            $htmlPortada .= '<h4 style="text-align:left;">Total de solicitudes finalizadas en el periodo seleccionado: ' . $solicitudestotales_resumen . '</h4>';
+        }
+
+        // Agregar las etiquetas a la portada
+        $htmlPortada .= $etiquetatipo_subsolicitud;
+        $htmlPortada .= $etiquetaFechas;
+        $htmlPortada .= $etiquetaComuna;
+        $htmlPortada .= $etiquetaComunidad;
+        $htmlPortada .= "<br>";
+
+        // Tabla: Total de solicitudes general en la portada
+        $htmlPortada .= '<table>';
+        $htmlPortada .= '<tr><th>Tipo de Solicitud</th><th>Total</th></tr>';
+        foreach ($finalizadas_resumen as $key => $value) {
+            if (is_numeric($value) && $value > 0) {
+                $htmlPortada .= "<tr><td>" . str_replace('_', ' ', $key) . "</td><td>$value</td></tr>";
+            }
+        }
+        $htmlPortada .= '</table>';
+
+        $htmlPortada .= <<<FOOTER_PORTADA
+                 <div class="footer" style="text-align: right;">
+                    <img src="https://alcaldiapaez.gob.ve/wp-content/uploads/2025/05/logoSIA.png" style="width: 100px; height: auto; display: inline-block; vertical-align: middle; margin-right: 10px;">
+                    <h2 style="display: inline-block; vertical-align: middle; margin: 0; font-weight: bold;">Sistema integral de Atención al Ciudadano</h2>
+                </div>
+    <div class="page-break"></div>
+FOOTER_PORTADA;
+
+
+        // Inicializar el HTML principal con el contenido de la portada
+        $html = $htmlPortada;
+
+        // === Generación de las páginas de detalle por mes ===
         $solicitudesPorMes = [];
         foreach ($data as $participante) {
             $mes = date('Y-m', strtotime($participante->fecha));
@@ -3942,112 +4077,28 @@ class SolicitudController extends Controller
             $solicitudesPorMes[$mes][] = $participante;
         }
 
-        if (!empty($comuna)) {
-            $etiquetaComuna = "<h5 style='text-align:left;'>COMUNA: $comuna->codigo</h5>";
-        }
-        if (!empty($fechadesde) && !empty($fechahasta)) {
-            $etiquetaFechas = "<h5 style='text-align:left;'>Reporte de solicitudes finalizadas desde el $diadesde-$mesdesde-$anodesde hasta el $diahasta-$meshasta-$anohasta</h5>";
-        }
-        if (!empty($comunidad)) {
-            $etiquetaComunidad = "<h5 style='text-align:left;'>COMUNIDAD: $comunidad->nombre</h5>";
-        }
-        if (!empty($tipo_subsolicitud)) {
-            $etiquetatipo_subsolicitud = "<h5 style='text-align:left;'>TIPO SOLICITUD: $tipo_subsolicitud->nombre</h5>";
+        // Las etiquetas ya están definidas arriba, solo se usan en el HTML principal
+        // $totalfinalizadas para el encabezado de las páginas de detalle
+        if ($tipo_subsolicitud) {
+            $totalfinalizadas_detalle = "<h4 style='text-align:left;'>Total de solicitudes de " . $tipo_subsolicitud->nombre . " finalizadas en el periodo seleccionado: " . $solicitudestotales_detalle . "</h4>";
+        } else {
+            $totalfinalizadas_detalle = "<h4 style='text-align:left;'>Total de solicitudes finalizadas en el periodo seleccionado: " . $solicitudestotales_detalle . "</h4>";
         }
 
-        $nombreArchivo = "Reporte de solicitudes finalizadas";
-        // **************** CORRECCIÓN AQUÍ ****************
-        $totalfinalizadas = "<h4 style='text-align:left;'>Total de solicitudes finalizadas en el periodo seleccionado: " . $solicitudestotales . "</h4>";
-        // *************************************************
-
-        if (!empty($fechadesde) && !empty($fechahasta)) {
-            $nombreArchivo .= " desde el $diadesde-$mesdesde-$anodesde al $diahasta-$meshasta-$anohasta";
-        }
-        if (!empty($comuna)) {
-            $nombreArchivo .= " Comuna $comuna->codigo";
-        }
-        if (!empty($comunidad)) {
-            $nombreArchivo .= " Comunidad $comunidad->nombre";
-        }
-        if (!empty($tipo_subsolicitud)) {
-            $nombreArchivo .= " Tipo " . $tipo_subsolicitud->nombre;
-            // **************** CORRECCIÓN AQUÍ ****************
-            $totalfinalizadas = "<h4 style='text-align:left;'>Total de solicitudes de " . $tipo_subsolicitud->nombre . " finalizadas en el periodo seleccionado: " . $solicitudestotales . "</h4>";
-            // *************************************************
-        }
-        $nombreArchivo .= ".pdf";
-
-        $footerImageUrl = public_path('images/logoSIA.png');
-
-        $html =
-            <<<HTML
-        <!DOCTYPE html>
-        <html lang="es">
-        <head>
-            <meta charset="UTF-8">
-            <style>
-                    body {
-                        font-family: sans-serif;
-                        padding-bottom: 70px; /* Mismo valor que el margin-bottom de @page */
-                    }
-
-                    table {
-                        width: 100%;
-                        border-collapse: collapse;
-                        margin-bottom: 20px;
-                    }
-
-                    th, td {
-                        text-align:center;
-                        border: 1px solid #ddd;
-                        padding: 8px;
-                    }
-
-                    th {
-                        font-size: 12px;
-                        background-color: #f0f0f0;
-                    }
-                    td{
-                        font-size: 12px;
-                    }
-                    /* Estilo para el salto de página */
-                    .page-break {
-                        page-break-after: always;
-                    }
-
-                    /* Nuevo estilo para el pie de página fijo en cada página */
-                    @page {
-                        margin-bottom: 70px; /* Ajusta este valor para el espacio del footer */
-                    }
-                    .footer {
-                        position: fixed;
-                        bottom: 0;
-                        left: 0;
-                        width: 100%;
-                        height: 60px; /* Altura del footer */
-                        text-align: center;
-                        font-size: 10px;
-                        border-top: 1px solid #ddd;
-                        padding-top: 5px;
-                        box-sizing: border-box; /* Para que el padding no añada al height total */
-                        z-index: 1000; /* Asegura que esté por encima de otros elementos */
-                    }
-            </style>
-        </head>
-        <body>
+        // Contenedor principal de las páginas de detalle, sin head ni body, ya que se asume que se concatenará
+        // al htmlPortada que ya contiene esas etiquetas.
+        $html .= <<<HTML_DETALLE
         <img src="https://prensa.alcaldiapaez.gob.ve/wp-content/uploads/sites/2/2024/06/CINTILLO-POLITICAS-SOCIALES-Y-COMUNITARIAS-Y-PODER-POPULAR.jpg" alt="" srcset="" width="100%">
-
         <h3 style="text-align:left;">Dirección de Politicas Sociales y Poder Popular</h3>
-        $totalfinalizadas
+        $totalfinalizadas_detalle
         $etiquetatipo_subsolicitud
         $etiquetaFechas
         $etiquetaComuna
         $etiquetaComunidad
-                <br>
-        HTML;
+        <br>
+HTML_DETALLE;
 
         $registrosPorPagina = 9;
-
         $mesesKeys = array_keys($solicitudesPorMes);
         $totalMonths = count($mesesKeys);
 
@@ -4087,29 +4138,29 @@ class SolicitudController extends Controller
                     $html .= "</tr>";
                 }
                 $html .= "</table>";
-                if ( $count == 0) {
-                    $html .= <<<FOOTER
-                <div class="footer" style="text-align: right;">
-                    <img src="https://alcaldiapaez.gob.ve/wp-content/uploads/2025/05/logoSIA.png" style="width: 150px; height: auto; display: inline-block; vertical-align: middle; margin-right: 10px;">
-                    <h2 style="display: inline-block; vertical-align: middle; margin: 0; font-weight: bold;">Sistema integral de Atención al Ciudadano</h2>
-                </div>
-                FOOTER;
-                $count++;
-                }
+
+                // Este footer se aplica a las páginas de detalle
+
 
                 $isLastPageOfCurrentMonth = ($paginaIndex == count($paginasSolicitudes) - 1);
                 if (!$isLastPageOfCurrentMonth || !$isLastMonth) {
-                     $html .= '<div class="page-break"></div>';
+                    $html .= '<div class="page-break"></div>';
+                    // Reiniciar encabezado para la siguiente página de detalle si no es la última del mes o del reporte
+                    if (!$isLastPageOfCurrentMonth) {
+                        $html .= <<<REINICIO_ENCABEZADO
+                        <img src="https://prensa.alcaldiapaez.gob.ve/wp-content/uploads/sites/2/2024/06/CINTILLO-POLITICAS-SOCIALES-Y-COMUNITARIAS-Y-PODER-POPULAR.jpg" alt="" srcset="" width="100%">
+                        <h3 style="text-align:left;">Dirección de Politicas Sociales y Poder Popular</h3>
+                        $totalfinalizadas_detalle
+                        $etiquetatipo_subsolicitud
+                        $etiquetaFechas
+                        $etiquetaComuna
+                        $etiquetaComunidad
+                        <br>
+REINICIO_ENCABEZADO;
+                    }
                 }
             }
         }
-
-        $html .= <<<FOOTER
-        <div class="footer" style="text-align: right;">
-            <img src="https://alcaldiapaez.gob.ve/wp-content/uploads/2025/05/logoSIA.png" style="width: 150px; height: auto; display: inline-block; vertical-align: middle; margin-right: 10px;">
-            <h2 style="display: inline-block; vertical-align: middle; margin: 0; font-weight: bold;">Sistema integral de Atención al Ciudadano</h2>
-        </div>
-        FOOTER;
 
         $html .= "</body></html>";
 
@@ -4126,7 +4177,6 @@ class SolicitudController extends Controller
 
         return redirect()->back();
     }
-
 public function imprimir3(Request $request) {
     $input = $request->all();
     $fechadesde = $input['fecha_desde'];
@@ -4470,7 +4520,7 @@ public function imprimir3(Request $request) {
             if ( $count == 0) {
                 $html .= <<<FOOTER
             <div class="footer" style="text-align: right;">
-                <img src="https://alcaldiapaez.gob.ve/wp-content/uploads/2025/05/logoSIA.png" style="width: 150px; height: auto; display: inline-block; vertical-align: middle; margin-right: 10px;">
+                <img src="https://alcaldiapaez.gob.ve/wp-content/uploads/2025/05/logoSIA.png" style="width: 100px; height: auto; display: inline-block; vertical-align: middle; margin-right: 10px;">
                 <h2 style="display: inline-block; vertical-align: middle; margin: 0; font-weight: bold;">Sistema integral de Atención al Ciudadano</h2>
             </div>
             FOOTER;
@@ -4707,8 +4757,8 @@ public function imprimirfarmacia(Request $request) {
     </tr>
     </table>
      <div class="footer">
-        <img src="https://alcaldiapaez.gob.ve/wp-content/uploads/2025/05/logoSIA.png"style="width: 20% display: block;">
-        <h5 style=" text-align: right ; margin-top: -60px;">Sistema  integral de Atención al Ciudadano</h5>
+        <img src="https://alcaldiapaez.gob.ve/wp-content/uploads/2025/05/logoSIA.png"style="width: 10% display: block; align: right">
+        <h6 style=" text-align: right ; margin-top: -45px;">Sistema  integral de Atención al Ciudadano</h6>
     </div>
 
     <div class="page-break"></div>

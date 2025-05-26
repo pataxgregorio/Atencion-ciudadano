@@ -137,24 +137,24 @@
     }
 
     .content-wrapper {
-        background-image: url("{{ url('/images/icons/fondo5.jpeg') }}");
+    /*    background-image: url("{{ url('/images/icons/fondo5.jpeg') }}");
         background-size: cover; /* Ajusta la imagen al tamaño de la sección */
-        animation: cambiarFondo 15s linear infinite; /* Animación para cambiar el fondo */
+    /*    animation: cambiarFondo 15s linear infinite; Animación para cambiar el fondo */
     }
 
     @keyframes cambiarFondo {
-        0% {
+        /* 0% {
             background-image: url("{{ url('/images/icons/fondo1.jpeg') }}");
         }
         33.33% {
             background-image: url("{{ url('/images/icons/fondo2.jpeg') }}"); /* Reemplaza con la ruta de tu segunda imagen */
-        }
-        66.66% {
+        /*}
+        ::cue()    66.66% {
             background-image: url("{{ url('/images/icons/fondo3.jpeg') }}"); /* Reemplaza con la ruta de tu tercera imagen */
-        }
+    /*    }
         100% {
-            background-image: url("{{ url('/images/icons/fondo4-2.jpeg') }}");
-        }
+           background-image: url("{{ url('/images/icons/fondo4-2.jpeg') }}");
+        }*/
     }
 </style>
 @endsection

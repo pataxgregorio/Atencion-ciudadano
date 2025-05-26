@@ -238,17 +238,22 @@ class Solicitud extends Model
                     }
                     // Convertimos el array asociativo nuevamente en un array indexado numéricamente
                     $solicitud_no_repetida = array_values($solicitud_no_repetida);
-
+                    // var_dump($solicitud_no_repetida);
+                    // exit();
                     return $solicitud_no_repetida;
                 }
 
             } else {
                 // se retorna la solicitud de salud que coincida con el parametro salud_id
+                // var_dump($solicitud);
+                // exit();
                 return $solicitud;
             }
 
         }catch(Throwable $e){
             $solicitud = [];
+            // var_dump($solicitud);
+            // exit();
             return $solicitud;
         }
     }

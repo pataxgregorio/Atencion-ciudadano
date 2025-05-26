@@ -1101,13 +1101,13 @@ $('#tipoentrada').on('change', function() {
 </script>
 <style>
     section.content {
-        background-image: url("{{ url('/images/icons/fondo5.jpeg') }}");
-        background-size: cover; /* Ajusta la imagen al tamaño de la sección */
-        animation: cambiarFondo 15s linear infinite; /* Animación para cambiar el fondo */
-        width: 100%;
+     /*   // background-image: url("{{ url('/images/icons/fondo5.jpeg') }}");*/
+        // background-size: cover; /* Ajusta la imagen al tamaño de la sección */
+        // animation: cambiarFondo 15s linear infinite; /* Animación para cambiar el fondo */
+        // width: 100%;
     }
 
-    @keyframes cambiarFondo {
+    @keyframes cambiarFondo2 {
         0% {
             background-image: url("{{ url('/images/icons/fondo1.jpeg') }}");
         }

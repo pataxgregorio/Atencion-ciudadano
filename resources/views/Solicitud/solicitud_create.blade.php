@@ -343,9 +343,12 @@ $("#buscarCedula").click(function(event) {
 // Corregir la sintaxis del if y el mensaje de la alerta
         var fechaMoment = moment(data.fecha);
        var fechaFormateada = fechaMoment.format('DD-MM-YYYY');
+        const beneficiarioArray = JSON.parse(data.beneficiario);
+        const solicitaValue = beneficiarioArray[0].solicita;
+
 
             if (dias < 30) {
-                alert("El solicitante tiene menos de 30 días de haber solicitado el beneficio. La Última fecha de solicitud: " + fechaFormateada);
+                alert("El solicitante tiene menos de 30 días de haber solicitado el beneficio. La Última fecha de solicitud: " + fechaFormateada+". y el beneficio recibido fue: "+solicitaValue);
             }
         $("#cedula_hidden").val(data.cedula);
         $("#nombre_user").val(data.nombre);
@@ -764,26 +767,26 @@ function cargarParroquias(municipio_id, data) {
 </script>
 <style>
     section.content {
-        background-image: url("{{ url('/images/icons/fondo5.jpeg') }}");
+        /* background-image: url("{{ url('/images/icons/fondo5.jpeg') }}");
         background-size: cover; /* Ajusta la imagen al tamaño de la sección */
-        animation: cambiarFondo 15s linear infinite; /* Animación para cambiar el fondo */
-        width: 100%;
+    /*    animation: cambiarFondo 15s linear infinite; /* Animación para cambiar el fondo */
+    /*    width: 100%; */
 
     }
 
     @keyframes cambiarFondo {
-        0% {
+   /*     0% {
             background-image: url("{{ url('/images/icons/fondo1.jpeg') }}");
-        }
+        }/*
         33.33% {
             background-image: url("{{ url('/images/icons/fondo2.jpeg') }}"); /* Reemplaza con la ruta de tu segunda imagen */
-        }
+   /*     }
         66.66% {
             background-image: url("{{ url('/images/icons/fondo3.jpeg') }}"); /* Reemplaza con la ruta de tu tercera imagen */
-        }
+   /*     }
         100% {
             background-image: url("{{ url('/images/icons/fondo4-2.jpeg') }}");
-        }
+        }*/
     }
 </style>
 @endsection

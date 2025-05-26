@@ -393,7 +393,7 @@ Route::get('/solicitud/getSolicitudesWAN', 'Solicitud\SolicitudController@getSol
 
 /* REPORTES FINALIZADAS */
 
-Route::get('/solicitud/totalFinalizadas', 'Solicitud\SolicitudController@imprimir4')->name('solicitud.solicitudTotalFinalizadas');
+Route::get('/solicitud/totalFinalizadas', 'Solicitud\SolicitudController@imprisolicitud/buscargeneralmir4')->name('solicitud.solicitudTotalFinalizadas');
 
 Route::get('/solicitud/totalFinalizadas2', 'Solicitud\SolicitudController@getTotalSolicitudesFinalizadas2')->name('solicitud.solicitudTotalFinalizadas2');
 
