@@ -100,7 +100,7 @@
                                         <div style="text-align:left;">
                                             {!! Form::label('telefono', 'TELEFONO', ['class' => 'control-label']) !!}<span
                                                 class="required" style="color:red;">*</span>
-                                            {!! Form::text('telefono', old('telefono'), ['placeholder' => trans('message.solicitud_action.telefono'), 'class' => 'form-control', 'id' => 'telefono_user', 'required' => true]) !!}
+                                            {!! Form::text('telefono', old('telefono'), ['placeholder' => trans('message.solicitud_action.telefono'), 'class' => 'form-control', 'id' => 'telefono_user']) !!}
                                         </div>
 
                                         @if($rols_id != 10)
