@@ -10,22 +10,22 @@
         <img src="{{ url('/images/icons/logo.png') }}" alt="logo" height="100px">
         <p style="margin-top: 40px; font-size: 36px">SIA - Sistema Integral de Atención al Ciudadano</p>
         <img src="{{ url('/images/icons/logoSIA.png') }}" alt="logo" height="150px" style="margin-top: -15px">
-      </h2> 
+      </h2>
     </div>
 
 @endsection
 
 @section('main-content')
 
- 
-<div class="row">        
-    <div class="col-lg-4 col-md-6 col-xs-12">            
+
+<div class="row">
+    <div class="col-lg-4 col-md-6 col-xs-12">
 		<a href="/solicitud"><x-box titulo="Total Solicitudes Registrada" cantidad="{{$total_solicitudes_registradas2}}" name="Solitudes Registradas"  color="bg-red"></x-box></a>
 	</div>
-	<div class="col-lg-4 col-md-6 col-xs-12">            		
+	<div class="col-lg-4 col-md-6 col-xs-12">
 		<a href="/seguimiento"><x-box titulo="Total Solicitudes en Proceso" cantidad="{{$total_solicitudes_procesadas2}}" name="Solitudes en Proceso" color="bg-yellow"></x-box></a>
 	</div>
-	<div class="col-lg-4 col-md-6 col-xs-12">            		
+	<div class="col-lg-4 col-md-6 col-xs-12">
 	  <a href="/solicitudfinalizadas"><x-box titulo="Total Solicitudes Terminadas" cantidad="{{$total_solicitudes_finalizadas2}}" name="Solitudes Terminadas" color="bg-green"></x-box></a>
 	</div>
 </div>
@@ -46,6 +46,14 @@
                   <div class="panel-heading"><b>Medidores por tipo de Gestiones y Solicitudes de Atención al Ciudadano </b></div>
                   <div class="panel-body" id="contenedor_02">
                     <canvas style="width: 684px; height: 400px;" id="solicitudTipo"></canvas>
+                  </div>
+                </div>
+              </div>
+                  <div class="col-lg-6">
+                <div class="panel panel-default">
+                  <div class="panel-heading"><b>Medidor de Solicitudes de Beneficios por Comunidad </b></div>
+                  <div class="panel-body" id="contenedor_02">
+                    <canvas style="width: 684px; height: 400px;" id="count_solictudxtiposubsolicitud"></canvas>
                   </div>
                 </div>
               </div>

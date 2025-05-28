@@ -1205,6 +1205,49 @@ public function getSolicitudesWAN ($fechaDesde , $fechaHasta , $comuna_id){
             ->orderByDesc('TOTAL_SOLICITUD')->get();
     }
 
+public function count_solictudxtiposubsolicitud_mes_actual(){
+
+        $rols_id = auth()->user()->rols_id; // Considera si necesitas usar esto para filtrar
+
+
+        // Obtener el mes y año actual
+
+        $currentMonth = Carbon::now()->month;
+
+        $currentYear = Carbon::now()->year;
+
+
+            return DB::table('solicitud')
+
+            ->join('tipo_subsolicitud', 'solicitud.tipo_subsolicitud_id', '=', 'tipo_subsolicitud.id')
+
+            ->join('comuna', 'solicitud.comuna_id', '=', 'comuna.id')
+
+            ->join('users', 'solicitud.users_id', '=', 'users.id')
+
+            ->select(
+
+            'comuna.codigo AS COMUNA_NOMBRE',
+
+            DB::raw('COUNT(solicitud.id) AS TOTAL_SOLICITUD')
+
+            )
+
+            ->where('solicitud.status_id','=', 5)
+
+          //  ->whereMonth('solicitud.fecha', $currentMonth) // Filtra por el mes actual
+
+          //  ->whereYear('solicitud.fecha', $currentYear) // Filtra por el año actual
+
+            ->groupBy('solicitud.comuna_id')
+
+            ->orderByDesc('TOTAL_SOLICITUD')
+
+            ->get();
+
+            }
+
+
     public function count_solictud2()
     {
         return DB::table('solicitud')

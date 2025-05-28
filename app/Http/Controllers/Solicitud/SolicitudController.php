@@ -1434,6 +1434,16 @@ class SolicitudController extends Controller
             return response()->json($countSolicitud);
         }
     }
+
+    public function solictudxtiposubsolicitudxcomuna(Request $request)
+    {
+        if ($request->ajax()) {
+            $countSolicitud = (new Solicitud)->count_solictudxtiposubsolicitud_mes_actual();
+
+            return response()->json($countSolicitud);
+        }
+    }
+
     public function solicitudTipo2(Request $request)
     {
 

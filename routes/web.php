@@ -388,6 +388,9 @@ Route::get('/solicitud/listfin', 'Solicitud\SolicitudController@getSolicitudfin'
 Route::get('/solicitud/print', 'Solicitud\SolicitudController@solicitudPrint')->name('solicitud.solicitudPrint')->middleware('permiso:solicitud,print');
 
 Route::get('/solicitud/solicitudTipo', 'Solicitud\SolicitudController@solicitudTipo')->name('solicitud.solicitudTipo');
+Route::get('/solicitud/solicitudTipoxcomuna', 'Solicitud\SolicitudController@solictudxtiposubsolicitudxcomuna')->name('solicitud.solicitudTipoxcomuna');
+
+
 Route::get('/solicitud/getSolicitudesWAN', 'Solicitud\SolicitudController@getSolicitudesWAN')->name('solicitud.getSolicitudesWAN');
 
 
