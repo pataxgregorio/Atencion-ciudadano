@@ -1235,9 +1235,9 @@ public function count_solictudxtiposubsolicitud_mes_actual(){
 
             ->where('solicitud.status_id','=', 5)
 
-          //  ->whereMonth('solicitud.fecha', $currentMonth) // Filtra por el mes actual
+            ->whereMonth('solicitud.fecha', $currentMonth) // Filtra por el mes actual
 
-          //  ->whereYear('solicitud.fecha', $currentYear) // Filtra por el año actual
+            ->whereYear('solicitud.fecha', $currentYear) // Filtra por el año actual
 
             ->groupBy('solicitud.comuna_id')
 

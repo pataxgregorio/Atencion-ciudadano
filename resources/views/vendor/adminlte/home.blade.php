@@ -51,7 +51,7 @@
               </div>
                   <div class="col-lg-6">
                 <div class="panel panel-default">
-                  <div class="panel-heading"><b>Medidor de Solicitudes de Beneficios por Comunidad </b></div>
+                  <div class="panel-heading"><b>Medidor de Solicitudes de Beneficios por Comunidad del mes actual </b></div>
                   <div class="panel-body" id="contenedor_02">
                     <canvas style="width: 684px; height: 400px;" id="count_solictudxtiposubsolicitud"></canvas>
                   </div>
