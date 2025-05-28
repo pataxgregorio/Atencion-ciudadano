@@ -1365,6 +1365,7 @@ public function count_solictudxtiposubsolicitud_mes_actual(){
             ->join('status', 'solicitud.status_id','=','status.id')
             ->select('status.nombre AS SOLICITUD_NOMBRE', DB::raw('COUNT(status.id) AS TOTAL_SOLICITUD'))
             ->where('users.rols_id', $rols_id)
+            ->where('tipo_solicitud.id', '=',6)
             ->groupBy('status.id')
             ->orderBy('status.id')->get();
             return $resultado;}
