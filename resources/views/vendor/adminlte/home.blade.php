@@ -18,7 +18,7 @@
 @section('main-content')
 
 
-<div class="row">
+{{-- <div class="row">
     <div class="col-lg-4 col-md-6 col-xs-12">
 		<a href="/solicitud"><x-box titulo="Total Solicitudes Registrada" cantidad="{{$total_solicitudes_registradas2}}" name="Solitudes Registradas"  color="bg-red"></x-box></a>
 	</div>
@@ -28,7 +28,7 @@
 	<div class="col-lg-4 col-md-6 col-xs-12">
 	  <a href="/solicitudfinalizadas"><x-box titulo="Total Solicitudes Terminadas" cantidad="{{$total_solicitudes_finalizadas2}}" name="Solitudes Terminadas" color="bg-green"></x-box></a>
 	</div>
-</div>
+</div> --}}
 	<!--  CANVAS de las Metricas Para User, Rol y Notificaciones, para View-->
         <div class="row justify-content-center">
           <div class="col-sm-12 align-self-center">
