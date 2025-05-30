@@ -53,14 +53,14 @@
                 <div class="panel panel-default">
                   <div class="panel-heading"><b>Medidor de Solicitudes de Beneficios por Comunidad del mes actual </b></div>
                   <div class="panel-body" id="contenedor_03">
-                    <canvas style="width: 100%; height: 400px;" id="count_solictudxtiposubsolicitud"></canvas>
+                    <canvas style="width: 100%; height: 460px;" id="count_solictudxtiposubsolicitud"></canvas>
                   </div>
                 </div>
               </div>
                 <div class="col-lg-6" >
                  <div class="panel panel-default row table-borderless">
                      <div class="panel-heading"><b>Medidor de Solicitudes de Beneficios por Comunidad de Medicina e Insumos</b></div>
-                     <iframe class="embed-responsive-item" style="width: 100%; height: 430px;" src="http://156.235.91.67:9000/#/farmacia2" allowfullscreen frameborder="0"></iframe>
+                     <iframe class="embed-responsive-item" style="width: 100%; height: 490px;" src="http://156.235.91.67:9000/#/farmacia2" allowfullscreen frameborder="0"></iframe>
                 </div>
               </div>
             </div>
